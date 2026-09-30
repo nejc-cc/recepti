@@ -187,9 +187,14 @@
       var h = '', besedilo, stetje;
 
       if (nacin === 'doma' && izbrane.length) {
-        /* shramba: 0, 1 ali 2 manjkajoce; recepti, ki rabijo vec, izpadejo */
+        /* shramba: 0, 1 ali 2 manjkajoce; recepti, ki rabijo vec, izpadejo.
+           Recept mora uporabiti vsaj nekaj od izbranega - sicer bi se pri
+           vsaki izbiri pojavil vsak kratek recept (ciabatta ima samo dve
+           sestavini, ki nista osnovni, in bi ji "manjkali dve" tudi ob datljih). */
         var sk = [[], [], []];
         osnovni.forEach(function (r) {
+          var lastne = brezOsnov(r);
+          if (!lastne.some(function (s) { return izbrane.indexOf(s) !== -1; })) return;
           var m = manjkaDoma(r);
           if (m.length <= 2) sk[m.length].push({ r: r, m: m });
         });
@@ -202,8 +207,8 @@
         if (sk[2].length) h += locnica(t('Manjkata dve', 'Missing two'));
         sk[2].forEach(function (x) { h += vrstica(x.r, manjkaOznaka(x.m)); });
         if (!h) {
-          h = '<li class="prazno">' + t('Vsakemu receptu manjka več kot dvoje. Odkljukaj še kaj.',
-                                        'Every recipe is missing more than two things. Tick a few more.') + '</li>';
+          h = '<li class="prazno">' + t('Noben recept s tem, kar imaš, ni dovolj blizu — vsakemu manjka več kot dvoje. Odkljukaj še kaj.',
+                                        'No recipe with what you have is close enough — each is missing more than two things. Tick a few more.') + '</li>';
         }
         besedilo = t('lahko skuhaš ', 'you can make ') + sk[0].length + ' · ' +
                    t('skoraj ', 'almost ') + (sk[1].length + sk[2].length);

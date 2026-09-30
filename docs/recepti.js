@@ -431,7 +431,7 @@ window.RECEPTI = [
 ];
 window.RECEPTI_PODVIRI = {
   "_assets/recept.css": "301cca6d",
-  "_assets/kazalo.js": "43696e8c",
+  "_assets/kazalo.js": "5a055142",
   "_assets/tema.js": "89542f8b",
   "_assets/recept.js": "0c84c0f0",
   "_assets/jezik.js": "00903d2d"
