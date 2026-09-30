@@ -13,6 +13,50 @@
     return;
   }
 
+  /* --- jezik -----------------------------------------------------------
+     Jezik izbere _assets/jezik.js. Besedilo vmesnika nosi oba prevoda kar
+     ob sebi: t('Prekliči', 'Cancel'). Recept ima angleski prevod v bloku
+     "en", ki se polozi cez slovenskega (prevedi spodaj).
+     RS ostane slovenski izvirnik: iz njega gre kosarica na slovenski
+     nakupovalni seznam in iz njega so kljuci za hranila.js - v anglescini
+     se spremeni samo, kar se prikaze. */
+  var EN = window.RECEPTI_JEZIK === 'en';
+  function t(sl, en) { return EN ? en : sl; }
+  var RS = R;
+
+  function prevedi(izv, en) {
+    var r = JSON.parse(JSON.stringify(izv));
+    ['naslov', 'povzetek', 'opis', 'predgretje'].forEach(function (k) {
+      if (en[k] !== undefined) r[k] = en[k];
+    });
+    if (en.opombe) r.opombe = en.opombe;
+    if (en.osnova && r.osnova) {
+      if (en.osnova.oblike) r.osnova.oblike = en.osnova.oblike;
+      r.osnova.oblike_gumb = en.osnova.oblike_gumb || en.osnova.oblike || r.osnova.oblike_gumb;
+    }
+    (en.sestavine || []).forEach(function (e, i) {
+      var s = r.sestavine && r.sestavine[i];
+      if (!s || !e) return;
+      if (e.ime !== undefined) s.ime = e.ime;
+      if (e.kratko !== undefined) s.kratko = e.kratko;
+      else if (e.ime !== undefined) delete s.kratko;
+      /* enota ostane slovenska, ker iz nje racunajo hranila - prikaz ima svojo */
+      if (e.enota !== undefined) s.enota_prikaz = e.enota;
+      if (e.merica_enota !== undefined && s.merica) s.merica.enota = e.merica_enota;
+    });
+    (en.koraki || []).forEach(function (b, i) {
+      if (r.koraki && r.koraki[i] && typeof b === 'string') r.koraki[i].besedilo = b;
+    });
+    if (en.plasti && r.plasti) {
+      if (en.plasti.naslov) r.plasti.naslov = en.plasti.naslov;
+      (en.plasti.od_zgoraj || []).forEach(function (ime, i) {
+        if (r.plasti.od_zgoraj && r.plasti.od_zgoraj[i]) r.plasti.od_zgoraj[i].ime = ime;
+      });
+    }
+    return r;
+  }
+  if (EN && RS.en) R = prevedi(RS, RS.en);
+
   var osnova = (R.osnova && R.osnova.kolicina) || 1;
   var oblike = (R.osnova && R.osnova.oblike) || null;
   var oblikeGumb = (R.osnova && R.osnova.oblike_gumb) || oblike;
@@ -22,10 +66,14 @@
   /* --- pomozne --- */
   function stevilo(v) {
     var r = Math.round(v * 10) / 10;
-    return (Number.isInteger(r) ? String(r) : r.toFixed(1)).replace('.', ',');
+    var s = Number.isInteger(r) ? String(r) : r.toFixed(1);
+    return EN ? s : s.replace('.', ',');
   }
+  /* Slovensko: 1 / 2 / 3-4 / 5+ (in 101 = ednina). Anglesko samo ednina in
+     mnozina: oblike so tam ["egg", "eggs"]. */
   function sklon(n, o) {
     if (!o) return '';
+    if (EN) return Math.abs(n) === 1 ? o[0] : (o[1] || o[0]);
     var m = Math.abs(n) % 100;
     if (m === 1) return o[0];
     if (m === 2) return o[1] || o[0];
@@ -76,7 +124,8 @@
   function sestavinaNiz(s, n) {
     var v = kolSestavine(s, n);
     if (v === null) return imeSestavine(s, n) + mericaNiz(s, n);
-    return '<span class="kol">' + stevilo(v) + (s.enota ? '&nbsp;' + s.enota : '') + '</span> ' +
+    var enota = s.enota_prikaz !== undefined ? s.enota_prikaz : s.enota;
+    return '<span class="kol">' + stevilo(v) + (enota ? '&nbsp;' + enota : '') + '</span> ' +
            imeSestavine(s, n) + mericaNiz(s, n);
   }
   function obseg(k, dolzina) {
@@ -119,9 +168,9 @@
     var s = R.sestavine || [], koraki = R.koraki || [];
     var h = '';
     if (R.predgretje) h += '<div class="predgretje-box">' + vstavi(R.predgretje, n) + '</div>';
-    h += '<h2>Sestavine</h2><ul class="sestavine">';
+    h += '<h2>' + t('Sestavine', 'Ingredients') + '</h2><ul class="sestavine">';
     for (var i = 0; i < s.length; i++) h += '<li data-s="' + i + '">' + sestavinaNiz(s[i], n) + '</li>';
-    h += '</ul><h2>Postopek</h2><ol class="koraki">';
+    h += '</ul><h2>' + t('Postopek', 'Method') + '</h2><ol class="koraki">';
     for (var j = 0; j < koraki.length; j++) {
       var o = obseg(koraki[j], s.length);
       var besedilo = vstavi(koraki[j].besedilo, n).replace(/\n/g, ' ');
@@ -131,7 +180,7 @@
         for (var k = o[0] - 1; k < o[1]; k++) {
           if (!s[k]) continue;
           var ik = s[k].kratko;
-          if (!ik) ik = jeSeznam(s[k].ime) ? (s[k].ime[2] || s[k].ime[0]) : s[k].ime;
+          if (!ik) ik = jeSeznam(s[k].ime) ? ((EN ? s[k].ime[1] : s[k].ime[2]) || s[k].ime[0]) : s[k].ime;
           imena.push(vstavi(ik, n));
         }
         kaj = ' <span style="color:var(--muted)">(' + imena.join(', ') + ')</span>';
@@ -149,7 +198,7 @@
   function plasti(n) {
     var pl = R.plasti;
     if (!pl || !pl.od_zgoraj || !pl.od_zgoraj.length) return '';
-    var h = '<div class="plasti"><h2>' + (pl.naslov || 'Plasti') +
+    var h = '<div class="plasti"><h2>' + (pl.naslov || t('Plasti', 'Layers')) +
             '</h2><div class="plasti-seznam">';
     for (var i = 0; i < pl.od_zgoraj.length; i++) {
       var p = pl.od_zgoraj[i];
@@ -206,8 +255,9 @@
      kadar recept nima stehtane koncne mase */
   function hranilaRecepta(n) {
     var r = { kcal: 0, b: 0, masa: 0, vrstice: [], ni: [] };
-    (R.sestavine || []).forEach(function (s) {
-      var ime = brezOznak(vstavi(s.kratko || (jeSeznam(s.ime) ? s.ime[0] : s.ime), n));
+    (RS.sestavine || []).forEach(function (s, i) {
+      var d = (R.sestavine || [])[i] || s;            /* prikaz: v izbranem jeziku */
+      var ime = brezOznak(vstavi(d.kratko || (jeSeznam(d.ime) ? d.ime[0] : d.ime), n));
       if (s.hranilo === false) { r.ni.push(ime); return; }
       var e = vnosHranila(kljucHranila(s));
       if (!e) { r.ni.push(ime); return; }
@@ -217,7 +267,7 @@
         return;
       }
       if (!m) { r.ni.push(ime); return; }
-      var v = { s: s, g: m[0], tocno: m[1], kcal: m[0] * e.kcal / 100, b: m[0] * (e.b || 0) / 100 };
+      var v = { s: d, g: m[0], tocno: m[1], kcal: m[0] * e.kcal / 100, b: m[0] * (e.b || 0) / 100 };
       r.kcal += v.kcal;
       r.b += v.b;
       r.masa += v.g;
@@ -227,7 +277,7 @@
   }
   function celo(v) {
     var r = Math.round(v);
-    try { return r.toLocaleString('sl-SI'); } catch (e) { return String(r); }
+    try { return r.toLocaleString(EN ? 'en-GB' : 'sl-SI'); } catch (e) { return String(r); }
   }
   function gramiNiz(v) { return (v >= 10 ? celo(v) : stevilo(v)) + '&nbsp;g'; }
 
@@ -238,45 +288,51 @@
     /* stolpca "na porcijo" in "za 12 porcij"; ce je kolicina 1 ali recept
        nima enote, bi bila enaka - takrat samo eden */
     var st = [];
-    if (oblike && n !== 1) st.push(['Na ' + oblike[0], n]);
+    if (oblike && n !== 1) st.push([t('Na ', 'Per ') + oblike[0], n]);
     /* Na 100 g: iz stehtane koncne mase, ce jo recept ima, sicer iz mase
        surovih sestavin. Pecene in kuhane jedi izgubijo vodo, zato je druga
        moznost oznacena - na 100 g koncne jedi je tam vec. */
     var koncna = typeof R.koncna_masa === 'number' ? R.koncna_masa * faktor(n) : null;
     var masa100 = koncna || r.masa;
-    if (masa100 > 0) st.push([koncna ? 'Na 100 g' : 'Na 100 g surovega', masa100 / 100]);
-    if (oblike) st.push(['Za ' + kolicinaNiz(n), 1]);
-    else st.push(['Cel recept', 1]);
+    if (masa100 > 0) st.push([koncna ? t('Na 100 g', 'Per 100 g') : t('Na 100 g surovega', 'Per 100 g raw'), masa100 / 100]);
+    if (oblike) st.push([t('Za ', 'For ') + kolicinaNiz(n), 1]);
+    else st.push([t('Cel recept', 'Whole recipe'), 1]);
 
-    var h = '<div class="hranila"><h2>Hranilna vrednost <span class="pribl">približno</span></h2>' +
+    var h = '<div class="hranila"><h2>' + t('Hranilna vrednost', 'Nutrition') +
+            ' <span class="pribl">' + t('približno', 'approximate') + '</span></h2>' +
             '<table class="povzetek"><thead><tr><th></th>';
     st.forEach(function (c) { h += '<th>' + c[0] + '</th>'; });
-    h += '</tr></thead><tbody><tr><th>Energija</th>';
+    h += '</tr></thead><tbody><tr><th>' + t('Energija', 'Energy') + '</th>';
     st.forEach(function (c) { h += '<td>' + celo(r.kcal / c[1]) + '&nbsp;kcal</td>'; });
-    h += '</tr><tr><th>Beljakovine</th>';
+    h += '</tr><tr><th>' + t('Beljakovine', 'Protein') + '</th>';
     st.forEach(function (c) { h += '<td>' + gramiNiz(r.b / c[1]) + '</td>'; });
     h += '</tr></tbody></table>';
 
     h += '<details class="po-sestavinah"' + (odprto ? ' open' : '') +
-         '><summary>Po sestavinah</summary><table><thead><tr>' +
-         '<th>Sestavina</th><th>Masa</th><th>kcal</th><th>Beljakovine</th></tr></thead><tbody>';
+         '><summary>' + t('Po sestavinah', 'By ingredient') + '</summary><table><thead><tr>' +
+         '<th>' + t('Sestavina', 'Ingredient') + '</th><th>' + t('Masa', 'Weight') +
+         '</th><th>kcal</th><th>' + t('Beljakovine', 'Protein') + '</th></tr></thead><tbody>';
     r.vrstice.forEach(function (v) {
       /* ≈ = masa je izpeljana (kosi, zlice, gostota), ne zapisana v g */
       h += '<tr><td>' + sestavinaNiz(v.s, n) + '</td><td>' + (v.tocno ? '' : '≈') +
            gramiNiz(v.g) + '</td><td>' + celo(v.kcal) + '</td><td>' + gramiNiz(v.b) + '</td></tr>';
     });
     h += '</tbody></table></details><p class="opomba">' +
-         (r.ni.length ? 'Ni vračunano: ' + r.ni.join(', ') + '. ' : '') +
-         'Iz surovih sestavin in tipičnih vrednosti na 100 g, brez izgub pri kuhanju. ' +
-         (koncna ? 'Na 100 g glede na stehtano končno jed (' + celo(koncna) + '&nbsp;g).'
-                 : 'Na 100 g surovega: pečena ali kuhana jed izgubi vodo, zato ima na 100 g ' +
-                   'običajno 10–30 % več.') + '</p></div>';
+         (r.ni.length ? t('Ni vračunano: ', 'Not included: ') + r.ni.join(', ') + '. ' : '') +
+         t('Iz surovih sestavin in tipičnih vrednosti na 100 g, brez izgub pri kuhanju. ',
+           'From raw ingredients and typical values per 100 g, without cooking losses. ') +
+         (koncna ? t('Na 100 g glede na stehtano končno jed (', 'Per 100 g of the weighed finished dish (') +
+                   celo(koncna) + '&nbsp;g).'
+                 : t('Na 100 g surovega: pečena ali kuhana jed izgubi vodo, zato ima na 100 g ' +
+                     'običajno 10–30 % več.',
+                     'Per 100 g raw: baking or cooking drives off water, so the finished dish ' +
+                     'usually has 10–30 % more per 100 g.')) + '</p></div>';
     return h;
   }
 
   /* --- kosarica -> HA todo seznam prek webhooka --- */
   var NAST = window.RECEPTI_NASTAVITVE || {};
-  var SESTAVINE = ['sestavina', 'sestavini', 'sestavine', 'sestavin'];
+  var SESTAVINE = EN ? ['ingredient', 'ingredients'] : ['sestavina', 'sestavini', 'sestavine', 'sestavin'];
   /* Webhook je relativna pot, zato deluje samo, kadar stran streze HA
      (/local/recepti/...). Odprta z diska ali od drugod: gumba ni. */
   var kosaricaMozna = !!NAST.webhook && location.protocol.indexOf('http') === 0;
@@ -284,9 +340,11 @@
   function velikaZac(t) { return t.charAt(0).toUpperCase() + t.slice(1); }
 
   /* Seznam za kosarico: najprej prave sestavine, na koncu se neobvezni
-     "predlogi" (npr. sadje po zelji) - ti so v seznamu odkljukani. */
+     "predlogi" (npr. sadje po zelji) - ti so v seznamu odkljukani.
+     Vedno iz slovenskega izvirnika (RS): nakupovalni seznam je slovenski,
+     ne glede na jezik strani. */
   function zaNakup(n) {
-    var sez = (R.sestavine || [])
+    var sez = (RS.sestavine || [])
       .filter(function (s) { return s.nakup !== false; })
       .map(function (s) {
         var ime = typeof s.nakup === 'string' ? s.nakup : (s.kratko || s.ime);
@@ -296,12 +354,12 @@
         var kol = '';
         if (s.kol !== null && s.kol !== undefined) {
           var v = s.skaliraj === false ? s.kol : s.kol * faktor(n);
-          kol = stevilo(v) + (s.enota ? ' ' + s.enota : '');
+          kol = stevilo(v).replace('.', ',') + (s.enota ? ' ' + s.enota : '');
         }
         if (typeof s.nakup_kolicina === 'string') kol = vstavi(s.nakup_kolicina, n);
         return { ime: velikaZac(vstavi(ime, n)), kolicina: kol };
       });
-    (R.predlogi || []).forEach(function (p) {
+    (RS.predlogi || []).forEach(function (p) {
       sez.push({ ime: velikaZac(vstavi(p, n)), kolicina: '', predlog: true });
     });
     return sez;
@@ -311,16 +369,16 @@
     var box = document.querySelector('.kosarica');
     if (!box || box.hidden) return;
     var sez = zaNakup(n);
-    var h = '<h2>Na seznam ' + (NAST.seznam || 'nakupov') + '</h2>';
+    var h = '<h2>' + t('Na seznam ', 'Add to list: ') + (NAST.seznam || t('nakupov', 'shopping')) + '</h2>';
     sez.forEach(function (s, i) {
       h += '<label><input type="checkbox" data-i="' + i + '"' + (s.predlog ? '' : ' checked') +
            '> <span>' + s.ime +
            (s.kolicina ? ' <span class="enota">' + s.kolicina + '</span>' : '') +
-           (s.predlog ? ' <span class="enota">neobvezno</span>' : '') + '</span></label>';
+           (s.predlog ? ' <span class="enota">' + t('neobvezno', 'optional') + '</span>' : '') + '</span></label>';
     });
     h += '<div class="gumbi">' +
-         '<button type="button" class="glavni potrdi">Dodaj</button>' +
-         '<button type="button" class="tanki preklici">Prekliči</button></div>';
+         '<button type="button" class="glavni potrdi">' + t('Dodaj', 'Add') + '</button>' +
+         '<button type="button" class="tanki preklici">' + t('Prekliči', 'Cancel') + '</button></div>';
     box.innerHTML = h;
     box.querySelector('.potrdi').addEventListener('click', function () { poslji(this); });
     box.querySelector('.preklici').addEventListener('click', function () {
@@ -346,21 +404,22 @@
         izbrane.push({ ime: s.ime, kolicina: s.kolicina });
       }
     });
-    if (!izbrane.length) { obvesti('Nič ni izbrano.', 'napaka'); return; }
+    if (!izbrane.length) { obvesti(t('Nič ni izbrano.', 'Nothing selected.'), 'napaka'); return; }
 
     gumb.disabled = true;
-    obvesti('Pošiljam…', '');
+    obvesti(t('Pošiljam…', 'Sending…'), '');
     fetch('/api/webhook/' + NAST.webhook, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ recept: R.naslov, sestavine: izbrane })
+      body: JSON.stringify({ recept: RS.naslov, sestavine: izbrane })
     }).then(function (r) {
-      if (!r.ok) throw new Error('HA je vrnil ' + r.status);
+      if (!r.ok) throw new Error(t('HA je vrnil ', 'HA returned ') + r.status);
       box.hidden = true;
-      obvesti('Dodano na seznam ' + (NAST.seznam || '') + ': ' +
+      obvesti(t('Dodano na seznam ', 'Added to list ') + (NAST.seznam || '') + ': ' +
               izbrane.length + ' ' + sklon(izbrane.length, SESTAVINE) + '.', 'ok');
     }).catch(function (e) {
-      obvesti('Ni šlo: ' + e.message + '. Deluje samo prek Home Assistanta, na domačem omrežju.', 'napaka');
+      obvesti(t('Ni šlo: ', 'Failed: ') + e.message + t('. Deluje samo prek Home Assistanta, na domačem omrežju.',
+              '. Works only through Home Assistant, on the home network.'), 'napaka');
     }).then(function () {
       gumb.disabled = false;
     });
@@ -376,17 +435,18 @@
 
   function posljiPecici(podatki, sporocilo, gumb) {
     gumb.disabled = true;
-    obvesti('Pošiljam…', '');
-    podatki.recept = R.naslov;
+    obvesti(t('Pošiljam…', 'Sending…'), '');
+    podatki.recept = RS.naslov;
     return fetch('/api/webhook/' + NAST.webhookPecica, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(podatki)
     }).then(function (r) {
-      if (!r.ok) throw new Error('HA je vrnil ' + r.status);
+      if (!r.ok) throw new Error(t('HA je vrnil ', 'HA returned ') + r.status);
       obvesti(sporocilo, 'ok');
     }).catch(function (e) {
-      obvesti('Ni šlo: ' + e.message + '. Deluje samo prek Home Assistanta, na domačem omrežju.', 'napaka');
+      obvesti(t('Ni šlo: ', 'Failed: ') + e.message + t('. Deluje samo prek Home Assistanta, na domačem omrežju.',
+              '. Works only through Home Assistant, on the home network.'), 'napaka');
     }).then(function () {
       gumb.disabled = false;
     });
@@ -400,17 +460,17 @@
     function pospravi() {
       clearTimeout(cakam);
       cakam = null;
-      g.textContent = '🔥 Segrej pečico — ' + P.temperatura + ' °C';
+      g.textContent = t('🔥 Segrej pečico — ', '🔥 Preheat oven — ') + P.temperatura + ' °C';
       g.classList.remove('glavni');
       g.classList.add('tanki');
     }
     pospravi();
     g.addEventListener('click', function () {
       if (!cakam) {
-        g.textContent = 'Potrdi: ' + P.temperatura + ' °C';
+        g.textContent = t('Potrdi: ', 'Confirm: ') + P.temperatura + ' °C';
         g.classList.remove('tanki');
         g.classList.add('glavni');
-        obvesti('Še enkrat klikni za vklop.', '');
+        obvesti(t('Še enkrat klikni za vklop.', 'Click again to switch it on.'), '');
         cakam = setTimeout(function () { pospravi(); obvesti('', ''); }, 6000);
         return;
       }
@@ -420,17 +480,18 @@
         temperatura: P.temperatura,
         program: P.program || 'top_bottom',
         hitro_predgretje: P.hitro_predgretje !== false
-      }, 'Pečica se segreva na ' + P.temperatura + ' °C. Zagon traja do minute.', g);
+      }, t('Pečica se segreva na ' + P.temperatura + ' °C. Zagon traja do minute.',
+            'Oven heating to ' + P.temperatura + ' °C. Start-up takes up to a minute.'), g);
     });
   }
 
   /* Casovnik: en klik, brez potrditve - klikas ga z vrocim pekacem v rokah,
      nastavi pa samo kuhinjski alarm pecice. */
   function gumbCasovnik(g) {
-    g.textContent = '⏱ Časovnik — ' + P.minute + ' min';
+    g.textContent = t('⏱ Časovnik — ', '⏱ Timer — ') + P.minute + ' min';
     g.addEventListener('click', function () {
       posljiPecici({ akcija: 'casovnik', minute: P.minute },
-                   'Časovnik pečice teče: ' + P.minute + ' min.', g);
+                   t('Časovnik pečice teče: ', 'Oven timer running: ') + P.minute + ' min.', g);
     });
   }
 
@@ -488,15 +549,15 @@
     if (g) g.hidden = steviloOpravljenih() === 0;
   }
   function preklopiOpravljeno(dogodek) {
-    var t = dogodek.target;
-    while (t && t.nodeType === 1 && t !== document.body &&
-           !t.hasAttribute('data-s') && !t.hasAttribute('data-k')) {
-      t = t.parentNode;
+    var cel = dogodek.target;
+    while (cel && cel.nodeType === 1 && cel !== document.body &&
+           !cel.hasAttribute('data-s') && !cel.hasAttribute('data-k')) {
+      cel = cel.parentNode;
     }
-    if (!t || t.nodeType !== 1 || t === document.body) return;
+    if (!cel || cel.nodeType !== 1 || cel === document.body) return;
     if (dogodek.target.closest && dogodek.target.closest('a')) return;  /* vir pusti pri miru */
-    var vrsta = t.hasAttribute('data-s') ? 's' : 'k';
-    var idx = t.getAttribute('data-' + vrsta);
+    var vrsta = cel.hasAttribute('data-s') ? 's' : 'k';
+    var idx = cel.getAttribute('data-' + vrsta);
     opravljeno[vrsta][idx] = !opravljeno[vrsta][idx];
     shraniOpravljeno();
     oznaciOpravljeno();
@@ -539,8 +600,10 @@
     function osvezi() {
       g.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="' +
                     (budnostIzklop ? IKONA_KAVA_IZKLOP : IKONA_KAVA) + '"></path></svg>';
-      g.title = budnostIzklop ? 'Zaslon se lahko ugasne. Klikni, da ostane prižgan.'
-                              : 'Zaslon ostane prižgan. Klikni za izklop.';
+      g.title = budnostIzklop ? t('Zaslon se lahko ugasne. Klikni, da ostane prižgan.',
+                                  'Screen may turn off. Click to keep it on.')
+                              : t('Zaslon ostane prižgan. Klikni za izklop.',
+                                  'Screen stays on. Click to turn this off.');
       g.setAttribute('aria-label', g.title);
       g.setAttribute('aria-pressed', String(!budnostIzklop));
     }
@@ -590,7 +653,7 @@
   }
   function prenesi(naslov) {
     return fetch(naslov).then(function (r) {
-      if (!r.ok) throw new Error(naslov + ' je vrnil ' + r.status);
+      if (!r.ok) throw new Error(naslov + t(' je vrnil ', ' returned ') + r.status);
       return r;
     });
   }
@@ -627,7 +690,7 @@
     /* gumbi za kolicino na sliki nimajo pomena - ostane samo izbrana */
     var kol = k.querySelector('.kolicina');
     if (kol) {
-      kol.innerHTML = '<span class="oznaka">Količina</span>' +
+      kol.innerHTML = '<span class="oznaka">' + t('Količina', 'Makes') + '</span>' +
                       '<span class="izbrano">' + kolicinaNiz(stanje, true) + '</span>';
     }
     var od = k.querySelectorAll('.opravljeno');
@@ -689,10 +752,10 @@
              uveljavijo sele za razresitvijo obljube */
           setTimeout(function () {
             var w = IZVOZ_SIRINA;
-            var t = d.querySelector('table.recept');
-            if (t) {
+            var tab = d.querySelector('table.recept');
+            if (tab) {
               var rob = w - d.querySelector('.stran').getBoundingClientRect().width;
-              w = Math.max(w, Math.ceil(t.getBoundingClientRect().width + rob));
+              w = Math.max(w, Math.ceil(tab.getBoundingClientRect().width + rob));
               f.style.width = w + 'px';
             }
             var mere = {
@@ -745,12 +808,12 @@
             narisi();
             c.toBlob(function (b) {
               if (b) ok(b);
-              else ne(new Error('brskalnik je vrnil prazno sliko'));
+              else ne(new Error(t('brskalnik je vrnil prazno sliko', 'the browser returned an empty image')));
             }, 'image/png');
           } catch (e) { ne(e); }   /* npr. SecurityError, ce brskalnik canvas zaklene */
         }, 150);
       };
-      img.onerror = function () { ne(new Error('izris ni uspel')); };
+      img.onerror = function () { ne(new Error(t('izris ni uspel', 'rendering failed'))); };
       img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     });
   }
@@ -774,17 +837,17 @@
     okno.className = 'izvoz-okno';
     okno.setAttribute('role', 'dialog');
     okno.setAttribute('aria-modal', 'true');
-    okno.setAttribute('aria-label', 'Recept kot slika');
+    okno.setAttribute('aria-label', t('Recept kot slika', 'Recipe as image'));
     var h = '<div class="okvir"><img><div class="gumbi">';
     if (lahkoDeli) {
-      h += '<button type="button" class="glavni deli">Deli…</button>';
+      h += '<button type="button" class="glavni deli">' + t('Deli…', 'Share…') + '</button>';
     } else if (window.top !== window) {
       /* HA aplikacija (WebView) deljenja ne zna; sistemski brskalnik ga.
          Povezava odpre isti recept z #izvoz, ki sliko naredi sam. */
-      h += '<a class="glavni brskalnik" target="_blank" rel="noopener">↗ Odpri v brskalniku</a>';
+      h += '<a class="glavni brskalnik" target="_blank" rel="noopener">' + t('↗ Odpri v brskalniku', '↗ Open in browser') + '</a>';
     }
-    h += '<a class="tanki shrani">Shrani</a>' +
-         '<button type="button" class="tanki zapri">Zapri</button></div>' +
+    h += '<a class="tanki shrani">' + t('Shrani', 'Save') + '</a>' +
+         '<button type="button" class="tanki zapri">' + t('Zapri', 'Close') + '</button></div>' +
          '<p class="namig"></p></div>';
     okno.innerHTML = h;
     var img = okno.querySelector('img');
@@ -794,7 +857,12 @@
     shrani.href = url;
     shrani.setAttribute('download', ime);
     var brskalnik = okno.querySelector('.brskalnik');
-    if (brskalnik) brskalnik.href = location.pathname + location.search + '#izvoz-' + stanje;
+    if (brskalnik) {
+      /* sistemski brskalnik nima nase izbire jezika - zato gre z v naslovu */
+      var cilj = location.pathname + location.search;
+      if (EN && !/[?&](jezik|lang)=/.test(location.search)) cilj += (location.search ? '&' : '?') + 'jezik=en';
+      brskalnik.href = cilj + '#izvoz-' + stanje;
+    }
 
     /* Nazaj (Android poteza, gumb brskalnika) naj zapre predogled, ne pa
        zapusti recepta. Stran poteze ne more ujeti neposredno, vidi pa korak
@@ -824,7 +892,7 @@
       deli.addEventListener('click', function () {
         navigator.share({ files: [datoteka], title: R.naslov, text: R.naslov }).catch(function (e) {
           if (e && e.name === 'AbortError') return;   /* uporabnik je sam preklical */
-          okno.querySelector('.namig').textContent = 'Deljenje ni uspelo: ' + (e && e.message || e);
+          okno.querySelector('.namig').textContent = t('Deljenje ni uspelo: ', 'Sharing failed: ') + (e && e.message || e);
         });
       });
     }
@@ -834,7 +902,7 @@
   function izvoziSliko(gumb) {
     var prej = gumb.textContent;
     gumb.disabled = true;
-    gumb.textContent = 'Pripravljam sliko…';
+    gumb.textContent = t('Pripravljam sliko…', 'Preparing image…');
     obvesti('', '');
     var html = klonZaIzvoz();
     slogZaIzvoz().then(function (css) {
@@ -842,7 +910,7 @@
         return rasteriziraj(svgZaIzvoz(css, html, mere), mere);
       });
     }).then(pokaziIzvoz).catch(function (e) {
-      obvesti('Slike ni bilo mogoče narediti: ' + (e && e.message || e) + '.', 'napaka');
+      obvesti(t('Slike ni bilo mogoče narediti: ', 'Could not create the image: ') + (e && e.message || e) + '.', 'napaka');
     }).then(function () {
       gumb.disabled = false;
       gumb.textContent = prej;
@@ -876,12 +944,16 @@
   /* --- ogrodje strani --- */
   var stran = document.querySelector('.stran');
   var h = '';
-  if (R.kazalo !== false) h += '<a class="nazaj" href="index.html">&larr; Vsi recepti</a>';
-  if (R.kategorija) h += '<div class="kicker">Recept &middot; ' + R.kategorija + '</div>';
+  if (R.kazalo !== false) {
+    h += '<a class="nazaj" href="' + (EN ? 'index.html?jezik=en' : 'index.html') + '">&larr; ' +
+         t('Vsi recepti', 'All recipes') + '</a>';
+  }
+  var kategorija = window.RECEPTI_KATEGORIJA ? window.RECEPTI_KATEGORIJA(R.kategorija) : R.kategorija;
+  if (R.kategorija) h += '<div class="kicker">' + t('Recept', 'Recipe') + ' &middot; ' + kategorija + '</div>';
   h += '<h1>' + R.naslov + '</h1>';
   if (R.opis) h += '<p class="lead"></p>';
   if (izbire.length > 1) {
-    h += '<div class="kolicina"><span class="oznaka">Količina</span>';
+    h += '<div class="kolicina"><span class="oznaka">' + t('Količina', 'Makes') + '</span>';
     izbire.forEach(function (k) {
       h += '<button type="button" data-n="' + k + '">' + kolicinaNiz(k, true) + '</button>';
     });
@@ -893,13 +965,13 @@
      od kosarice ali pecice. */
   h += '<div class="akcije">';
   if (kosaricaMozna && R.kosarica !== false) {
-    h += '<button type="button" class="tanki odpri-kosarico">🛒 V košarico</button>';
+    h += '<button type="button" class="tanki odpri-kosarico">' + t('🛒 V košarico', '🛒 Add to list') + '</button>';
   }
   if (grejeMozno) h += '<button type="button" class="tanki segrej-pecico"></button>';
   if (casovnikMozen) h += '<button type="button" class="tanki casovnik-pecice"></button>';
-  if (izvozMozen) h += '<button type="button" class="tanki izvozi">📷 Izvozi kot sliko</button>';
+  if (izvozMozen) h += '<button type="button" class="tanki izvozi">' + t('📷 Izvozi kot sliko', '📷 Export as image') + '</button>';
   /* pokaze se sele, ko je kaj odkljukano */
-  h += '<button type="button" class="tanki ponastavi" hidden>↺ Prični od začetka</button>';
+  h += '<button type="button" class="tanki ponastavi" hidden>' + t('↺ Prični od začetka', '↺ Start over') + '</button>';
   h += '</div><div class="kosarica" hidden></div><div class="obvestilo"></div>';
   if (R.opombe && R.opombe.length) {
     h += '<div class="opombe">';
@@ -909,7 +981,7 @@
   /* na koncu: med kuhanjem je ne rabis, je pa del recepta (tisk, slika) */
   h += '<div class="hranila-ovoj"></div>';
   stran.innerHTML = h;
-  document.title = R.naslov + (R.kategorija ? ' — ' + R.kategorija : '') + ' | Recepti';
+  document.title = R.naslov + (R.kategorija ? ' — ' + kategorija : '') + t(' | Recepti', ' | Recipes');
 
   document.querySelectorAll('.kolicina button').forEach(function (b) {
     b.addEventListener('click', function () { stanje = Number(b.dataset.n); izrisi(); });

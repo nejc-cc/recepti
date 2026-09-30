@@ -62,8 +62,8 @@
     g.innerHTML =
       '<span class="ikona"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">' +
       '<path fill="currentColor" d="M20 9V15H12V19.84L4.16 12L12 4.16V9H20Z"></path></svg></span>' +
-      '<span class="oznaka">nazaj</span>';
-    g.title = 'Nazaj na ' + cilj;
+      '<span class="oznaka">' + (window.RECEPTI_JEZIK === 'en' ? 'back' : 'nazaj') + '</span>';
+    g.title = (window.RECEPTI_JEZIK === 'en' ? 'Back to ' : 'Nazaj na ') + cilj;
     g.addEventListener('click', function () {
       var p = window.parent;
       try {

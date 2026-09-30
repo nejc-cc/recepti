@@ -49,7 +49,9 @@
     function osvezi() {
       var t = temnoZdaj();
       g.textContent = t ? '☀' : '☾';
-      g.title = t ? 'Preklopi na svetlo' : 'Preklopi na temno';
+      var en = window.RECEPTI_JEZIK === 'en';
+      g.title = t ? (en ? 'Switch to light' : 'Preklopi na svetlo')
+                  : (en ? 'Switch to dark' : 'Preklopi na temno');
       g.setAttribute('aria-label', g.title);
     }
     g.addEventListener('click', function () {

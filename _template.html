@@ -6,8 +6,9 @@
 <meta name="robots" content="noindex, nofollow">
 <title>Ime recepta | Recepti</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%9E%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="_assets/recept.css?v=2521fed6">
-<script src="_assets/tema.js?v=488c8426"></script>
+<link rel="stylesheet" href="_assets/recept.css?v=5d762494">
+<script src="_assets/jezik.js?v=79feac01"></script>
+<script src="_assets/tema.js?v=89542f8b"></script>
 </head>
 <body>
 <div class="stran"></div>
@@ -77,6 +78,20 @@
                 surovih sestavin, ki pri peki in kuhanju izgubijo vodo.
     kazalo      false = skrij povezavo "Vsi recepti" (neobvezno)
     kosarica    false = skrij gumb "V kosarico" (neobvezno)
+    en          ANGLESKI PREVOD - generator opozori, ce ga ni. Polozi se cez
+                slovensko besedilo, zato imata "sestavine" in "koraki" ENAKO
+                stevilo elementov v ENAKEM vrstnem redu kot zgoraj.
+                  naslov, povzetek, opis, predgretje, opombe - kot zgoraj
+                  osnova.oblike   ["serving", "servings"] - ednina, mnozina
+                  sestavine[i]    { "ime": "flour" } ali { "ime": ["egg", "eggs"] },
+                                  neobvezno "kratko", "enota" (samo prikaz, npr.
+                                  "tbsp" - racuna se iz slovenske) in
+                                  "merica_enota" (enota druge mere)
+                  koraki          seznam besedil, npr. ["mix\ndry", "bake"]
+                  plasti          { "od_zgoraj": ["cocoa", "cream"] }
+                Kosarica ostane slovenska: na seznam gre vedno slovensko ime.
+                Nova kategorija -> dodaj jo v _assets/jezik.js; nova sestavina
+                -> "en" v _assets/hranila.js.
     predlogi    neobvezne stvari za kosarico; v seznamu so ODKLJUKANE
                 (npr. sadje po zelji). Ce recept pece na papirju za peko,
                 dodaj sem "papir za peko".
@@ -116,11 +131,34 @@
   "opombe": [
     "Prva opomba.",
     "Druga opomba."
-  ]
+  ],
+  "en": {
+    "naslov": "Recipe name",
+    "povzetek": "One line shown in the index.",
+    "opis": "For <strong>{kolicina}</strong>. A short introduction.",
+    "predgretje": "Preheat the oven to 180&nbsp;°C",
+    "osnova": {"oblike": ["serving", "servings"]},
+    "sestavine": [
+      {"ime": "flour", "kratko": "flour"},
+      {"ime": "salt", "kratko": "salt"},
+      {"ime": "water"},
+      {"ime": "pinch of sugar"}
+    ],
+    "koraki": [
+      "mix\ndry",
+      "knead\ninto a dough",
+      "rise\n1 h",
+      "bake\n180&nbsp;°C\n30 min"
+    ],
+    "opombe": [
+      "First note.",
+      "Second note."
+    ]
+  }
 }
 </script>
-<script src="_assets/hranila.js?v=1ff880ea"></script>
+<script src="_assets/hranila.js?v=451cf232"></script>
 <script src="_assets/nastavitve.js?v=5cadc01b"></script>
-<script src="_assets/recept.js?v=c7faa272"></script>
+<script src="_assets/recept.js?v=56d7234c"></script>
 </body>
 </html>

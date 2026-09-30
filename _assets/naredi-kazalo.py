@@ -141,9 +141,68 @@ def tezave_hranil(d, H):
     return ven
 
 
+def angl_ime(ime, H):
+    """Anglesko ime kanonicne sestavine iz hranila.js ("en"), po verigi
+    "enako"; None, ce ga ni."""
+    if not H:
+        return None
+    baza = H["sestavine"]
+    e, i = baza.get(ime.lower()), 0
+    while e and i < 5:
+        if e.get("en"):
+            return e["en"]
+        e, i = baza.get(str(e.get("enako", "")).lower()), i + 1
+    return None
+
+
+def sestavine_za_iskanje_en(sl, H, ime_recepta):
+    """Ista imena kot sestavine_za_iskanje, prevedena prek hranila.js - tako
+    je "Butter" isti chip v vseh receptih. Manjkajoce ime ostane slovensko."""
+    ven = []
+    for s in sl:
+        en = angl_ime(s, H)
+        if not en:
+            print('   prevod %s: sestavina "%s" nima "en" v hranila.js' % (ime_recepta, s))
+            en = s
+        if en not in ven:
+            ven.append(en)
+    return sorted(ven, key=lambda x: x.lower())
+
+
+def kategorije_en():
+    """Kljuci slovarja kategorij iz jezik.js (za opozorilo o manjkajocem prevodu)."""
+    pot = os.path.join(MAPA, "_assets", "jezik.js")
+    if not os.path.exists(pot):
+        return None
+    m = re.search(r"RECEPTI_KATEGORIJE\s*=\s*\{(.*?)\}", open(pot, encoding="utf-8").read(), re.S)
+    return set(re.findall(r"'([^']+)'\s*:", m.group(1))) if m else None
+
+
+def tezave_prevoda(d):
+    """Angleski blok "en" mora imeti toliko sestavin in korakov kot recept,
+    sicer bi se prevod zamaknil - ime ene sestavine bi stalo ob kolicini druge."""
+    en = d.get("en")
+    if not en:
+        return ['ni angleskega prevoda ("en")']
+    ven = []
+    for kljuc in ("sestavine", "koraki"):
+        a, b = len(d.get(kljuc) or []), len(en.get(kljuc) or [])
+        if b and a != b:
+            ven.append('"%s": v receptu %d, v prevodu %d' % (kljuc, a, b))
+        elif not b and a:
+            ven.append('"%s" ni prevedeno' % kljuc)
+    if d.get("opombe") and not en.get("opombe"):
+        ven.append('"opombe" niso prevedene')
+    pl = (d.get("plasti") or {}).get("od_zgoraj") or []
+    if pl and len((en.get("plasti") or {}).get("od_zgoraj") or []) != len(pl):
+        ven.append('"plasti" niso (vse) prevedene')
+    return ven
+
+
 def recepti():
     """Vrne (vnosi za kazalo, imena zasebnih datotek)."""
     H = nalozi_hranila()
+    KAT = kategorije_en()
     vnosi, zasebni = [], []
     for ime in sorted(os.listdir(MAPA)):
         if not ime.lower().endswith(".html") or ime.startswith("_") or ime == "index.html":
@@ -166,14 +225,26 @@ def recepti():
             zasebni.append(ime)
             if GIT:
                 continue          # v javno kazalo ne gre
-        vnosi.append({
+        for t in tezave_prevoda(d):
+            print("   prevod %s: %s" % (ime, t))
+        if KAT is not None and d.get("kategorija") and d["kategorija"].lower() not in KAT:
+            print('   prevod %s: kategorija "%s" ni v jezik.js (RECEPTI_KATEGORIJE)' % (ime, d["kategorija"]))
+        sl = sestavine_za_iskanje(d)
+        en = d.get("en") or {}
+        vnos = {
             "datoteka": ime,
             "v": zeton(pot),
             "naslov": d.get("naslov", ime),
             "kategorija": d.get("kategorija", ""),
             "povzetek": d.get("povzetek") or CIST.sub("", d.get("opis", "")).strip(),
-            "sestavine": sestavine_za_iskanje(d),
-        })
+            "sestavine": sl,
+            "sestavine_en": sestavine_za_iskanje_en(sl, H, ime),
+        }
+        if en.get("naslov"):
+            vnos["naslov_en"] = en["naslov"]
+        if en.get("povzetek") or en.get("opis"):
+            vnos["povzetek_en"] = en.get("povzetek") or CIST.sub("", en.get("opis", "")).strip()
+        vnosi.append(vnos)
     vnosi.sort(key=lambda v: (v["kategorija"].lower(), v["naslov"].lower()))
     return vnosi, zasebni
 
@@ -215,7 +286,7 @@ def zapisi_kazalo(vnosi):
     podviri = {}
     # nastavitve.js namenoma ne: ni v javnem repu, index pa ga tu ne rabi
     for rel in ("_assets/recept.css", "_assets/kazalo.js", "_assets/tema.js",
-                "_assets/recept.js"):
+                "_assets/recept.js", "_assets/jezik.js"):
         p = os.path.join(MAPA, rel.replace("/", os.sep))
         if os.path.exists(p):
             podviri[rel] = zeton(p)

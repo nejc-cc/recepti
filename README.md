@@ -51,6 +51,23 @@ Datoteke z začetnim `_` generator preskoči, zato tam stoji predloga.
     _assets/naredi-kazalo.py     generator
     _assets/fonts/               Source Serif 4 (latin + latin-ext)
 
+## Jezik (slovensko / English)
+
+Gumb **EN / SL** zgoraj desno preklopi celo stran - vmesnik in recepte.
+Privzeto je slovensko. Izbira se zapomni v brskalniku (localStorage, kot
+tema; piškotkov ni). Povezava s `?jezik=en` odpre stran naravnost v
+angleščini - taka se lahko pošlje.
+
+- **Vmesnik**: vsak napis nosi oba prevoda kar ob sebi v kodi
+  (`t('Prekliči', 'Cancel')`); jezik izbere `_assets/jezik.js`, ki prevede
+  tudi kategorije.
+- **Recepti**: vsak ima blok `"en"`, ki se položi čez slovenskega - glej
+  predlogo. Sestavine in koraki se ujemajo po vrstnem redu.
+- **Iskanje po sestavinah** v angleščini uporablja imena iz polja `"en"` v
+  `_assets/hranila.js`, zato je "Butter" isti chip v vseh receptih.
+- Generator opozori na recept brez prevoda, na neujemanje števila sestavin
+  ali korakov in na kategorijo ali sestavino brez angleškega imena.
+
 ## Hranilna vrednost
 
 Podatki so v `_assets/hranila.js`, **na 100 g, surovo**, iz tipičnih
