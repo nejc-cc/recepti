@@ -278,7 +278,17 @@ def zavaruj_zasebne(zasebni):
               % (s, s), file=sys.stderr)
 
 
-def zapisi_kazalo(pot, vnosi):
+def osnove(vnosi, H):
+    """Sestavine iz shrambe, ki jih ima vsak (v hranila.js "zanemarljivo":
+    sol, zacimbe, pecilni prasek) - filter "Kaj imam doma" jih steje kot doma."""
+    if not H:
+        return {"sl": [], "en": []}
+    sl = sorted({s for v in vnosi for s in v["sestavine"]
+                 if (H["sestavine"].get(s.lower()) or {}).get("zanemarljivo")}, key=str.lower)
+    return {"sl": sl, "en": sorted({angl_ime(s, H) or s for s in sl}, key=str.lower)}
+
+
+def zapisi_kazalo(pot, vnosi, H=None):
     """Kazalo nosi tudi zetone podvirov: recepti.js se edini vedno nalozi svez,
     zato index popravi svoj CSS tudi, ko sam lezi v predpomnilniku."""
     podviri = {}
@@ -290,7 +300,8 @@ def zapisi_kazalo(pot, vnosi):
     return pisi(pot,
                 "/* Samodejno zgrajeno z orodja/naredi.py - ne urejaj rocno. */\n"
                 "window.RECEPTI = " + json.dumps(vnosi, ensure_ascii=False, indent=2) + ";\n"
-                "window.RECEPTI_PODVIRI = " + json.dumps(podviri, ensure_ascii=False, indent=2) + ";\n")
+                "window.RECEPTI_PODVIRI = " + json.dumps(podviri, ensure_ascii=False, indent=2) + ";\n"
+                "window.RECEPTI_OSNOVE = " + json.dumps(osnove(vnosi, H), ensure_ascii=False) + ";\n")
 
 
 def main():
@@ -362,8 +373,8 @@ def main():
     uredi = lambda v: (v["kategorija"].lower(), v["naslov"].lower())
     vsi.sort(key=uredi)
     javni.sort(key=uredi)
-    zapisi_kazalo(os.path.join(STRAN, "recepti.js"), javni)
-    zapisi_kazalo(os.path.join(STRAN, "recepti-doma.js"), vsi)
+    zapisi_kazalo(os.path.join(STRAN, "recepti.js"), javni, H)
+    zapisi_kazalo(os.path.join(STRAN, "recepti-doma.js"), vsi, H)
     index = os.path.join(STRAN, "index.html")
     if pisi(index, ozigosaj(beri(index))):
         print("   ozigosan index.html")

@@ -39,7 +39,8 @@ SLOVENSKO = [
     "Prični od začetka", "Izvozi kot sliko", "Beljakovine", "približno",
     "Po sestavinah", "Na porcijo", "Segrej pečico", "Časovnik", "V košarico",
     "Ni vračunano", "Išči po", "Počisti", "Kaj imaš doma", "receptov",
-    "Recept ·", "Energija", "Manjka ena", "Beri po vrsticah",
+    "Recept ·", "Energija", "Manjka ena", "Beri po vrsticah", "Lahko skuhaš",
+    "Kaj imam doma", "S temi sestavinami", "Manjkata dve", "imaš vse",
 ]
 
 OVOJ = """<!DOCTYPE html><meta charset="utf-8"><pre id="izid">cakam</pre>

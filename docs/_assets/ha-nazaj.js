@@ -21,6 +21,8 @@
     }
   }
 
+  /* samo kopija na HA (/local/...): javna stran ni nikoli del dashboarda */
+  if (location.pathname.indexOf('/local/') !== 0) return;
   var pot = starsevskaPot();
   if (!pot) return;
 

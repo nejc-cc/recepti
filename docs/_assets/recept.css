@@ -348,6 +348,13 @@ a.glavni, a.tanki { display: inline-block; text-decoration: none; line-height: n
 }
 .sestavine-filter .glava button { padding: var(--s1) var(--s3); font-size: .85rem; }
 .filter-sestavin { display: flex; flex-wrap: wrap; gap: var(--s1); }
+/* preklop nacina: dva sosednja chipa kot en gumb z dvema polozajema */
+.sestavine-filter .nacin { display: inline-flex; }
+.sestavine-filter .nacin .chip { padding: var(--s1) var(--s3); font-size: .85rem; }
+.sestavine-filter .nacin .chip + .chip { margin-left: -1px; }
+.sestavine-filter .nacin .chip:first-child { border-radius: 2px 0 0 2px; }
+.sestavine-filter .nacin .chip:last-child { border-radius: 0 2px 2px 0; }
+.namig-nacina { margin: 0 0 var(--s2); font-size: .82rem; color: var(--muted); }
 
 /* filter po kategorijah - stalno viden, ker je kategorij malo */
 .filter-kategorij { display: flex; flex-wrap: wrap; gap: var(--s1); margin-bottom: var(--s4); }

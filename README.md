@@ -23,7 +23,11 @@ se raztezajo čez sestavine, na katere se nanašajo.
 - **Izvoz kot slika** - PNG za deljenje: svetla tema, tabela, brez gumbov.
 - **Predogled povezave** - ob deljenju recepta (WhatsApp, Viber ...) kartica z
   naslovom in opisom.
-- **Kazalo** - iskanje po imenu, kategoriji in sestavinah ("kaj imam doma").
+- **Kazalo** - iskanje po imenu in kategoriji ter po sestavinah na dva načina:
+  **S temi sestavinami** (recepti z vsemi izbranimi; ostanejo samo sestavine,
+  ki se z njimi pojavljajo) in **Kaj imam doma** (odkljukaš shrambo - najprej
+  recepti, ki jih lahko skuhaš, nato tisti, ki jim manjka ena ali dve
+  sestavini; sol in začimbe štejejo kot doma).
 
 ## Zgradba
 
