@@ -400,6 +400,37 @@ ul.kazalo .opis { flex: 1 1 100%; font-size: .95rem; color: var(--muted); }
   .po-sestavinah table { font-size: .82rem; }
 }
 
+/* ---------- telefon: preklop Seznam / Tabela ----------
+   Nad 700 px ga ni (tam je tabela vedno). V tabeli je stolpec s sestavinami
+   prilepljen levo, koraki se premikajo vstran. Tu je tabela z LOCENIMI
+   obrobami (vsaka celica ima svojo desno in spodnjo): pri border-collapse
+   obrobe prilepljenih celic ostanejo v mrezi in odpotujejo z drsenjem, med
+   njimi pa proseva besedilo korakov. */
+.prikaz { display: none; }
+@media (max-width: 700px) {
+  .prikaz { display: inline-flex; margin: 0 0 var(--s3); }
+  .prikaz .chip { padding: var(--s1) var(--s3); font-size: .85rem; }
+  .prikaz .chip + .chip { margin-left: -1px; }
+  .prikaz .chip:first-child { border-radius: 2px 0 0 2px; }
+  .prikaz .chip:last-child { border-radius: 0 2px 2px 0; }
+  html[data-prikaz="tabela"] .tabela-ovoj { display: block; }
+  html[data-prikaz="tabela"] .zlozeno { display: none; }
+  html[data-prikaz="tabela"] table.recept { font-size: .9rem; border-collapse: separate; border-spacing: 0; }
+  html[data-prikaz="tabela"] table.recept td { padding: var(--s2); border-width: 0 1px 1px 0; }
+  html[data-prikaz="tabela"] table.recept td.predgretje { text-align: left; }
+  html[data-prikaz="tabela"] table.recept td.sestavina {
+    position: sticky; left: 0; z-index: 1;
+    width: 38vw; min-width: 7.5em;
+    background: var(--paper);
+    /* crta NAD celico, ne pod njo: vrstice imajo delne visine, prilepljena
+       celica spodaj za delcek piksla prekrije spodnjo obrobo zgornje */
+    border-bottom-width: 0; box-shadow: inset 0 1px 0 var(--line);
+  }
+  html[data-prikaz="tabela"] table.recept td.sestavina.opravljeno {
+    background: color-mix(in srgb, var(--text) 6%, var(--paper));
+  }
+}
+
 /* Ozek telefon (360 px): tri kolone hranil z dolgimi slovenskimi naslovi
    (»Na 100 g surovega«, »Za 4 ciabatte«) z velikimi crkami ne gredo v 330 px. */
 @media (max-width: 420px) {
@@ -409,7 +440,7 @@ ul.kazalo .opis { flex: 1 1 100%; font-size: .95rem; color: var(--muted); }
 
 @media print {
   body { background: #fff; color: #000; padding: 0; font-size: 11pt; }
-  .kolicina, .nazaj, .akcije, .kosarica, .obvestilo, .tema-gumb, .budnost-gumb, .jezik-gumb, .ha-nazaj, .izvoz-okno, .noga { display: none; }
+  .kolicina, .nazaj, .akcije, .kosarica, .obvestilo, .tema-gumb, .budnost-gumb, .jezik-gumb, .ha-nazaj, .izvoz-okno, .noga, .prikaz { display: none; }
   /* natisnjen izvod je cist: kar je bilo odkljukano med kuhanjem, se ne vidi */
   .opravljeno { text-decoration: none; opacity: 1; background: none; }
   .tabela-ovoj { display: block; overflow: visible; }

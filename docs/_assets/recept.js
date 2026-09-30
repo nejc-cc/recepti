@@ -688,7 +688,7 @@
 
   function klonZaIzvoz() {
     var k = document.querySelector('.stran').cloneNode(true);
-    var ven = k.querySelectorAll('.nazaj, .orodja, .akcije, .kosarica, .obvestilo, .zlozeno, .noga');
+    var ven = k.querySelectorAll('.nazaj, .orodja, .akcije, .kosarica, .obvestilo, .zlozeno, .noga, .prikaz');
     for (var i = 0; i < ven.length; i++) ven[i].parentNode.removeChild(ven[i]);
     /* gumbi za kolicino na sliki nimajo pomena - ostane samo izbrana */
     var kol = k.querySelector('.kolicina');
@@ -963,6 +963,10 @@
     });
     h += '</div>';
   }
+  /* preklop je viden samo pod 700 px (CSS) - tam je privzeto seznam */
+  h += '<div class="prikaz" role="group" aria-label="' + t('Prikaz', 'View') + '">' +
+       '<button type="button" class="chip" data-prikaz="seznam">' + t('Seznam', 'List') + '</button>' +
+       '<button type="button" class="chip" data-prikaz="tabela">' + t('Tabela', 'Table') + '</button></div>';
   h += '<div class="tabela-ovoj"></div><div class="zlozeno"></div>' +
        '<div class="plasti-ovoj"></div>';
   /* Vrstica z akcijami je zdaj vedno, ker gumb za ponastavitev ni odvisen
@@ -1028,6 +1032,33 @@
     var zk = Number(zahtevaIzvoza[1]);
     if (zk && (zk === osnova || izbire.indexOf(zk) !== -1)) stanje = zk;
     try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+  }
+
+  /* --- prikaz na telefonu: seznam (privzeto) ali tabela ------------
+     Tabela je na ozkem zaslonu siroka, zato se premika vstran, stolpec s
+     sestavinami pa ostane prilepljen levo (CSS). Izbira je po napravi in
+     velja samo pod 700 px - sirse je tabela vedno. */
+  var PRIKAZ_KLJUC = 'recepti-prikaz';
+  function nastaviPrikaz(p) {
+    if (p === 'tabela') document.documentElement.setAttribute('data-prikaz', 'tabela');
+    else document.documentElement.removeAttribute('data-prikaz');
+    var g = document.querySelectorAll('.prikaz button');
+    for (var i = 0; i < g.length; i++) g[i].setAttribute('aria-pressed', String(g[i].getAttribute('data-prikaz') === p));
+  }
+  var zacetni = 'seznam';
+  try { if (localStorage.getItem(PRIKAZ_KLJUC) === 'tabela') zacetni = 'tabela'; } catch (e) {}
+  nastaviPrikaz(zacetni);
+  var gumbiPrikaza = document.querySelector('.prikaz');
+  if (gumbiPrikaza) {
+    gumbiPrikaza.addEventListener('click', function (e) {
+      var p = e.target.getAttribute && e.target.getAttribute('data-prikaz');
+      if (!p) return;
+      nastaviPrikaz(p);
+      try {
+        if (p === 'tabela') localStorage.setItem(PRIKAZ_KLJUC, 'tabela');
+        else localStorage.removeItem(PRIKAZ_KLJUC);
+      } catch (err) {}
+    });
   }
 
   gumbBudnost();
