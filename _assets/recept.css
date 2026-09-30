@@ -309,6 +309,15 @@ a.glavni, a.tanki { display: inline-block; text-decoration: none; line-height: n
 .izvoz-okno .namig { margin: 0; font-size: .9rem; color: var(--napaka); }
 .izvoz-okno .namig:empty { display: none; }
 
+/* ---------- noga (samo javna stran, doda jo jezik.js) ---------- */
+.noga {
+  margin-top: var(--s8); padding-top: var(--s3);
+  border-top: 1px solid var(--line-soft);
+  font-size: .85rem; color: var(--muted);
+}
+.noga a { color: inherit; }
+.noga a:hover { color: var(--accent); }
+
 /* ---------- opombe ---------- */
 .opombe { display: flex; flex-wrap: wrap; gap: var(--s6) var(--s8); margin-top: var(--s6); max-width: 46em; }
 .opombe p { margin: 0; font-size: .95rem; color: var(--muted); flex: 1 1 14em; }
@@ -385,7 +394,7 @@ ul.kazalo .opis { flex: 1 1 100%; font-size: .95rem; color: var(--muted); }
 
 @media print {
   body { background: #fff; color: #000; padding: 0; font-size: 11pt; }
-  .kolicina, .nazaj, .akcije, .kosarica, .obvestilo, .tema-gumb, .budnost-gumb, .jezik-gumb, .ha-nazaj, .izvoz-okno { display: none; }
+  .kolicina, .nazaj, .akcije, .kosarica, .obvestilo, .tema-gumb, .budnost-gumb, .jezik-gumb, .ha-nazaj, .izvoz-okno, .noga { display: none; }
   /* natisnjen izvod je cist: kar je bilo odkljukano med kuhanjem, se ne vidi */
   .opravljeno { text-decoration: none; opacity: 1; background: none; }
   .tabela-ovoj { display: block; overflow: visible; }

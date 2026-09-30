@@ -91,6 +91,38 @@
     if (tema) orodja.insertBefore(g, tema);
     else orodja.appendChild(g);
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', gumb);
-  else gumb();
+  /* --- noga (samo javna stran) ---------------------------------------
+     Na HA (/local/...) je ni: tam je stran domaca in noga bi bila samo
+     sum na kiosku. Povezava za umik odpre GitHub obrazec
+     (.github/ISSUE_TEMPLATE/umik-recepta.yml), na receptu ze izpolnjen
+     s tem receptom. */
+  var REPO = 'https://github.com/nejc-cc/recepti';
+  function noga() {
+    if (location.pathname.indexOf('/local/') === 0) return;
+    var stran = document.querySelector('.stran');
+    if (!stran || stran.querySelector('.noga')) return;
+    var en = j === 'en';
+    var recept = !!document.getElementById('recept');
+    var h1 = stran.querySelector('h1');
+    var umik = REPO + '/issues/new?template=umik-recepta.yml';
+    if (recept) {
+      umik += '&title=' + encodeURIComponent((en ? 'Recipe removal: ' : 'Umik recepta: ') +
+                                             (h1 ? h1.textContent : '')) +
+              '&recept=' + encodeURIComponent(location.origin + location.pathname);
+    }
+    function povezava(href, besedilo) {
+      return '<a href="' + href + '" target="_blank" rel="noopener noreferrer">' + besedilo + '</a>';
+    }
+    var f = document.createElement('footer');
+    f.className = 'noga';
+    f.innerHTML = (en ? 'A home recipe collection' : 'Domača zbirka receptov') + ' · Nejc · ' +
+      povezava(REPO, en ? 'code on GitHub' : 'koda na GitHubu') + ' · ' +
+      povezava(umik, recept ? (en ? 'request removal of this recipe' : 'zahtevaj umik tega recepta')
+                            : (en ? 'request removal of a recipe' : 'zahtevaj umik recepta'));
+    stran.appendChild(f);
+  }
+
+  function ob() { gumb(); noga(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ob);
+  else ob();
 })();

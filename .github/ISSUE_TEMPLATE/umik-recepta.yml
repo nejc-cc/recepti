@@ -1,0 +1,28 @@
+name: Umik recepta / Recipe removal
+description: Avtor ali imetnik pravic prosi za umik recepta. / The author or rights holder asks for a recipe to be removed.
+title: "Umik recepta: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Hvala, ker ste se oglasili. Če ste avtor recepta ali imetnik pravic, bo recept umaknjen s strani — brez dodatnih vprašanj.
+
+        Thank you for getting in touch. If you are the author of the recipe or hold the rights to it, it will be taken down — no further questions.
+  - type: input
+    id: recept
+    attributes:
+      label: Recept na tej strani / Recipe on this site
+      description: Povezava na recept na recepti.nejc.cc / Link to the recipe on recepti.nejc.cc
+      placeholder: https://recepti.nejc.cc/...
+    validations:
+      required: true
+  - type: input
+    id: izvirnik
+    attributes:
+      label: Vaš izvirnik / Your original
+      description: Povezava na vaš izvirni recept (neobvezno) / Link to your original recipe (optional)
+  - type: textarea
+    id: sporocilo
+    attributes:
+      label: Sporočilo / Message
+      description: Neobvezno / Optional

@@ -685,7 +685,7 @@
 
   function klonZaIzvoz() {
     var k = document.querySelector('.stran').cloneNode(true);
-    var ven = k.querySelectorAll('.nazaj, .orodja, .akcije, .kosarica, .obvestilo, .zlozeno');
+    var ven = k.querySelectorAll('.nazaj, .orodja, .akcije, .kosarica, .obvestilo, .zlozeno, .noga');
     for (var i = 0; i < ven.length; i++) ven[i].parentNode.removeChild(ven[i]);
     /* gumbi za kolicino na sliki nimajo pomena - ostane samo izbrana */
     var kol = k.querySelector('.kolicina');

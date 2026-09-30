@@ -109,3 +109,7 @@ izpusti iz kazala in vpiše v `.gitignore`, zato ga v tem repu ni.
 
 Recepti so predelani v tabelo in imajo vir naveden v opombah. Fotografij z
 virov stran ne objavlja.
+
+Avtor ali imetnik pravic lahko zahteva umik recepta prek povezave v nogi
+strani - odpre obrazec na GitHubu (`.github/ISSUE_TEMPLATE/umik-recepta.yml`).
+Noga se pokaze samo na javni strani, na Home Assistantu (`/local/`) je ni.
