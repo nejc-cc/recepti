@@ -3,14 +3,15 @@
 Domača zbirka receptov kot statične strani: brez strežnika, baze in zunanjih
 knjižnic. Stran: **https://recepti.nejc.cc**
 
-Vsak recept je ena HTML datoteka z JSON blokom, ves izris naredi
-`_assets/recept.js`. Recept je **tabela**: sestavine so vrstice levo, koraki
-so stolpci desno, ki se raztezajo čez sestavine, na katere se nanašajo.
+Recept je **tabela**: sestavine so vrstice levo, koraki so stolpci desno, ki
+se raztezajo čez sestavine, na katere se nanašajo.
 
 ## Kaj zna
 
 - **Preračun količin** - gumbi za 1, 2, 4 ... porcije; slovenska sklanjatev
   enot in sestavin (1 jajce, 3 jajca, 6 jajc); neobvezna druga mera (cups).
+- **Dva jezika** - gumb EN/SL preklopi vmesnik in recepte; `?jezik=en` v
+  povezavi odpre stran naravnost v angleščini.
 - **Telefon** - pod 700 px isti recept kot seznam sestavin in oštevilčen
   postopek. **Tisk** - samo recept, brez gumbov. **Temni način** po sistemu,
   gumb zgoraj desno ga povozi.
@@ -20,57 +21,76 @@ so stolpci desno, ki se raztezajo čez sestavine, na katere se nanašajo.
 - **Hranilna vrednost** - kcal in beljakovine na porcijo, na 100 g in skupaj,
   z razčlenitvijo po sestavinah.
 - **Izvoz kot slika** - PNG za deljenje: svetla tema, tabela, brez gumbov.
+- **Predogled povezave** - ob deljenju recepta (WhatsApp, Viber ...) kartica z
+  naslovom in opisom.
 - **Kazalo** - iskanje po imenu, kategoriji in sestavinah ("kaj imam doma").
+
+## Zgradba
+
+    recepti/<ime>.json      VIR: en recept = ena datoteka, samo podatki
+    orodja/                 generator, preizkus, predloga, opis polj
+    docs/                   STRAN - to streže GitHub Pages
+      index.html            kazalo z iskanjem
+      recepti.js            kazalo - GENERIRANO
+      recept/<ime>.html     strani receptov - GENERIRANE iz recepti/*.json
+      _assets/              slog, skripte, pisave, hranila.js
+
+Strani receptov so generirane iz ene predloge (`orodja/stran-recepta.html`),
+zato se ogrodje strani spreminja na enem mestu, recepti pa ostanejo čisti
+podatki. **Strani v `docs/recept/` ne urejaj** - naslednji zagon generatorja
+bi spremembo povozil.
+
+    orodja/naredi.py             generator: strani, kazalo, žetoni, preverjanja
+    orodja/preveri.py            preizkus v brskalniku (glej spodaj)
+    orodja/oblikuj.py            enotna oblika JSON receptov
+    orodja/stran-recepta.html    predloga strani recepta
+    orodja/predloga-recepta.json izhodišče za nov recept
+    orodja/POLJA.md              opis vseh polj recepta
+    docs/_assets/recept.js       izris recepta, količine, hranila, izvoz
+    docs/_assets/kazalo.js       izris in iskanje v kazalu
+    docs/_assets/jezik.js        jezik (SL/EN), prevod kategorij, noga
+    docs/_assets/tema.js         preklop svetlo/temno
+    docs/_assets/hranila.js      hranilne vrednosti na 100 g in angleška imena
+    docs/_assets/ha-nazaj.js     gumb "nazaj" v Home Assistant dashboardu
+    docs/_assets/nastavitve.primer.js  vzorec nastavitev za Home Assistant
 
 ## Dodajanje recepta
 
-1. `_template.html` kopiraj pod novim imenom, npr. `kruh-pirin.html`
-   (male črke, brez šumnikov in presledkov).
-2. Izpolni JSON blok - vsa polja so opisana v komentarju v predlogi.
-3. Poženi generator:
+1. `orodja/predloga-recepta.json` kopiraj v `recepti/<ime>.json`
+   (male črke, brez šumnikov in presledkov - ime je tudi naslov strani in se
+   po objavi ne menja).
+2. Izpolni podatke - vsa polja so opisana v `orodja/POLJA.md`. Angleški
+   prevod gre v blok `"en"`.
+3. Poženi:
 
-       python _assets/naredi-kazalo.py
+       python orodja/naredi.py
+       python orodja/preveri.py
 
-   Prepiše `recepti.js` (kazalo), osveži `?v=` žetone in preveri, ali zna
-   stran vračunati hranilno vrednost vseh sestavin.
+   Generator izdela stran in kazalo ter izpiše, česar ne zna vračunati
+   (`hranila ...`) in kaj manjka v prevodu (`prevod ...`). Enotno obliko JSON
+   da `python orodja/oblikuj.py recepti/<ime>.json`.
 
-Datoteke z začetnim `_` generator preskoči, zato tam stoji predloga.
+## Preizkus
 
-## Kaj je kaj
-
-    index.html                   kazalo z iskanjem
-    recepti.js                   kazalo - SAMODEJNO zgrajeno, ne urejaj
-    _template.html               predloga + opis vseh polj
-    _assets/recept.js            izris recepta, količine, hranila, izvoz
-    _assets/recept.css           slog (tabela, telefon, tisk, temni način)
-    _assets/kazalo.js            izris in iskanje v kazalu
-    _assets/tema.js              preklop svetlo/temno
-    _assets/hranila.js           hranilne vrednosti na 100 g
-    _assets/ha-nazaj.js          gumb "nazaj" v Home Assistant dashboardu
-    _assets/nastavitve.primer.js vzorec neobveznih nastavitev za Home Assistant
-    _assets/naredi-kazalo.py     generator
-    _assets/fonts/               Source Serif 4 (latin + latin-ext)
+`orodja/preveri.py` postreže `docs/` in v headless Edgu naloži kazalo in vsak
+recept v slovenščini in angleščini, v 360 px širokem okvirju. Poroča o JS
+napakah, neizrisanih straneh, strani, ki je širša od telefona, in o
+slovenskem besedilu vmesnika v angleški različici. Ob težavi vrne kodo 1.
+Na Windows ga poženi iz PowerShella ali cmd (iz git-basha se Edge odklopi).
 
 ## Jezik (slovensko / English)
 
-Gumb **EN / SL** zgoraj desno preklopi celo stran - vmesnik in recepte.
-Privzeto je slovensko. Izbira se zapomni v brskalniku (localStorage, kot
-tema; piškotkov ni). Povezava s `?jezik=en` odpre stran naravnost v
-angleščini - taka se lahko pošlje.
-
 - **Vmesnik**: vsak napis nosi oba prevoda kar ob sebi v kodi
-  (`t('Prekliči', 'Cancel')`); jezik izbere `_assets/jezik.js`, ki prevede
-  tudi kategorije.
-- **Recepti**: vsak ima blok `"en"`, ki se položi čez slovenskega - glej
-  predlogo. Sestavine in koraki se ujemajo po vrstnem redu.
+  (`t('Prekliči', 'Cancel')`); jezik izbere `docs/_assets/jezik.js`. Izbira
+  se zapomni v brskalniku (localStorage, kot tema; piškotkov ni).
+- **Recepti**: vsak ima blok `"en"`, ki se položi čez slovenskega. Sestavine
+  in koraki se ujemajo po vrstnem redu.
 - **Iskanje po sestavinah** v angleščini uporablja imena iz polja `"en"` v
-  `_assets/hranila.js`, zato je "Butter" isti chip v vseh receptih.
-- Generator opozori na recept brez prevoda, na neujemanje števila sestavin
-  ali korakov in na kategorijo ali sestavino brez angleškega imena.
+  `hranila.js`, zato je "Butter" isti chip v vseh receptih.
 
 ## Hranilna vrednost
 
-Podatki so v `_assets/hranila.js`, **na 100 g, surovo**, iz tipičnih
+Podatki so v `docs/_assets/hranila.js`, **na 100 g, surovo**, iz tipičnih
 deklaracij v EU oz. USDA FoodData Central. Ključ je ime z nakupovalnega
 seznama (polje `nakup`), zato ista sestavina v vseh receptih bere isto vrstico.
 
@@ -90,26 +110,29 @@ naj bo v sliki, mora biti vgrajeno - zunanja slika bi ostala prazna.
 
 ## Home Assistant (neobvezno)
 
-Isto mapo lahko streže Home Assistant iz `/config/www/` (na `/local/`). Če
-tam obstaja `_assets/nastavitve.js` (vzorec: `nastavitve.primer.js`), se
-pokažeta še gumba za nakupovalni seznam in pečico, ki kličeta HA webhooke.
-Avtomatizacije niso del tega repa. Na javni strani nastavitev ni, zato tudi
-gumbov ni.
+Mapo `docs/` lahko streže tudi Home Assistant iz `/config/www/` (na
+`/local/`). Če tam obstaja `_assets/nastavitve.js` (vzorec:
+`nastavitve.primer.js`), se pokažeta še gumba za nakupovalni seznam in
+pečico, ki kličeta HA webhooke. Avtomatizacije niso del tega repa. Na javni
+strani nastavitev ni, zato tudi gumbov ni.
 
 HA streže `/local/` z 31-dnevnim predpomnilnikom, zato ima vsak sklic na
 `_assets/*` žeton `?v=` iz vsebine datoteke - menja se samo ob resnični
-spremembi.
+spremembi. Zato mapa ostaja `_assets`: stara kopija kazala iz predpomnilnika
+jo še vedno najde.
 
 ## Zasebni recepti
 
-Recept z `"javno": false` ostane samo doma. V git delovni mapi ga generator
-izpusti iz kazala in vpiše v `.gitignore`, zato ga v tem repu ni.
+Recept z `"javno": false` ostane samo doma. Generator ga izpusti iz javnega
+kazala (`docs/recepti.js`), doda v domače (`docs/recepti-doma.js`) ter vir in
+stran vpiše v `.gitignore`, zato ga v tem repu ni.
 
-## Viri
+## Viri in licenca
 
 Recepti so predelani v tabelo in imajo vir naveden v opombah. Fotografij z
-virov stran ne objavlja.
+virov stran ne objavlja. Avtor ali imetnik pravic lahko zahteva umik recepta
+prek povezave v nogi strani - odpre obrazec na GitHubu
+(`.github/ISSUE_TEMPLATE/umik-recepta.yml`). Noga se pokaže samo na javni
+strani, na Home Assistantu (`/local/`) je ni.
 
-Avtor ali imetnik pravic lahko zahteva umik recepta prek povezave v nogi
-strani - odpre obrazec na GitHubu (`.github/ISSUE_TEMPLATE/umik-recepta.yml`).
-Noga se pokaze samo na javni strani, na Home Assistantu (`/local/`) je ni.
+Koda je pod licenco MIT (`LICENSE`). Recepti niso del licence.

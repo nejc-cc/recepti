@@ -1,0 +1,79 @@
+{
+  "naslov": "Fižolovi browniji",
+  "kategorija": "sladica",
+  "ikona": "🍫",
+  "povzetek": "Brez moke in dodanega sladkorja — konzerva fižola, datlji in proteini; 33 min na 180 °C.",
+  "opis": "Za <strong>{kolicina}</strong> — ena porcija je ena konzerva fižola, da gre cela v delo. Sladijo samo datlji, moke ni. Beri po vrsticah: sestavine levo, postopek se pomika v desno.",
+  "osnova": {
+    "kolicina": 2,
+    "oblike": ["porcijo", "porciji", "porcije", "porcij"],
+    "oblike_gumb": ["porcija", "porciji", "porcije", "porcij"]
+  },
+  "izbire": [1, 2, 3, 4],
+  "predgretje": "Pečico ogrej na 180&nbsp;°C — zgornji + spodnji grelec",
+  "pecica": {"temperatura": 180, "minute": 33, "program": "top_bottom", "hitro_predgretje": true},
+  "sestavine": [
+    {"kol": 480, "enota": "g", "ime": "odcejenega rjavega fižola ({n} &times; konzerva 400 g)", "kratko": "rjavi fižol", "nakup": "Rjavi fižol v konzervi", "nakup_kolicina": "{n} × 400 g"},
+    {"kol": 200, "enota": "ml", "ime": "vode", "kratko": "voda", "nakup": false},
+    {"kol": 6, "ime": ["jajce", "jajci", "jajca", "jajc"], "kratko": "jajca", "nakup": "Jajca"},
+    {"kol": 16, "ime": "datljev, izkoščičenih", "kratko": "datlji", "nakup": "Datlji"},
+    {"kol": 50, "enota": "g", "ime": "proteinov v prahu", "kratko": "protein v prahu", "nakup": "Protein v prahu"},
+    {"kol": 14, "enota": "g", "ime": "kakavovega prahu", "kratko": "kakav v prahu", "nakup": "Kakav v prahu"},
+    {"kol": 8, "enota": "g", "ime": "pecilnega praška", "kratko": "pecilni prašek", "nakup": "Pecilni prašek"},
+    {"kol": null, "ime": "ščepec soli", "kratko": "sol", "nakup": false},
+    {"kol": null, "ime": "sadje po želji — jagode, banana, borovnice", "kratko": "sadje", "nakup": false, "hranilo": false},
+    {"kol": 70, "enota": "g", "ime": "sesekljane 70&nbsp;% čokolade", "kratko": "70 % čokolada", "nakup": "Temna čokolada (60–70 %)"}
+  ],
+  "predlogi": ["jagode", "banane", "borovnice", "papir za peko"],
+  "koraki": [
+    {"besedilo": "odcedi\nin splakni", "vrstice": [1, 1]},
+    {"besedilo": "v posodi\nzblendaj\nv gladko zmes", "vrstice": [1, 8]},
+    {"besedilo": "v pekač,\nsadje vmešaj in/ali\ndodaj po vrhu +\npotresi čokolado"},
+    {"besedilo": "peci\n180&nbsp;°C\n33 min", "slog": "zakljucek"}
+  ],
+  "opombe": [
+    "Ena porcija je ena konzerva fižola: konzerva ima 400 g, odcejenega ostane cca. 240 g. Preračun je zastavljen tako, da vedno porabiš cele konzerve.",
+    "Fižol odcedi in dobro splakni, sicer se pozna okus konzerve.",
+    "Če so datlji presuhi, jih pred blendanjem nekaj minut prevri v vodi in odcedi.",
+    "Vse sestavine daj v eno posodo in zblendaj s paličnim mešalnikom, dokler zmes ni popolnoma gladka — koščki fižola se v pečici ne zmehčajo.",
+    "Sadje lahko vmešaš v zmes, položiš po vrhu ali oboje. Na nakupovalnem seznamu je sadje samo predlog (jagode, banane, borovnice) — obkljukaj, kar rabiš.",
+    "Preračun v žlice: 1 slaba merica proteinov &asymp; 25 g, 1 čajna žlička pecilnega praška &asymp; 4 g, 1 žlica kakava &asymp; 7 g, 1/3 tablice čokolade &asymp; 35 g.",
+    "Pekač 20 &times; 30 cm, obložen s papirjem za peko. Pri drugačni količini izberi pekač tako, da ostane zmes enako debela — 33 min na 180 &deg;C potem drži.",
+    "Pusti, da se popolnoma ohladi, preden razrežeš; vroči se drobijo. V hladilniku zdržijo 3–4 dni."
+  ],
+  "en": {
+    "naslov": "Bean brownies",
+    "povzetek": "No flour and no added sugar — a can of beans, dates and protein powder; 33 min at 180 °C.",
+    "opis": "For <strong>{kolicina}</strong> — one batch is one can of beans, so the whole can gets used. Only the dates sweeten them; there is no flour. Read row by row: ingredients on the left, the method moves to the right.",
+    "predgretje": "Preheat the oven to 180&nbsp;°C — top and bottom heat",
+    "osnova": {"oblike": ["batch", "batches"]},
+    "sestavine": [
+      {"ime": "drained red kidney beans ({n} &times; 400 g can)", "kratko": "kidney beans"},
+      {"ime": "water", "kratko": "water"},
+      {"ime": ["egg", "eggs"], "kratko": "eggs"},
+      {"ime": "dates, pitted", "kratko": "dates"},
+      {"ime": "protein powder", "kratko": "protein powder"},
+      {"ime": "cocoa powder", "kratko": "cocoa powder"},
+      {"ime": "baking powder", "kratko": "baking powder"},
+      {"ime": "pinch of salt", "kratko": "salt"},
+      {"ime": "fruit of your choice — strawberries, banana, blueberries", "kratko": "fruit"},
+      {"ime": "chopped 70% chocolate", "kratko": "70% chocolate"}
+    ],
+    "koraki": [
+      "drain\nand rinse",
+      "blend\nin a bowl\nuntil smooth",
+      "into the tin,\nfold in fruit and/or\nadd it on top +\nsprinkle chocolate",
+      "bake\n180&nbsp;°C\n33 min"
+    ],
+    "opombe": [
+      "One batch is one can of beans: a can holds 400 g, about 240 g once drained. The scaling is set up so that you always use whole cans.",
+      "Drain the beans and rinse them well, otherwise you can taste the can.",
+      "If the dates are too dry, simmer them in water for a few minutes before blending and drain them.",
+      "Put all the ingredients in one bowl and blend with a stick blender until completely smooth — bits of bean don't soften in the oven.",
+      "The fruit can be folded into the mixture, laid on top, or both. On the shopping list the fruit is only a suggestion (strawberries, bananas, blueberries) — tick what you need.",
+      "Spoon conversion: 1 scant scoop of protein &asymp; 25 g, 1 tsp baking powder &asymp; 4 g, 1 tbsp cocoa &asymp; 7 g, 1/3 of a chocolate bar &asymp; 35 g.",
+      "Tin 20 &times; 30 cm, lined with baking paper. For a different quantity choose a tin that keeps the mixture the same depth — then 33 min at 180 &deg;C still holds.",
+      "Let them cool completely before cutting; warm, they crumble. They keep for 3–4 days in the fridge."
+    ]
+  }
+}

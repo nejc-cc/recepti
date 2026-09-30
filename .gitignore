@@ -1,14 +1,19 @@
 # Samo doma, nikoli na splet:
 # - prave nastavitve z ID-ji HA webhookov (vzorec je nastavitve.primer.js)
-/_assets/nastavitve.js
+/docs/_assets/nastavitve.js
 # - opis domace HA namestitve
-/_README-ha.md
+/docs/_README-ha.md
+# - kazalo z zasebnimi recepti (objavi.ps1 ga na HA zapise kot recepti.js)
+/docs/recepti-doma.js
 # - osnutki, dokler niso objavljeni
-/_osnutek-*.html
+/recepti/_osnutek-*.json
+/docs/recept/_osnutek-*.html
 # - Python predpomnilnik
 __pycache__/
 
-# --- zasebni recepti: vzdrzuje naredi-kazalo.py, ne urejaj rocno ---
-/cokoladna-torta-s-kislim-zeljem.html
-/cokoladna-torta-z-majonezo.html
+# --- zasebni recepti: vzdrzuje orodja/naredi.py, ne urejaj rocno ---
+/recepti/cokoladna-torta-s-kislim-zeljem.json
+/docs/recept/cokoladna-torta-s-kislim-zeljem.html
+/recepti/cokoladna-torta-z-majonezo.json
+/docs/recept/cokoladna-torta-z-majonezo.html
 # --- konec zasebnih receptov ---

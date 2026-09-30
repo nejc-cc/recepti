@@ -1,0 +1,59 @@
+{
+  "naslov": "Ciabatta",
+  "kategorija": "kruh",
+  "ikona": "🍞",
+  "povzetek": "Mokro testo s 77 % hidracije, počiva čez noč, peče se 40 min na 200 °C.",
+  "opis": "Za <strong>{kolicina}</strong>. Beri po vrsticah: sestavine levo, postopek se pomika v desno.",
+  "osnova": {
+    "kolicina": 4,
+    "oblike": ["ciabatto", "ciabatti", "ciabatte", "ciabatt"],
+    "oblike_gumb": ["ciabatta", "ciabatti", "ciabatte", "ciabatt"]
+  },
+  "izbire": [1, 2, 4],
+  "predgretje": "Pečico ogrej na 200&nbsp;°C — zgornji + spodnji grelec",
+  "pecica": {"temperatura": 200, "minute": 40, "program": "top_bottom", "hitro_predgretje": true},
+  "sestavine": [
+    {"kol": 1000, "enota": "g", "ime": "moke 00 manitoba", "kratko": "moka", "nakup": "Moka 00 manitoba"},
+    {"kol": 16, "enota": "g", "ime": "soli", "kratko": "sol", "nakup": "Sol"},
+    {"kol": 2, "enota": "g", "ime": "kvasa", "kratko": "kvas", "nakup": "Suhi kvas"},
+    {"kol": 770, "enota": "ml", "ime": "vode", "kratko": "voda", "nakup": false}
+  ],
+  "predlogi": ["papir za peko"],
+  "koraki": [
+    {"besedilo": "zmešaj\nsuho", "vrstice": [1, 3]},
+    {"besedilo": "zmešaj\nv testo"},
+    {"besedilo": "počiva\npokrito\nčez noč", "slog": "tih"},
+    {"besedilo": "razdeli\nna {n}", "slog": "tih"},
+    {"besedilo": "peci\n200&nbsp;°C\n40 min", "slog": "zakljucek"}
+  ],
+  "opombe": [
+    "Suhe sestavine zmešaj najprej, šele nato dodaj vodo.",
+    "Testo mora počivati v pokriti posodi — čez noč, pri sobni temperaturi.",
+    "Hidracija <strong>77 %</strong>. Testo je mokro; delaj z mokrimi rokami."
+  ],
+  "en": {
+    "naslov": "Ciabatta",
+    "povzetek": "Wet dough at 77% hydration, rests overnight, bakes for 40 min at 200 °C.",
+    "opis": "Makes <strong>{kolicina}</strong>. Read row by row: ingredients on the left, the method moves to the right.",
+    "predgretje": "Preheat the oven to 200&nbsp;°C — top and bottom heat",
+    "osnova": {"oblike": ["ciabatta", "ciabattas"]},
+    "sestavine": [
+      {"ime": "Manitoba 00 flour", "kratko": "flour"},
+      {"ime": "salt", "kratko": "salt"},
+      {"ime": "yeast", "kratko": "yeast"},
+      {"ime": "water", "kratko": "water"}
+    ],
+    "koraki": [
+      "mix\ndry",
+      "mix\ninto a dough",
+      "rest\ncovered\novernight",
+      "divide\ninto {n}",
+      "bake\n200&nbsp;°C\n40 min"
+    ],
+    "opombe": [
+      "Mix the dry ingredients first, then add the water.",
+      "The dough must rest in a covered bowl — overnight, at room temperature.",
+      "Hydration <strong>77%</strong>. The dough is wet; work with wet hands."
+    ]
+  }
+}

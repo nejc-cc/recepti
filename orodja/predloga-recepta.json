@@ -1,0 +1,40 @@
+{
+  "naslov": "Ime recepta",
+  "kategorija": "kategorija",
+  "ikona": "🍞",
+  "povzetek": "Ena vrstica, ki se prikaze v kazalu.",
+  "opis": "Za <strong>{kolicina}</strong>. Kratek uvod.",
+  "osnova": {"kolicina": 1, "oblike": ["porcijo", "porciji", "porcije", "porcij"]},
+  "izbire": [1, 2, 4],
+  "predlogi": [],
+  "predgretje": "Pečico ogrej na 180&nbsp;°C",
+  "pecica": {"temperatura": 180, "minute": 30, "program": "top_bottom", "hitro_predgretje": true},
+  "sestavine": [
+    {"kol": 500, "enota": "g", "ime": "moke", "kratko": "moka"},
+    {"kol": 10, "enota": "g", "ime": "soli", "kratko": "sol"},
+    {"kol": 300, "enota": "ml", "ime": "vode", "nakup": false},
+    {"kol": null, "ime": "ščepec sladkorja"}
+  ],
+  "koraki": [
+    {"besedilo": "zmešaj\nsuho", "vrstice": [1, 2]},
+    {"besedilo": "zamesi\ntesto"},
+    {"besedilo": "vzhaja\n1 h", "slog": "tih"},
+    {"besedilo": "peci\n180&nbsp;°C\n30 min", "slog": "zakljucek"}
+  ],
+  "opombe": ["Prva opomba.", "Druga opomba."],
+  "en": {
+    "naslov": "Recipe name",
+    "povzetek": "One line shown in the index.",
+    "opis": "For <strong>{kolicina}</strong>. A short introduction.",
+    "predgretje": "Preheat the oven to 180&nbsp;°C",
+    "osnova": {"oblike": ["serving", "servings"]},
+    "sestavine": [
+      {"ime": "flour", "kratko": "flour"},
+      {"ime": "salt", "kratko": "salt"},
+      {"ime": "water"},
+      {"ime": "pinch of sugar"}
+    ],
+    "koraki": ["mix\ndry", "knead\ninto a dough", "rise\n1 h", "bake\n180&nbsp;°C\n30 min"],
+    "opombe": ["First note.", "Second note."]
+  }
+}

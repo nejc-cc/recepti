@@ -1,0 +1,80 @@
+{
+  "naslov": "Piščančji žur",
+  "kategorija": "glavna jed",
+  "ikona": "🍗",
+  "povzetek": "Potolčen piščančji file, obložen s pršutom in sirom ter prelit s smetano; 45 min na 220 °C.",
+  "opis": "Za <strong>{kolicina}</strong>. Vse se sestavi kar v pekaču: potolčen file, čezenj pršut, nanj sir in po vsem smetana — potem gre samo še v pečico. Beri po vrsticah: sestavine levo, postopek se pomika v desno.",
+  "osnova": {
+    "kolicina": 6,
+    "oblike": ["porcijo", "porciji", "porcije", "porcij"],
+    "oblike_gumb": ["porcija", "porciji", "porcije", "porcij"]
+  },
+  "izbire": [3, 6, 12],
+  "predgretje": "Pečico ogrej na 220&nbsp;°C — zgornji + spodnji grelec",
+  "pecica": {"temperatura": 220, "minute": 45, "program": "top_bottom", "hitro_predgretje": true},
+  "sestavine": [
+    {"kol": 6, "ime": ["piščančji file", "piščančja fileja", "piščančji fileji", "piščančjih filejev"], "kratko": "piščančji file", "nakup": "Piščančje prsi (file)"},
+    {"kol": null, "ime": "sol", "kratko": "sol", "nakup": false},
+    {"kol": null, "ime": "poper", "kratko": "poper", "nakup": false},
+    {"kol": null, "ime": "rožmarin", "kratko": "rožmarin", "nakup": "Rožmarin"},
+    {"kol": 200, "enota": "g", "ime": "pršuta", "kratko": "pršut", "nakup": "Pršut"},
+    {"kol": 300, "enota": "g", "ime": "sira", "kratko": "sir", "nakup": "Sir"},
+    {"kol": 300, "enota": "ml", "ime": "razžvrkljane smetane", "kratko": "smetana", "nakup": "Sladka smetana"},
+    {"kol": null, "ime": "maslo za pekač", "kratko": "maslo", "nakup": "Maslo", "gramov": 5}
+  ],
+  "koraki": [
+    {"besedilo": "potolči", "vrstice": [1, 1]},
+    {"besedilo": "namaži\npekač", "vrstice": [8, 8]},
+    {"besedilo": "položi\nv pekač", "vrstice": [1, 1]},
+    {"besedilo": "začini", "vrstice": [1, 4]},
+    {"besedilo": "obloži", "vrstice": [1, 5]},
+    {"besedilo": "obloži\ns tankimi\nrezinami", "vrstice": [1, 6]},
+    {"besedilo": "prelij", "vrstice": [1, 7]},
+    {"besedilo": "peci\n220&nbsp;°C\n45 min", "vrstice": [1, 8], "slog": "zakljucek"}
+  ],
+  "opombe": [
+    "File potolči na enakomerno debelino — tanjši se speče prej in bi se do konca peke izsušil.",
+    "Pekač namaži z maslom, preden vanj zložiš meso.",
+    "Meso posoli zadržano: pršut in sir sta že sama po sebi slana.",
+    "Sir nareži na <strong>tanke rezine</strong>, da se med peko enakomerno stopi. Recept vrste sira ne določa; primeren je poltrdi sir, ki se lepo topi — edamec, gavda.",
+    "Smetano razžvrkljaj in jo enakomerno zlij čez vse skupaj.",
+    "Peče se nepokrito 45 minut na 220 &deg;C. Če se sir na vrhu prehitro obarva, ga za zadnjih 10 minut pokrij z alufolijo.",
+    "Vir: <a href=\"https://www.kulinarika.net/recepti/mesne-jedi/perutnina/piscancji-zur/2789/\">kulinarika.net</a>."
+  ],
+  "en": {
+    "naslov": "Chicken party bake",
+    "povzetek": "Pounded chicken breast topped with prosciutto and cheese and covered in cream; 45 min at 220 °C.",
+    "opis": "For <strong>{kolicina}</strong>. Everything is assembled right in the baking dish: pounded fillets, prosciutto over them, cheese on top and cream over everything — then it just goes in the oven. Read row by row: ingredients on the left, the method moves to the right.",
+    "predgretje": "Preheat the oven to 220&nbsp;°C — top and bottom heat",
+    "osnova": {"oblike": ["serving", "servings"]},
+    "sestavine": [
+      {"ime": ["chicken breast fillet", "chicken breast fillets"], "kratko": "chicken breast"},
+      {"ime": "salt", "kratko": "salt"},
+      {"ime": "pepper", "kratko": "pepper"},
+      {"ime": "rosemary", "kratko": "rosemary"},
+      {"ime": "prosciutto", "kratko": "prosciutto"},
+      {"ime": "cheese", "kratko": "cheese"},
+      {"ime": "cream, whisked", "kratko": "cream"},
+      {"ime": "butter for the dish", "kratko": "butter"}
+    ],
+    "koraki": [
+      "pound",
+      "grease\nthe dish",
+      "lay\nin the dish",
+      "season",
+      "cover",
+      "cover\nwith thin\nslices",
+      "pour over",
+      "bake\n220&nbsp;°C\n45 min"
+    ],
+    "opombe": [
+      "Pound the fillets to an even thickness — thinner parts cook faster and would dry out by the end of baking.",
+      "Grease the dish with butter before laying in the meat.",
+      "Go easy on the salt: the prosciutto and cheese are salty enough on their own.",
+      "Cut the cheese into <strong>thin slices</strong> so it melts evenly. The recipe doesn't specify the cheese; a semi-hard cheese that melts well — Edam, Gouda — works.",
+      "Whisk the cream and pour it evenly over everything.",
+      "Bake uncovered for 45 minutes at 220 &deg;C. If the cheese on top browns too fast, cover it with foil for the last 10 minutes.",
+      "Source: <a href=\"https://www.kulinarika.net/recepti/mesne-jedi/perutnina/piscancji-zur/2789/\">kulinarika.net</a>."
+    ]
+  }
+}

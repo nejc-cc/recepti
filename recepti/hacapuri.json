@@ -1,0 +1,99 @@
+{
+  "naslov": "Hačapuri",
+  "kategorija": "slano pecivo",
+  "ikona": "🧀",
+  "povzetek": "Gruzijski sirovi čolniči iz kvašenega testa — tri vrste sira, rumenjak na sredino; 20–25 min na 200 °C.",
+  "opis": "Za <strong>{kolicina}</strong>. Kvašeno testo se razvalja v krog, nadev se potrese 2 cm od roba, robovi se zavihajo v podolgovat čoln. Rumenjak gre na sredino šele proti koncu peke, da ostane tekoč. Beri po vrsticah: sestavine levo, postopek se pomika v desno.",
+  "osnova": {
+    "kolicina": 6,
+    "oblike": ["kos", "kosa", "kose", "kosov"],
+    "oblike_gumb": ["kos", "kosa", "kosi", "kosov"]
+  },
+  "izbire": [3, 6, 12],
+  "predgretje": "Pečico ogrej na 200&nbsp;°C — zgornji + spodnji grelec",
+  "pecica": {"temperatura": 200, "minute": 20, "program": "top_bottom", "hitro_predgretje": true},
+  "sestavine": [
+    {"kol": 500, "enota": "g", "ime": "moke", "kratko": "moka", "nakup": "Gladka moka"},
+    {"kol": 300, "enota": "g", "ime": "mlačne vode", "kratko": "voda", "nakup": false},
+    {"kol": 21, "enota": "g", "ime": "svežega kvasa", "kratko": "sveži kvas", "nakup": "Sveži kvas", "nakup_kolicina": "1 zavojček (42 g)"},
+    {"kol": 15, "enota": "g", "ime": "kislega testa — neobvezno", "kratko": "kislo testo", "nakup": false, "hranilo": false},
+    {"kol": 30, "enota": "ml", "ime": "olivnega olja", "kratko": "olivno olje", "nakup": "Olivno olje"},
+    {"kol": 8, "enota": "g", "ime": "soli", "kratko": "sol", "nakup": false},
+    {"kol": 300, "enota": "g", "ime": "ribane mozzarelle", "kratko": "mozzarella", "nakup": "Ribana mozzarella"},
+    {"kol": 150, "enota": "g", "ime": "feta sira", "kratko": "feta", "nakup": "Feta sir"},
+    {"kol": 100, "enota": "g", "ime": "svežega zrnatega sira", "kratko": "zrnati sir", "nakup": "Zrnati sir"},
+    {"kol": 1, "skaliraj": false, "ime": "jajce za premaz", "kratko": "jajce", "nakup": false, "hranilo": "jajca"},
+    {"kol": 6, "ime": ["rumenjak", "rumenjaka", "rumenjaki", "rumenjakov"], "kratko": "rumenjaki", "nakup": "Jajca", "nakup_kolicina": "{n} + 1 za premaz", "hranilo": "rumenjak"},
+    {"kol": null, "ime": "maslo za premaz", "kratko": "maslo", "nakup": "Maslo", "gramov": 30}
+  ],
+  "predlogi": ["papir za peko", "kislo testo Fala"],
+  "koraki": [
+    {"besedilo": "gneti\n10 min", "vrstice": [1, 6]},
+    {"besedilo": "vzhaja\n40–60 min", "vrstice": [1, 6], "slog": "tih"},
+    {"besedilo": "razdeli na {n}\nin razvaljaj\n20–24 cm", "vrstice": [1, 6]},
+    {"besedilo": "zmešaj", "vrstice": [7, 9]},
+    {"besedilo": "nadevaj,\nzavihaj robove,\noblikuj čoln", "vrstice": [1, 9]},
+    {"besedilo": "vzhaja\n15–20 min", "vrstice": [1, 9], "slog": "tih"},
+    {"besedilo": "premaži robove\nin peci\n200&nbsp;°C\n20–25 min", "vrstice": [1, 10]},
+    {"besedilo": "na sredino,\npeci še\n2–3 min", "vrstice": [1, 11]},
+    {"besedilo": "premaži", "vrstice": [1, 12], "slog": "zakljucek"}
+  ],
+  "opombe": [
+    "Testo gneti <strong>10 minut</strong> s kljukastim nastavkom pri višji hitrosti. Ročno gnetenje traja dlje in testo mora biti na koncu gladko in elastično.",
+    "Prvo vzhajanje: 40–60 minut v čisti naoljeni skledi, pokrito, dokler se volumen ne podvoji.",
+    "Vzhajano testo pretlači in razdeli na enake dele — vsak tehta približno <strong>150 g</strong>. Kose oblikuj v gladke krogle in pokrij s folijo, da se ne posušijo.",
+    "Nadev potresi približno <strong>2 cm od roba</strong>, robove zavihaj čez nadev in dobro pritisni. Oblikuj podolgovat čoln in stisni oba šiva, sicer se med peko razpre.",
+    "Drugo vzhajanje: 15–20 minut, že na pekaču s papirjem za peko, pokrito s folijo.",
+    "Časovnik je nastavljen na 20 minut. Takrat preveri — robovi morajo biti zlato rjavi; po potrebi peci do 25 minut. <strong>Šele nato</strong> na sredino vsakega čolna razbij rumenjak in peci še 2–3 minute, da ostane tekoč.",
+    "Pečen hačapuri premaži z maslom in postrezi vroč: rumenjak in sir se pred jedjo premešata s koščkom odtrganega roba.",
+    "<strong>Jajce za premaz, rumenjaki in maslo v izvirnem seznamu sestavin niso navedeni</strong>, so pa v postopku — brez njih recept ne gre skozi. Na vsak hačapuri gre en rumenjak, za premaz robov pa gre še eno celo jajce — na nakupovalnem seznamu so zato zapisana skupaj, npr. „Jajca 6 + 1 za premaz“. Pri večji seriji razmetaj še eno.",
+    "Kislo testo je neobvezno, zato ni med obveznimi nakupi — v košarici ga najdeš med predlogi.",
+    "Preračun: 30 ml olivnega olja &asymp; 2 žlici; 21 g svežega kvasa = pol zavojčka.",
+    "Vir: <a href=\"https://www.sketa.si/hacapuri/\">sketa.si</a>."
+  ],
+  "en": {
+    "naslov": "Khachapuri",
+    "povzetek": "Georgian cheese boats of yeasted dough — three kinds of cheese, a yolk in the middle; 20–25 min at 200 °C.",
+    "opis": "Makes <strong>{kolicina}</strong>. The yeasted dough is rolled into a circle, the filling scattered 2 cm from the edge, and the edges rolled into a long boat. The yolk goes into the middle only towards the end of baking, so it stays runny. Read row by row: ingredients on the left, the method moves to the right.",
+    "predgretje": "Preheat the oven to 200&nbsp;°C — top and bottom heat",
+    "osnova": {"oblike": ["piece", "pieces"]},
+    "sestavine": [
+      {"ime": "flour", "kratko": "flour"},
+      {"ime": "lukewarm water", "kratko": "water"},
+      {"ime": "fresh yeast", "kratko": "fresh yeast"},
+      {"ime": "sourdough starter — optional", "kratko": "sourdough starter"},
+      {"ime": "olive oil", "kratko": "olive oil"},
+      {"ime": "salt", "kratko": "salt"},
+      {"ime": "grated mozzarella", "kratko": "mozzarella"},
+      {"ime": "feta", "kratko": "feta"},
+      {"ime": "fresh cottage cheese", "kratko": "cottage cheese"},
+      {"ime": "egg for brushing", "kratko": "egg"},
+      {"ime": ["egg yolk", "egg yolks"], "kratko": "egg yolks"},
+      {"ime": "butter for brushing", "kratko": "butter"}
+    ],
+    "koraki": [
+      "knead\n10 min",
+      "rise\n40–60 min",
+      "divide into {n}\nand roll out\n20–24 cm",
+      "mix",
+      "fill,\nfold the edges,\nshape a boat",
+      "rise\n15–20 min",
+      "brush the edges\nand bake\n200&nbsp;°C\n20–25 min",
+      "into the middle,\nbake\n2–3 min more",
+      "brush"
+    ],
+    "opombe": [
+      "Knead the dough for <strong>10 minutes</strong> with the dough hook at a higher speed. Kneading by hand takes longer, and at the end the dough must be smooth and elastic.",
+      "First rise: 40–60 minutes in a clean oiled bowl, covered, until doubled in volume.",
+      "Knock back the risen dough and divide it into equal pieces — each weighs about <strong>150 g</strong>. Shape them into smooth balls and cover them with cling film so they don't dry out.",
+      "Scatter the filling about <strong>2 cm from the edge</strong>, fold the edges over the filling and press them down well. Shape a long boat and pinch both seams, otherwise it opens up in the oven.",
+      "Second rise: 15–20 minutes, already on the tray lined with baking paper, covered with cling film.",
+      "The timer is set to 20 minutes. Check then — the edges should be golden brown; bake for up to 25 minutes if needed. <strong>Only then</strong> crack a yolk into the middle of each boat and bake for another 2–3 minutes so it stays runny.",
+      "Brush the baked khachapuri with butter and serve hot: before eating, the yolk and cheese are stirred together with a piece of torn-off crust.",
+      "<strong>The egg for brushing, the yolks and the butter are not in the original ingredient list</strong>, but they are in the method — the recipe doesn't work without them. Each khachapuri gets one yolk, and one whole egg is used for brushing the edges — so on the shopping list they are written together, e.g. “Eggs 6 + 1 for brushing”. For a bigger batch, use one more.",
+      "The sourdough starter is optional, so it isn't a required purchase — in the shopping list it is among the suggestions.",
+      "Conversion: 30 ml olive oil &asymp; 2 tbsp; 21 g fresh yeast = half a cube.",
+      "Source: <a href=\"https://www.sketa.si/hacapuri/\">sketa.si</a>."
+    ]
+  }
+}

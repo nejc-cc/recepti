@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Domača zbirka receptov — tabela sestavin in korakov, preračun količin, hranilna vrednost.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Recepti">
+<meta property="og:title" content="Recepti">
+<meta property="og:description" content="Domača zbirka receptov — tabela sestavin in korakov, preračun količin, hranilna vrednost.">
+<meta property="og:url" content="https://recepti.nejc.cc/">
+<meta property="og:locale" content="sl_SI">
+<meta property="og:locale:alternate" content="en_GB">
+<title>Recepti</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%9E%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="_assets/recept.css?v=3c6b15b3">
+<script src="_assets/nastavitve.js?v=5cadc01b"></script>
+<script src="_assets/jezik.js?v=00903d2d"></script>
+<script src="_assets/tema.js?v=89542f8b"></script>
+<script src="_assets/ha-nazaj.js?v=ebb56bfb"></script>
+</head>
+<body>
+<div class="stran">
+  <h1>Recepti</h1>
+  <input id="iskanje" type="search" placeholder="Išči po imenu, kategoriji, opisu ali sestavini…" autocomplete="off">
+  <div class="filter-kategorij" role="group" aria-label="Kategorije"></div>
+
+  <div class="sestavine-filter">
+    <button type="button" id="odpri-sestavine" class="tanki" aria-expanded="false">🔎 Išči po sestavinah</button>
+    <div class="telo" hidden>
+      <div class="glava">
+        <span class="kicker">Kaj imaš doma</span>
+        <input id="iskanje-sestavin" type="search" placeholder="zoži seznam…" autocomplete="off">
+        <button type="button" id="pocisti-sestavine" class="tanki" hidden>Počisti</button>
+      </div>
+      <div class="filter-sestavin"></div>
+    </div>
+  </div>
+
+  <p class="kicker" id="stevec"></p>
+  <ul class="kazalo"></ul>
+</div>
+<script>
+/* Kazalo nalozimo dinamicno s casovnim zetonom: index.html sam lezi v
+   31-dnevnem HA cachu (/local/), seznam receptov pa mora biti svez tudi
+   takrat, ko brskalnik to stran postreze iz predpomnilnika. */
+(function () {
+  var a = document.createElement('script');
+  a.src = 'recepti.js?t=' + Math.floor(Date.now() / 60000);
+  a.onload = a.onerror = function () {
+    var P = window.RECEPTI_PODVIRI || {};
+    /* Ce je ta stran stara iz cachea, je lahko star tudi njen CSS. Svez zeton
+       pride z recepti.js; ce se razlikuje, stylesheet zamenjamo. */
+    var css = P['_assets/recept.css'];
+    var l = document.querySelector('link[rel=stylesheet]');
+    if (css && l && l.getAttribute('href').indexOf(css) === -1) {
+      l.setAttribute('href', '_assets/recept.css?v=' + css);
+    }
+    var b = document.createElement('script');
+    b.src = '_assets/kazalo.js?v=' + (P['_assets/kazalo.js'] || 'x');
+    document.body.appendChild(b);
+  };
+  document.body.appendChild(a);
+})();
+</script>
+</body>
+</html>

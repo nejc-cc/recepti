@@ -1,0 +1,82 @@
+{
+  "naslov": "Govedina po mongolsko",
+  "kategorija": "glavna jed",
+  "ikona": "🥩",
+  "povzetek": "Tanki trakovi marinirane govedine, hitro zapečeni s porom in prelivom iz ostrigine in sojine omake.",
+  "opis": "Govedina se nareže na tanke trakove in pol ure marinira, nato se zapeče, doda se por in na koncu omaka, ki se v dveh minutah zgosti. Izvirnik števila porcij ne navaja. Beri po vrsticah: sestavine levo, postopek se pomika v desno.",
+  "sestavine": [
+    {"kol": 450, "enota": "g", "ime": "mladega govejega hrbta ali roastbeefa", "kratko": "govedina", "nakup": "Goveji hrbet (roastbeef)"},
+    {"kol": 15, "enota": "ml", "ime": "sojine omake", "kratko": "sojina omaka", "nakup": "Sojina omaka", "nakup_kolicina": "45 ml (marinada + omaka)", "merica": {"kol": 1, "enota": ["žlica", "žlici", "žlice", "žlic"]}},
+    {"kol": 45, "enota": "ml", "ime": "riževega vina", "kratko": "riževo vino", "nakup": "Riževo vino", "merica": {"kol": 3, "enota": ["žlica", "žlici", "žlice", "žlic"]}},
+    {"kol": null, "ime": "1 čajna žlička sladkorja", "kratko": "sladkor", "nakup": "Kristalni sladkor", "gramov": 4},
+    {"kol": null, "ime": "ščepec soli", "kratko": "sol", "nakup": false},
+    {"kol": null, "ime": "olje za pečenje — ni v izvirniku", "kratko": "olje", "nakup": "Rastlinsko olje", "gramov": 14},
+    {"kol": 150, "enota": "g", "ime": "pora", "kratko": "por", "nakup": "Por"},
+    {"kol": 2, "ime": ["strok česna", "stroka česna", "stroki česna", "strokov česna"], "kratko": "česen", "nakup": "Česen"},
+    {"kol": 100, "enota": "ml", "ime": "vode", "kratko": "voda", "nakup": false, "merica": {"kol": 1, "enota": "dl"}},
+    {"kol": 75, "enota": "ml", "ime": "ostrigine omake", "kratko": "ostrigina omaka", "nakup": "Ostrigina omaka", "merica": {"kol": 5, "enota": ["žlica", "žlici", "žlice", "žlic"]}},
+    {"kol": 30, "enota": "ml", "ime": "sojine omake", "kratko": "sojina omaka", "nakup": false, "merica": {"kol": 2, "enota": ["žlica", "žlici", "žlice", "žlic"]}},
+    {"kol": null, "ime": "1 žlica krompirjevega škroba", "kratko": "krompirjev škrob", "nakup": "Krompirjev škrob", "gramov": 9}
+  ],
+  "koraki": [
+    {"besedilo": "nareži\nna trakove\n0,5 × 4 cm", "vrstice": [1, 1]},
+    {"besedilo": "zmešaj\nmarinado", "vrstice": [2, 5]},
+    {"besedilo": "mariniraj\n30 min\nv hladilniku", "vrstice": [1, 5], "slog": "tih"},
+    {"besedilo": "nareži\nna 1–2 cm", "vrstice": [7, 7]},
+    {"besedilo": "nasekljaj\ndrobno", "vrstice": [8, 8]},
+    {"besedilo": "zmešaj\nomako", "vrstice": [8, 12]},
+    {"besedilo": "na olju\nzapeci", "vrstice": [1, 6]},
+    {"besedilo": "vmešaj,\npremetavaj\n1 min", "vrstice": [1, 7]},
+    {"besedilo": "prilij,\nmešaj 2 min,\nda se zgosti", "vrstice": [1, 12], "slog": "zakljucek"}
+  ],
+  "opombe": [
+    "<strong>Izvirnemu receptu manjka korak pečenja mesa.</strong> Po pripravi omake nadaljuje z »ko je meso zunaj že lepo zapečeno«, pečenja pa ne opiše in olja ne navaja. Korak »na olju zapeci« in olje sta zato dodana; količina olja in temperatura nista iz izvirnika. Taka jed se običajno peče v voku ali široki ponvi na močnem ognju, meso pa v manjših serijah, da se zapeče in ne duši.",
+    "Kos govedine naj bo lep in uležan — po izvirniku to naredi bistveno razliko v okusu. Trakove reži <strong>pravokotno na vlakna</strong>.",
+    "Por lahko pripraviš na dva načina: za bolj pokuhanega ga olupi po slojih in nareži na centimeterske koščke, za bolj hrustljavega (v sredini surovega) pa ga nareži celega na 1–2 cm koščke.",
+    "Omako dobro premešaj, da škrob ni v grudicah in dobiš fino tekočo zmes. V postopku izvirnika je škrob imenovan »moka«.",
+    "Ko priliješ omako, mešaj dve minuti, da jo meso delno vpije in se zgosti.",
+    "Sojino omako rabiš dvakrat — 1 žlico v marinadi in 2 žlici v omaki. Na nakupovalnem seznamu je enkrat, s skupno količino.",
+    "Znamke v izvirniku: za marinado sojina omaka Kikkoman ali PRB, za omako PRB, LKK ali Haday; ostrigina omaka Mae Krua.",
+    "Vir: <a href=\"https://www.asia-supermarket.si/recepti-136/govedina-po-mongolsko\">asia-supermarket.si</a>."
+  ],
+  "en": {
+    "naslov": "Mongolian beef",
+    "povzetek": "Thin strips of marinated beef, quickly seared with leek and a sauce of oyster and soy sauce.",
+    "opis": "The beef is cut into thin strips and marinated for half an hour, then seared; the leek goes in, and finally the sauce, which thickens in two minutes. The original doesn't give a number of servings. Read row by row: ingredients on the left, the method moves to the right.",
+    "sestavine": [
+      {"ime": "young beef sirloin or roast beef", "kratko": "beef"},
+      {"ime": "soy sauce", "kratko": "soy sauce", "merica_enota": "tbsp"},
+      {"ime": "rice wine", "kratko": "rice wine", "merica_enota": "tbsp"},
+      {"ime": "1 tsp sugar", "kratko": "sugar"},
+      {"ime": "pinch of salt", "kratko": "salt"},
+      {"ime": "oil for frying — not in the original", "kratko": "oil"},
+      {"ime": "leek", "kratko": "leek"},
+      {"ime": ["garlic clove", "garlic cloves"], "kratko": "garlic"},
+      {"ime": "water", "kratko": "water"},
+      {"ime": "oyster sauce", "kratko": "oyster sauce", "merica_enota": "tbsp"},
+      {"ime": "soy sauce", "kratko": "soy sauce", "merica_enota": "tbsp"},
+      {"ime": "1 tbsp potato starch", "kratko": "potato starch"}
+    ],
+    "koraki": [
+      "cut\ninto strips\n0.5 × 4 cm",
+      "mix\nthe marinade",
+      "marinate\n30 min\nin the fridge",
+      "cut\ninto 1–2 cm",
+      "chop\nfinely",
+      "mix\nthe sauce",
+      "sear\nin oil",
+      "stir in,\ntoss\n1 min",
+      "pour in,\nstir 2 min\nto thicken"
+    ],
+    "opombe": [
+      "<strong>The original recipe skips the step of searing the meat.</strong> After making the sauce it carries on with “once the meat is nicely seared on the outside”, but never describes the searing and doesn't list any oil. The step “sear in oil” and the oil were therefore added; the amount of oil and the temperature are not from the original. A dish like this is usually cooked in a wok or wide pan over high heat, with the meat in small batches so it sears rather than stews.",
+      "Use a good, well-aged piece of beef — according to the original this makes a big difference to the flavour. Cut the strips <strong>across the grain</strong>.",
+      "There are two ways to prepare the leek: for softer leek, separate the layers and cut them into centimetre pieces; for crunchier leek (raw in the middle), cut it whole into 1–2 cm pieces.",
+      "Mix the sauce well so the starch has no lumps and you get a smooth, runny mixture. The original's method calls the starch “flour”.",
+      "After pouring in the sauce, stir for two minutes so the meat partly absorbs it and it thickens.",
+      "You need soy sauce twice — 1 tbsp in the marinade and 2 tbsp in the sauce. On the shopping list it appears once, with the combined amount.",
+      "Brands in the original: for the marinade Kikkoman or PRB soy sauce, for the sauce PRB, LKK or Haday; oyster sauce Mae Krua.",
+      "Source: <a href=\"https://www.asia-supermarket.si/recepti-136/govedina-po-mongolsko\">asia-supermarket.si</a>."
+    ]
+  }
+}
