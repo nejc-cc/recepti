@@ -1,0 +1,6 @@
+# LF povsod: zetoni ?v= so iz vsebine, zato mora biti vsebina ista na vseh mestih.
+* text=auto eol=lf
+*.woff2 binary
+*.png binary
+*.jpg binary
+*.webp binary
