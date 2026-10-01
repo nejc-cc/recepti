@@ -169,6 +169,95 @@ h1 .pripis {
 .nazaj { display: inline-block; margin-bottom: var(--s4); color: var(--accent); text-decoration: none; font-size: .9rem; }
 .nazaj:hover { text-decoration: underline; }
 
+/* ---------- fotografije ----------
+   Naslovna na namizju stoji desno ob opisu in kolicini (tabela naj ostane
+   blizu vrha - tablica v kuhinji), na telefonu cez celo sirino. Dotik odpre
+   celo; kje se obreze, doloci "izrez" v receptu (object-position). Ozadje
+   okvirja se vidi samo, dokler se fotka nalaga. */
+.uvod.s-fotko {
+  display: grid; align-items: start;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 38%); column-gap: var(--s6);
+  grid-template-rows: auto 1fr;   /* visina fotke gre pod kolicino, ne med opis in kolicino */
+}
+.uvod.s-fotko > * { grid-column: 1; }
+.uvod.s-fotko .naslovna { grid-column: 2; grid-row: 1 / span 2; }
+.naslovna {
+  display: block; width: 100%; margin: 0 0 var(--s6); padding: 0;
+  aspect-ratio: 4 / 3; overflow: hidden;
+  border: 0; border-radius: 2px; background: var(--line-soft); cursor: zoom-in;
+}
+.naslovna img, .mreza-fotk img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
+.galerija { margin-top: var(--s6); }
+.galerija h2 {
+  font-size: .8rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); margin: 0 0 var(--s2); font-weight: 600;
+}
+.mreza-fotk {
+  display: grid; gap: var(--s3);
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+}
+.mreza-fotk figure { margin: 0; }
+.mreza-fotk button {
+  display: block; width: 100%; padding: 0; aspect-ratio: 4 / 3; overflow: hidden;
+  border: 0; border-radius: 2px; background: var(--line-soft); cursor: zoom-in;
+}
+.mreza-fotk figcaption { margin-top: var(--s1); font-size: .85rem; line-height: 1.35; color: var(--muted); }
+/* fotka koraka: majhen gumb s fotoaparatom za besedilom koraka */
+.fotka-koraka {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.75em; height: 1.75em; margin-left: .25em; padding: 0; vertical-align: middle;
+  border: 1px solid var(--line-soft); border-radius: 50%;
+  background: var(--paper); color: var(--accent); cursor: zoom-in;
+  font-size: 1rem;
+}
+.fotka-koraka svg { width: .95em; height: .95em; }
+.fotka-koraka:hover, .fotka-koraka:focus-visible { border-color: var(--accent); }
+@media (max-width: 700px) {
+  .uvod.s-fotko { display: block; }
+  .naslovna { aspect-ratio: 3 / 2; }
+  .mreza-fotk { grid-template-columns: repeat(2, 1fr); gap: var(--s2); }
+}
+
+/* ---------- ogled fotografij cez cel zaslon ----------
+   Vedno temno ozadje, ne glede na temo. touch-action: poteg vstran pobere
+   skripta (naslednja / prejsnja), povecava s prsti ostane. */
+.fotke-okno {
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--s8) var(--s3) var(--s3);
+  background: rgba(0, 0, 0, .92); color: #f3f2f2;
+  touch-action: pinch-zoom;
+}
+.fotke-okno figure {
+  margin: 0; max-width: 100%; max-height: 100%;
+  display: flex; flex-direction: column; align-items: center;
+}
+.fotke-okno img {
+  display: block; max-width: 100%; width: auto; height: auto;
+  max-height: calc(100vh - 8rem); max-height: calc(100dvh - 8rem);
+  object-fit: contain; user-select: none; -webkit-user-drag: none;
+}
+.fotke-okno figcaption { margin-top: var(--s2); max-width: 40em; text-align: center; font-size: .95rem; }
+.fotke-okno figcaption a { color: inherit; }
+.fotke-okno .stevec { position: absolute; top: var(--s3); left: var(--s4); font-size: .85rem; opacity: .75; }
+.fotke-okno button {
+  position: absolute; width: 44px; height: 44px; padding: 0;
+  border: 0; border-radius: 50%; cursor: pointer;
+  background: rgba(255, 255, 255, .14); color: #fff;
+  font: inherit; font-size: 1.7rem; line-height: 1;
+}
+.fotke-okno button:hover, .fotke-okno button:focus-visible { background: rgba(255, 255, 255, .28); }
+.fotke-okno .zapri { top: var(--s2); right: var(--s2); }
+.fotke-okno .prejsnja, .fotke-okno .naslednja { top: 50%; margin-top: -22px; }
+.fotke-okno .prejsnja { left: var(--s2); }
+.fotke-okno .naslednja { right: var(--s2); }
+/* na telefonu puscici ne prekrivata fotke - spodaj, poteg je tako ali tako glavni */
+@media (max-width: 700px) {
+  .fotke-okno .prejsnja, .fotke-okno .naslednja { top: auto; bottom: var(--s2); margin-top: 0; }
+}
+
 /* ---------- izbira kolicine ---------- */
 .kolicina { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); margin-bottom: var(--s6); }
 .kolicina .oznaka { font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-right: var(--s2); }
@@ -398,6 +487,19 @@ ul.kazalo a:hover { background: var(--paper); }
 ul.kazalo .ime { font-size: 1.3rem; font-weight: 600; }
 ul.kazalo .kat { font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
 ul.kazalo .opis { flex: 1 1 100%; font-size: .95rem; color: var(--muted); }
+/* slicice: samo, ce ima fotko vsaj en recept; brez fotke stoji emoji recepta */
+ul.kazalo a.s-slicico { flex-wrap: nowrap; align-items: flex-start; }
+ul.kazalo a.s-slicico .vsebina {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s1) var(--s3);
+  flex: 1 1 auto; min-width: 0;
+}
+ul.kazalo .slicica {
+  flex: 0 0 72px; width: 72px; height: 72px; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line-soft); border-radius: 2px; background: var(--paper);
+  font-size: 2rem; line-height: 1;
+}
+ul.kazalo .slicica img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .prazno { color: var(--muted); font-style: italic; padding: var(--s4) 0; }
 
 @media (max-width: 700px) {
@@ -408,6 +510,7 @@ ul.kazalo .opis { flex: 1 1 100%; font-size: .95rem; color: var(--muted); }
   .hranila th, .hranila td { padding: var(--s1) var(--s2); }
   .hranila thead th { letter-spacing: .04em; }
   .po-sestavinah table { font-size: .82rem; }
+  ul.kazalo .slicica { flex-basis: 56px; width: 56px; height: 56px; font-size: 1.6rem; }
 }
 
 /* ---------- telefon: preklop Seznam / Tabela ----------
@@ -453,6 +556,8 @@ ul.kazalo .opis { flex: 1 1 100%; font-size: .95rem; color: var(--muted); }
 @media print {
   body { background: #fff; color: #000; padding: 0; font-size: 11pt; }
   .kolicina, .nazaj, .akcije, .kosarica, .obvestilo, .tema-gumb, .budnost-gumb, .jezik-gumb, .ha-nazaj, .izvoz-okno, .noga, .prikaz { display: none; }
+  /* natisnjen recept je za kuhinjo - fotke bi samo porabile crnilo */
+  .naslovna, .galerija, .fotka-koraka, .fotke-okno { display: none; }
   /* natisnjen izvod je cist: kar je bilo odkljukano med kuhanjem, se ne vidi */
   .opravljeno { text-decoration: none; opacity: 1; background: none; }
   .tabela-ovoj { display: block; overflow: visible; }

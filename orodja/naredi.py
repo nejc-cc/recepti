@@ -13,6 +13,7 @@ Vir so podatki v recepti/<ime>.json. Iz njih nastane:
    objavi.ps1 na HA zapise domacega pod imenom recepti.js.
 3. ?v= zetoni na vseh sklicih na _assets/* (strani in docs/index.html).
    Zeton je iz VSEBINE datoteke, zato je enak na tem PC-ju, v gitu in na HA.
+4. docs/fotke/<ime>/ - fotografije za splet iz fotke/ (glej FOTOGRAFIJE).
 
 ZAKAJ ZETONI - Home Assistant streze /local/ z "Cache-Control: max-age=
 2678400" (31 dni). Brez zetona brskalnik mesec dni ne vprasa vec za CSS in
@@ -25,6 +26,15 @@ Sproti preveri se:
 
 Osnutki: recepti/_osnutek-<ime>.json -> docs/recept/_osnutek-<ime>.html,
 brez vnosa v kazalu (za predogled na HA), git jih ignorira.
+
+FOTOGRAFIJE - izvirniki so v fotke/ (samo na tem PC-ju, git jih ignorira):
+    fotke/<ime>.jpg      naslovna (vrh recepta, kazalo, predogled povezave)
+    fotke/<ime>-<n>.jpg  dodatne, po vrsti stevilk (luknje so dovoljene)
+jpg, png ali webp. V docs/fotke/<ime>/ gredo pomanjsane WebP (in JPEG za
+predogled povezave), obrnjene po EXIF in v sRGB. Vsi metapodatki ostanejo
+zunaj - telefon v fotko zapise GPS, torej domaci naslov. Opisi in korak, h
+kateremu fotka sodi, so v receptu (polje "fotke", orodja/POLJA.md).
+Izdelava je pocasna, zato si fotke/.naredi.json zapomni, kaj je ze narejeno.
 """
 import hashlib
 import html
@@ -32,6 +42,7 @@ import io
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import urllib.parse
@@ -42,6 +53,16 @@ STRAN = os.path.join(REPO, "docs")
 STRANI = os.path.join(STRAN, "recept")
 ASSETS = os.path.join(STRAN, "_assets")
 PREDLOGA = os.path.join(REPO, "orodja", "stran-recepta.html")
+FOTKE_VIR = os.path.join(REPO, "fotke")
+FOTKE = os.path.join(STRAN, "fotke")
+PREDPOMNILNIK = os.path.join(FOTKE_VIR, ".naredi.json")
+FOTKE_KONCNICE = (".jpg", ".jpeg", ".png", ".webp")
+# Mere v px. Ko se spremenijo, povecaj verzijo - fotke se izdelajo znova.
+FOTKE_VERZIJA = 1
+VELIKA = 1600            # ogled cez cel zaslon, naslovna na namizju in v izvozu
+MALA = 640               # galerija, naslovna na telefonu
+KAZALO = 240             # kvadrat v kazalu
+OG = (1200, 630)         # predogled povezave (Viber, WhatsApp) - JPEG, ker WebP ne poznajo vsi
 
 CIST = re.compile(r"<[^>]+>|\{[a-z]+\}")
 # Pravi HTML atribut (href="..." / src="..."), po zelji z ../ spredaj. V
@@ -219,6 +240,217 @@ def tezave_prevoda(d):
     return ven
 
 
+# --- fotografije -----------------------------------------------------------
+def najdi_fotke(imena):
+    """Izvirnike v fotke/ razporedi po receptih (imena so brez "_osnutek-").
+    Vrne {ime: {"naslovna": pot, "dodatne": {n: pot}}}. Generator pozna vsa
+    imena receptov, zato brownie-v-2-minutah-1.jpg ni dvoumen."""
+    ven = {}
+    if not os.path.isdir(FOTKE_VIR):
+        return ven
+    for datoteka in sorted(os.listdir(FOTKE_VIR), key=str.lower):
+        pot = os.path.join(FOTKE_VIR, datoteka)
+        if datoteka.startswith(".") or not os.path.isfile(pot):
+            continue
+        deblo, koncnica = os.path.splitext(datoteka.lower())
+        if koncnica in (".heic", ".heif"):
+            print("   fotke: %s je HEIC - shrani jo kot JPG" % datoteka)
+            continue
+        if koncnica not in FOTKE_KONCNICE:
+            print("   fotke: %s ni jpg, png ali webp - izpuscam" % datoteka)
+            continue
+        m = re.match(r"^(.+)-(\d+)$", deblo)
+        if deblo in imena:
+            ime, n = deblo, None
+        elif m and m.group(1) in imena:
+            ime, n = m.group(1), int(m.group(2))
+        else:
+            print("   fotke: %s ne ustreza nobenemu receptu" % datoteka)
+            continue
+        f = ven.setdefault(ime, {"naslovna": None, "dodatne": {}})
+        prej = f["naslovna"] if n is None else f["dodatne"].get(n)
+        if prej:
+            print("   fotke: %s in %s sta ista fotka - uporabim %s"
+                  % (os.path.basename(prej), datoteka, os.path.basename(prej)))
+        elif n is None:
+            f["naslovna"] = pot
+        else:
+            f["dodatne"][n] = pot
+    return ven
+
+
+def odpri_fotko(pot):
+    """Fotka, kot jo kaze telefon: obrnjena po EXIF, v sRGB, BREZ metapodatkov."""
+    from PIL import Image, ImageCms, ImageOps
+    im = ImageOps.exif_transpose(Image.open(pot))
+    icc = im.info.get("icc_profile")
+    if im.mode not in ("RGB", "RGBA", "CMYK"):
+        im = im.convert("RGBA" if ("A" in im.mode or "transparency" in im.info) else "RGB")
+    if icc:
+        try:
+            im = ImageCms.profileToProfile(im, ImageCms.ImageCmsProfile(io.BytesIO(icc)),
+                                           ImageCms.createProfile("sRGB"),
+                                           outputMode="RGBA" if im.mode == "RGBA" else "RGB")
+        except (ImageCms.PyCMSError, OSError, ValueError):
+            pass   # pokvarjen profil: barve, kot so
+    if im.mode == "CMYK":
+        im = im.convert("RGB")
+    # nova slika iz golih pik - EXIF (GPS), XMP, ICC in komentarji ostanejo zadaj
+    return Image.frombytes(im.mode, im.size, im.tobytes())
+
+
+def brez_metapodatkov(pot):
+    with open(pot, "rb") as f:
+        b = f.read()
+    if b[:4] == b"RIFF":
+        i, kosi = 12, set()
+        while i + 8 <= len(b):
+            kosi.add(b[i:i + 4])
+            n = int.from_bytes(b[i + 4:i + 8], "little")
+            i += 8 + n + (n & 1)
+        if kosi & {b"EXIF", b"XMP ", b"ICCP"}:
+            return False
+    return b"Exif\x00\x00" not in b and b"ns.adobe.com/xap" not in b
+
+
+def shrani_fotko(im, pot):
+    from PIL import Image
+    if pot.endswith(".jpg"):
+        if im.mode == "RGBA":
+            ozadje = Image.new("RGB", im.size, (255, 255, 255))
+            ozadje.paste(im, mask=im.split()[3])
+            im = ozadje
+        im.save(pot, "JPEG", quality=82, optimize=True, progressive=True)
+    else:
+        im.save(pot, "WEBP", quality=80, method=6)
+    if not brez_metapodatkov(pot):
+        os.remove(pot)
+        sys.exit("!! %s: v izdelani fotki so ostali metapodatki - ne objavljam" % pot)
+
+
+def opis_fotke(v):
+    """Opis fotke v receptu je niz ali {"opis": ..., "korak": 2, "izrez": "50% 30%"}."""
+    if isinstance(v, str):
+        return {"opis": v}
+    return v if isinstance(v, dict) else {}
+
+
+def izrez_fotke(v, kje):
+    """"izrez": "50% 30%" - tocka, ki ostane vidna, ko se fotka obreze
+    (naslovna je siroka, kvadrat v kazalu ozek). Privzeto sredina."""
+    if v is None:
+        return None
+    m = re.match(r"^\s*(\d{1,3}(?:\.\d+)?)%\s+(\d{1,3}(?:\.\d+)?)%\s*$", str(v))
+    if not m or float(m.group(1)) > 100 or float(m.group(2)) > 100:
+        print('   fotke %s: izrez "%s" ni v obliki "50%% 30%%" - uporabim sredino' % (kje, v))
+        return None
+    return float(m.group(1)), float(m.group(2))
+
+
+def izdelaj_fotke(ime, d, najdene, pomni, nov):
+    """Fotke recepta v docs/fotke/<ime>/. pomni = kar je ze narejeno (iz
+    fotke/.naredi.json), v nov gre, kar velja po tem zagonu. Vrne (podatki, datoteke):
+    podatki = {"stran": ..., "kazalo": pot, "og": pot} ali None,
+    datoteke = imena izdelanih datotek (ostalo v mapi se pobrise)."""
+    najdene = najdene or {"naslovna": None, "dodatne": {}}
+    vse = ([("naslovna", najdene["naslovna"])] if najdene["naslovna"] else []) + \
+          [(str(n), najdene["dodatne"][n]) for n in sorted(najdene["dodatne"])]
+    opisi = d.get("fotke") or {}
+    opisi_en = (d.get("en") or {}).get("fotke") or {}
+    for k in opisi:
+        if k not in dict(vse):
+            print('   fotke %s: opis za fotko "%s", fotke pa ni (fotke/%s%s.jpg)'
+                  % (ime, k, ime.replace("_osnutek-", ""), "" if k == "naslovna" else "-" + k))
+    if not vse:
+        return None, set()
+    try:
+        from PIL import Image, ImageOps
+    except ImportError:
+        print("!! fotke %s: za fotke rabis Pillow (pip install pillow) - izpuscam" % ime,
+              file=sys.stderr)
+        return None, set()
+
+    mapa = os.path.join(FOTKE, ime)
+    os.makedirs(mapa, exist_ok=True)
+    korakov = len(d.get("koraki") or [])
+    datoteke, stran, ven = set(), {"galerija": []}, {}
+    for kljuc, vir in vse:
+        oznaka = "%s/%s" % (ime, kljuc)
+        o, o_en = opis_fotke(opisi.get(kljuc)), opis_fotke(opisi_en.get(kljuc))
+        izrez = izrez_fotke(o.get("izrez"), oznaka)
+        imena = {"velika": kljuc + ".webp", "mala": kljuc + "-m.webp"}
+        if kljuc == "naslovna":
+            imena.update(kazalo=kljuc + "-k.webp", og=kljuc + "-og.jpg")
+        poti = {k: os.path.join(mapa, v) for k, v in imena.items()}
+        with open(vir, "rb") as f:
+            zapis = {"vir": hashlib.sha1(f.read()).hexdigest(), "verzija": FOTKE_VERZIJA,
+                     "izrez": izrez, "datoteke": sorted(imena.values())}
+        if pomni.get(oznaka) != zapis or not all(os.path.exists(p) for p in poti.values()):
+            im = odpri_fotko(vir)
+            sredina = (0.5, 0.5) if not izrez else (izrez[0] / 100, izrez[1] / 100)
+            for k, p in poti.items():
+                if k in ("velika", "mala"):
+                    m = im.copy()
+                    m.thumbnail((VELIKA, VELIKA) if k == "velika" else (MALA, MALA), Image.LANCZOS)
+                else:
+                    m = ImageOps.fit(im, (KAZALO, KAZALO) if k == "kazalo" else OG,
+                                     Image.LANCZOS, centering=sredina)
+                shrani_fotko(m, p)
+            print("   fotka %s <- fotke/%s" % (oznaka, os.path.basename(vir)))
+        nov[oznaka] = zapis
+        datoteke.update(imena.values())
+
+        def naslov(k):
+            return "%s/%s?v=%s" % (ime, imena[k], zeton(poti[k]))
+        w, h = Image.open(poti["velika"]).size
+        mw, mh = Image.open(poti["mala"]).size
+        f = {"velika": "../fotke/" + naslov("velika"), "mala": "../fotke/" + naslov("mala"),
+             "w": w, "h": h, "mw": mw, "mh": mh}
+        if o.get("opis"):
+            f["opis"] = o["opis"]
+            if o_en.get("opis"):
+                f["opis_en"] = o_en["opis"]
+            else:
+                print("   prevod %s: opis fotke %s ni preveden (en.fotke)" % (ime, kljuc))
+        if izrez:
+            f["izrez"] = "%g%% %g%%" % izrez
+        if o.get("korak") is not None:
+            if isinstance(o["korak"], int) and 1 <= o["korak"] <= korakov:
+                f["korak"] = o["korak"]
+            else:
+                print("   fotke %s: korak %s ne obstaja (koraki so 1-%d)" % (oznaka, o["korak"], korakov))
+        if kljuc == "naslovna":
+            stran["naslovna"] = f
+            ven["kazalo"] = "fotke/" + naslov("kazalo")
+            ven["og"] = "fotke/" + naslov("og")
+        else:
+            stran["galerija"].append(f)
+    ven["stran"] = stran
+    return ven, datoteke
+
+
+def pocisti_fotke(narejene):
+    """narejene = {mapa: {datoteke}}; vse drugo v docs/fotke je ostanek
+    izbrisanega izvirnika ali recepta."""
+    if not os.path.isdir(FOTKE):
+        return
+    for mapa in sorted(os.listdir(FOTKE)):
+        pot = os.path.join(FOTKE, mapa)
+        if mapa not in narejene:
+            if os.path.isdir(pot):
+                shutil.rmtree(pot)
+            else:
+                os.remove(pot)
+            print("   odstranjene fotke/%s (izvirnika ni vec)" % mapa)
+            continue
+        for datoteka in sorted(os.listdir(pot)):
+            if datoteka not in narejene[mapa]:
+                os.remove(os.path.join(pot, datoteka))
+                print("   odstranjena fotke/%s/%s" % (mapa, datoteka))
+    if not os.listdir(FOTKE):
+        os.rmdir(FOTKE)
+
+
 # --- strani ----------------------------------------------------------------
 def navaden(t):
     return html.escape(CIST.sub("", html.unescape(t or "")).strip(), quote=True)
@@ -230,14 +462,26 @@ def ikona_uri(emoji):
     return "data:image/svg+xml," + urllib.parse.quote(svg, safe=" ='/:.")
 
 
-def izdelaj_stran(predloga, d, ime, javni_url):
+def izdelaj_stran(predloga, d, ime, javni_url, fotke=None, baza_url=None):
     opis = navaden(d.get("povzetek") or d.get("opis"))
     dodatno = ""
     if javni_url:
         dodatno += '<meta property="og:url" content="%s">\n' % html.escape(javni_url, quote=True)
+        if fotke and fotke.get("og"):
+            # predogled povezave rabi poln naslov - zato samo na javni strani
+            dodatno += ('<meta property="og:image" content="%s">\n'
+                        '<meta property="og:image:width" content="%d">\n'
+                        '<meta property="og:image:height" content="%d">\n'
+                        '<meta property="og:image:alt" content="%s">\n'
+                        '<meta name="twitter:card" content="summary_large_image">\n'
+                        % (html.escape(baza_url + "/" + fotke["og"], quote=True), OG[0], OG[1],
+                           navaden(d.get("naslov", ime))))
     if d.get("en"):
         dodatno += '<meta property="og:locale:alternate" content="en_GB">\n'
+    # Fotke gredo stranem v JSON kot _fotke (izdela jih generator, ne pise se rocno).
     # "</" v JSON bi zaprl <script>; "<\/" je v JSON isti znak
+    if fotke:
+        d = dict(d, _fotke=fotke["stran"])
     podatki = json.dumps(d, ensure_ascii=False, indent=2).replace("</", "<\\/")
     stran = (predloga
              .replace("{{naslov}}", navaden(d.get("naslov", ime)))
@@ -251,11 +495,11 @@ def izdelaj_stran(predloga, d, ime, javni_url):
 
 # --- zasebno ---------------------------------------------------------------
 def zavaruj_zasebne(zasebni):
-    """Zasebne recepte (vir in stran) vpise v .gitignore in glasno opozori,
-    ce je kateri ze v gitu - .gitignore sledenih datotek ne izloci."""
+    """Zasebne recepte (vir, stran in fotke) vpise v .gitignore in glasno
+    opozori, ce je kateri ze v gitu - .gitignore sledenih datotek ne izloci."""
     poti = []
     for z in sorted(zasebni):
-        poti += ["/recepti/%s.json" % z, "/docs/recept/%s.html" % z]
+        poti += ["/recepti/%s.json" % z, "/docs/recept/%s.html" % z, "/docs/fotke/%s/" % z]
     pot = os.path.join(REPO, ".gitignore")
     staro = beri(pot) if os.path.exists(pot) else ""
     blok = "\n".join([GITIGNORE_ZAC] + poti + [GITIGNORE_KON])
@@ -313,6 +557,15 @@ def main():
     baza_url = ("https://" + beri(cname).strip()) if os.path.exists(cname) else None
 
     vsi, javni, zasebni, strani, spremenjenih = [], [], [], set(), 0
+    # fotke se iscejo po imenu recepta; osnutek uporablja fotke koncnega imena
+    viri = sorted(x[:-5] for x in os.listdir(VIR) if x.endswith(".json"))
+    najdene = najdi_fotke({x.replace("_osnutek-", "", 1) for x in viri
+                           if not x.startswith("_") or x.startswith("_osnutek-")})
+    try:
+        pomni = json.loads(beri(PREDPOMNILNIK))
+    except (OSError, ValueError):
+        pomni = {}
+    pomni_nov, narejene, s_fotkami = {}, {}, 0
     for datoteka in sorted(os.listdir(VIR)):
         if not datoteka.endswith(".json"):
             continue
@@ -337,7 +590,12 @@ def main():
         if zaseben:
             zasebni.append(ime)
         url = None if (zaseben or osnutek or not baza_url) else "%s/recept/%s.html" % (baza_url, ime)
-        vsebina = izdelaj_stran(predloga, d, ime, url)
+        fotke, datoteke = izdelaj_fotke(ime, d, najdene.get(ime.replace("_osnutek-", "", 1)),
+                                        pomni, pomni_nov)
+        if datoteke:
+            narejene[ime] = datoteke
+            s_fotkami += 1
+        vsebina = izdelaj_stran(predloga, d, ime, url, fotke, baza_url)
         if pisi(os.path.join(STRANI, ime + ".html"), vsebina):
             spremenjenih += 1
             print("   stran recept/%s.html" % ime)
@@ -356,6 +614,10 @@ def main():
             "sestavine": sl,
             "sestavine_en": sestavine_za_iskanje_en(sl, H, ime),
         }
+        if d.get("ikona"):
+            vnos["ikona"] = d["ikona"]
+        if fotke and fotke.get("kazalo"):
+            vnos["fotka"] = fotke["kazalo"]
         if en.get("naslov"):
             vnos["naslov_en"] = en["naslov"]
         if en.get("povzetek") or en.get("opis"):
@@ -369,6 +631,9 @@ def main():
         if obstojeca.endswith(".html") and obstojeca not in strani:
             os.remove(os.path.join(STRANI, obstojeca))
             print("   odstranjena recept/%s (vira ni vec)" % obstojeca)
+    pocisti_fotke(narejene)
+    if os.path.isdir(FOTKE_VIR) and pomni_nov != pomni:
+        pisi(PREDPOMNILNIK, json.dumps(pomni_nov, ensure_ascii=False, indent=1, sort_keys=True) + "\n")
 
     uredi = lambda v: (v["kategorija"].lower(), v["naslov"].lower())
     vsi.sort(key=uredi)
@@ -380,8 +645,8 @@ def main():
         print("   ozigosan index.html")
     zavaruj_zasebne(zasebni)
 
-    print("strani: %d, spremenjenih %d | kazalo: javno %d, doma %d (zasebnih %d)"
-          % (len(strani), spremenjenih, len(javni), len(vsi), len(zasebni)))
+    print("strani: %d, spremenjenih %d | kazalo: javno %d, doma %d (zasebnih %d) | s fotkami %d"
+          % (len(strani), spremenjenih, len(javni), len(vsi), len(zasebni), s_fotkami))
 
 
 if __name__ == "__main__":

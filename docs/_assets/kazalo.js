@@ -172,16 +172,26 @@
     }
 
     /* --- izris seznama receptov --- */
+    /* Slicice so, ce ima fotko vsaj en recept - takrat jo dobi vsak, recept
+       brez fotke pa svoj emoji. Brez fotk ostane kazalo, kot je bilo. */
+    var SLICICE = vsi.some(function (r) { return r.fotka; });
+    function slicica(r) {
+      if (r.fotka) return '<span class="slicica"><img src="' + encodeURI(r.fotka) + '" alt="" loading="lazy" width="72" height="72"></span>';
+      return '<span class="slicica" aria-hidden="true">' + (r.ikona || '🍽') + '</span>';
+    }
     function vrstica(r, oznaka) {
       var pot = encodeURI(r.datoteka) + (r.v ? '?v=' + r.v : '');
       /* jezik gre v povezavo, da ostane tudi brez localStorage */
       if (EN) pot += (r.v ? '&' : '?') + 'jezik=en';
-      return '<li><a href="' + pot + '">' +
-             '<span class="ime">' + naslov(r) + '</span>' +
+      var vsebina = '<span class="ime">' + naslov(r) + '</span>' +
              (r.kategorija ? '<span class="kat">' + kat(r.kategorija) + '</span>' : '') +
              (oznaka || '') +
-             (povzetek(r) ? '<span class="opis">' + povzetek(r) + '</span>' : '') +
-             '</a></li>';
+             (povzetek(r) ? '<span class="opis">' + povzetek(r) + '</span>' : '');
+      if (SLICICE) {
+        return '<li><a class="s-slicico" href="' + pot + '">' + slicica(r) +
+               '<span class="vsebina">' + vsebina + '</span></a></li>';
+      }
+      return '<li><a href="' + pot + '">' + vsebina + '</a></li>';
     }
     function locnica(besedilo) { return '<li class="locnica">' + besedilo + '</li>'; }
     function manjkaOznaka(m) {

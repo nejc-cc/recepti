@@ -2,7 +2,7 @@
 window.RECEPTI = [
   {
     "datoteka": "recept/govedina-po-mongolsko.html",
-    "v": "cd401157",
+    "v": "26b541d7",
     "naslov": "Govedina po mongolsko",
     "kategorija": "glavna jed",
     "povzetek": "Tanki trakovi marinirane govedine, hitro zapečeni s porom in prelivom iz ostrigine in sojine omake.",
@@ -28,12 +28,13 @@ window.RECEPTI = [
       "Soy sauce",
       "Vegetable oil"
     ],
+    "ikona": "🥩",
     "naslov_en": "Mongolian beef",
     "povzetek_en": "Thin strips of marinated beef, quickly seared with leek and a sauce of oyster and soy sauce."
   },
   {
     "datoteka": "recept/piscancji-zur.html",
-    "v": "f62b9f19",
+    "v": "e6d369a0",
     "naslov": "Piščančji žur",
     "kategorija": "glavna jed",
     "povzetek": "Potolčen piščančji file, obložen s pršutom in sirom ter prelit s smetano; 45 min na 220 °C.",
@@ -53,12 +54,13 @@ window.RECEPTI = [
       "Rosemary",
       "Whipping cream"
     ],
+    "ikona": "🍗",
     "naslov_en": "Chicken party bake",
     "povzetek_en": "Pounded chicken breast topped with prosciutto and cheese and covered in cream; 45 min at 220 °C."
   },
   {
     "datoteka": "recept/tajvanski-popcorn-piscanec.html",
-    "v": "84d85b98",
+    "v": "9646aa7e",
     "naslov": "Tajvanski popcorn piščanec",
     "kategorija": "glavna jed",
     "povzetek": "Marinirana piščančja stegna, obvaljana v grobem krompirjevem škrobu, iz cvrtnika na vroč zrak; s tajsko baziliko in posipom petih začimb.",
@@ -90,12 +92,13 @@ window.RECEPTI = [
       "Thai basil",
       "White pepper"
     ],
+    "ikona": "🍿",
     "naslov_en": "Taiwanese popcorn chicken",
     "povzetek_en": "Marinated chicken thighs coated in coarse potato starch, from the air fryer; with Thai basil and a five-spice seasoning."
   },
   {
     "datoteka": "recept/svinjska-enolocnica-z-grahom.html",
-    "v": "70eac8bd",
+    "v": "72f881e3",
     "naslov": "Svinjska enolončnica z grahom",
     "kategorija": "jed na žlico",
     "povzetek": "Svinjska ribica, krompir in grah v jušni osnovi s paradižnikovo mezgo in lovorjem; približno 1 h kuhanja.",
@@ -121,12 +124,13 @@ window.RECEPTI = [
       "Potatoes",
       "Tomato paste"
     ],
+    "ikona": "🥘",
     "naslov_en": "Pork and pea stew",
     "povzetek_en": "Pork tenderloin, potatoes and peas in stock with tomato paste and bay leaf; about 1 h of cooking."
   },
   {
     "datoteka": "recept/korejska-sojina-juha.html",
-    "v": "b0fc4e93",
+    "v": "03a2d4f7",
     "naslov": "Korejska sojina juha",
     "kategorija": "juha",
     "povzetek": "Gosta enolončnica s korejsko sojino pasto (miso juha), mleto govedino, školjkami ali rakci in zelenjavo; približno 15 min kuhanja.",
@@ -152,12 +156,13 @@ window.RECEPTI = [
       "Spring onion",
       "Vegetable oil"
     ],
+    "ikona": "🍲",
     "naslov_en": "Korean soybean paste stew",
     "povzetek_en": "A thick stew with Korean soybean paste, minced beef, clams or shrimp and vegetables; about 15 min of cooking."
   },
   {
     "datoteka": "recept/ciabatta.html",
-    "v": "002b6e3d",
+    "v": "eb9c4744",
     "naslov": "Ciabatta",
     "kategorija": "kruh",
     "povzetek": "Mokro testo s 77 % hidracije, počiva čez noč, peče se 40 min na 200 °C.",
@@ -171,12 +176,13 @@ window.RECEPTI = [
       "Manitoba 00 flour",
       "Salt"
     ],
+    "ikona": "🍞",
     "naslov_en": "Ciabatta",
     "povzetek_en": "Wet dough at 77% hydration, rests overnight, bakes for 40 min at 200 °C."
   },
   {
     "datoteka": "recept/prepovedan-kruh.html",
-    "v": "33b83566",
+    "v": "523eecfb",
     "naslov": "Prepovedan kruh",
     "kategorija": "kruh",
     "povzetek": "Ciabatta s čilijem, ocvirki in praženo čebulo — ker je enostavno predober. Počiva čez noč, 40 min na 200 °C.",
@@ -196,12 +202,13 @@ window.RECEPTI = [
       "Pork cracklings",
       "Salt"
     ],
+    "ikona": "🌶",
     "naslov_en": "Forbidden bread",
     "povzetek_en": "Ciabatta with chili crisp, pork cracklings and crispy fried onions — because it's simply too good. Rests overnight, 40 min at 200 °C."
   },
   {
     "datoteka": "recept/vroca-cokolada.html",
-    "v": "e8f216d8",
+    "v": "385f9385",
     "naslov": "Vroča čokolada",
     "kategorija": "pijača",
     "povzetek": "Prava vroča čokolada iz stopljene čokolade — mleko se vmešava po žlicah, da ne ostane peščena.",
@@ -217,12 +224,13 @@ window.RECEPTI = [
       "Milk",
       "Vanilla extract"
     ],
+    "ikona": "☕",
     "naslov_en": "Hot chocolate",
     "povzetek_en": "Real hot chocolate from melted chocolate — the milk goes in a spoonful at a time so it doesn't turn grainy."
   },
   {
     "datoteka": "recept/brownie-v-2-minutah.html",
-    "v": "434a4a40",
+    "v": "2a886a4f",
     "naslov": "Brownie v 2 minutah",
     "kategorija": "sladica",
     "povzetek": "Tri sestavine — jabolko, jajce in nesladkan kakav — zblendane in v mikrovalovki v 2–3 minutah; brez moke.",
@@ -236,12 +244,13 @@ window.RECEPTI = [
       "Cocoa powder (unsweetened)",
       "Eggs"
     ],
+    "ikona": "🍫",
     "naslov_en": "2-minute brownie",
     "povzetek_en": "Three ingredients — apple, egg and unsweetened cocoa — blended and cooked in the microwave in 2–3 minutes; no flour."
   },
   {
     "datoteka": "recept/creme-brulee.html",
-    "v": "5417d3fe",
+    "v": "26d3ab9b",
     "naslov": "Crème brûlée",
     "kategorija": "sladica",
     "povzetek": "Svilnata smetanova krema iz osmih rumenjakov; 1 h na 120 °C v vodni kopeli, 8 ur hlajenja, na koncu karamelizirana skorjica.",
@@ -259,12 +268,13 @@ window.RECEPTI = [
       "Vanilla extract",
       "Whipping cream"
     ],
+    "ikona": "🍮",
     "naslov_en": "Crème brûlée",
     "povzetek_en": "A silky cream custard made with eight yolks; 1 h at 120 °C in a water bath, 8 hours chilling, a caramelised crust to finish."
   },
   {
     "datoteka": "recept/fizolovi-browniji.html",
-    "v": "4a962949",
+    "v": "34ac6675",
     "naslov": "Fižolovi browniji",
     "kategorija": "sladica",
     "povzetek": "Brez moke in dodanega sladkorja — konzerva fižola, datlji in proteini; 33 min na 180 °C.",
@@ -286,12 +296,13 @@ window.RECEPTI = [
       "Eggs",
       "Protein powder"
     ],
+    "ikona": "🍫",
     "naslov_en": "Bean brownies",
     "povzetek_en": "No flour and no added sugar — a can of beans, dates and protein powder; 33 min at 180 °C."
   },
   {
     "datoteka": "recept/tiramisu.html",
-    "v": "3344c2c1",
+    "v": "8e57cafb",
     "naslov": "Tiramisu",
     "kategorija": "sladica",
     "povzetek": "Izvirna različica s sladko marsalo — zabajone nad soparo, mascarpone in stepena smetana; 4 ure v hladilniku.",
@@ -315,12 +326,13 @@ window.RECEPTI = [
       "Savoiardi (ladyfingers)",
       "Whipping cream"
     ],
+    "ikona": "🍰",
     "naslov_en": "Tiramisu",
     "povzetek_en": "The original version with sweet marsala — zabaglione over steam, mascarpone and whipped cream; 4 hours in the fridge."
   },
   {
     "datoteka": "recept/cokoladni-sufle.html",
-    "v": "58a54945",
+    "v": "bd74aae5",
     "naslov": "Čokoladni suflé",
     "kategorija": "sladica",
     "povzetek": "Suflé iz 70-odstotne čokolade v dveh ramekinih; 15 min na 190 °C, postreže se takoj.",
@@ -340,12 +352,13 @@ window.RECEPTI = [
       "Granulated sugar",
       "Whipping cream"
     ],
+    "ikona": "🧁",
     "naslov_en": "Chocolate soufflé",
     "povzetek_en": "A soufflé of 70% dark chocolate in two ramekins; 15 min at 190 °C, served at once."
   },
   {
     "datoteka": "recept/hacapuri.html",
-    "v": "ff10accd",
+    "v": "957571af",
     "naslov": "Hačapuri",
     "kategorija": "slano pecivo",
     "povzetek": "Gruzijski sirovi čolniči iz kvašenega testa — tri vrste sira, rumenjak na sredino; 20–25 min na 200 °C.",
@@ -369,12 +382,13 @@ window.RECEPTI = [
       "Olive oil",
       "Plain flour"
     ],
+    "ikona": "🧀",
     "naslov_en": "Khachapuri",
     "povzetek_en": "Georgian cheese boats of yeasted dough — three kinds of cheese, a yolk in the middle; 20–25 min at 200 °C."
   },
   {
     "datoteka": "recept/slana-pletenica-s-sunko-in-hrenom.html",
-    "v": "162397cc",
+    "v": "7154fb77",
     "naslov": "Slana pletenica s šunko in hrenom",
     "kategorija": "slano pecivo",
     "povzetek": "Mehko kvašeno testo z maslom in kislo smetano, nadevano s hrenovim namazom in dimljeno šunko; 30–40 min na 180 °C.",
@@ -402,12 +416,13 @@ window.RECEPTI = [
       "Sliced smoked ham",
       "Sour cream"
     ],
+    "ikona": "🥨",
     "naslov_en": "Savoury braid with ham and horseradish",
     "povzetek_en": "Soft yeasted dough with butter and sour cream, filled with creamed horseradish and smoked ham; 30–40 min at 180 °C."
   },
   {
     "datoteka": "recept/peceni-ovseni-kosmici.html",
-    "v": "c40e3a67",
+    "v": "31b43209",
     "naslov": "Pečeni ovseni kosmiči",
     "kategorija": "zajtrk",
     "povzetek": "Zmečkani banani in jajci, ovseni kosmiči in čokoladni proteini, sadje ali čokolada po želji; 40 min na 180 °C.",
@@ -425,15 +440,16 @@ window.RECEPTI = [
       "Protein powder (chocolate)",
       "Rolled oats"
     ],
+    "ikona": "🥣",
     "naslov_en": "Baked oats",
     "povzetek_en": "Mashed bananas and eggs, oats and chocolate protein powder, fruit or chocolate as you like; 40 min at 180 °C."
   }
 ];
 window.RECEPTI_PODVIRI = {
-  "_assets/recept.css": "a2830996",
-  "_assets/kazalo.js": "ffc9e835",
+  "_assets/recept.css": "31c51c18",
+  "_assets/kazalo.js": "928bdc96",
   "_assets/tema.js": "89542f8b",
-  "_assets/recept.js": "56d683f6",
+  "_assets/recept.js": "dbc21f29",
   "_assets/jezik.js": "00903d2d"
 };
 window.RECEPTI_OSNOVE = {"sl": ["Beli poper", "Goveja jušna osnova v gelu (Knorr)", "Kitajskih pet začimb (five spice)", "Lovorjev list", "Pecilni prašek", "Rožmarin", "Sol", "Vinski kamen (cream of tartar)", "Čebula v prahu", "Česen v prahu"], "en": ["Baking powder", "Bay leaf", "Beef stock (gel)", "Chinese five spice", "Cream of tartar", "Garlic powder", "Onion powder", "Rosemary", "Salt", "White pepper"]};

@@ -138,6 +138,37 @@
     return 'korak' + (k.slog ? ' ' + k.slog : '');
   }
 
+  /* --- fotografije ---------------------------------------------------
+     _fotke pripravi orodja/naredi.py iz fotke/<ime>.jpg (naslovna) in
+     fotke/<ime>-<n>.jpg (dodatne), opise doda iz polja "fotke". Ogled ima
+     eno vrsto za vse: naslovna, nato dodatne po stevilki - data-f na
+     gumbih je indeks v FOTKE. */
+  var F = RS._fotke || {};
+  var FOTKE = (F.naslovna ? [F.naslovna] : []).concat(F.galerija || []);
+  /* prva fotka vsakega koraka (indeks koraka od 0) */
+  var fotkaKoraka = {};
+  FOTKE.forEach(function (f, i) {
+    if (f.korak && fotkaKoraka[f.korak - 1] === undefined) fotkaKoraka[f.korak - 1] = i;
+  });
+  function opisFotke(f) { return (EN && f.opis_en) || f.opis || ''; }
+  function atribut(s) { return brezOznak(s).replace(/"/g, '&quot;'); }
+  function altFotke(i) {
+    return opisFotke(FOTKE[i]) || (R.naslov + ' — ' + t('fotografija ', 'photo ') + (i + 1));
+  }
+  /* izrez (npr. "50% 30%") je tocka, ki ostane vidna, ko fotko obreze okvir */
+  function izrezFotke(f) {
+    return f.izrez && /^[\d.]+% [\d.]+%$/.test(f.izrez) ? ' style="object-position:' + f.izrez + '"' : '';
+  }
+  var IKONA_FOTO = 'M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z';
+  function gumbFotkeKoraka(j) {
+    var i = fotkaKoraka[j];
+    if (i === undefined) return '';
+    var oznaka = t('Fotografija: ', 'Photo: ') + atribut(altFotke(i));
+    return ' <button type="button" class="fotka-koraka" data-f="' + i + '" title="' + oznaka +
+           '" aria-label="' + oznaka + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="' +
+           IKONA_FOTO + '"></path></svg></button>';
+  }
+
   /* --- tabela --- */
   /* Mreza tabele, kot jo postavi brskalnik: v vsaki vrstici gre korak, ki se
      tam zacne, v prvo kolono, ki je ne zaseda korak iz vrstic nad njo. Koraki
@@ -180,7 +211,7 @@
           if (m.obsegi[j][0] !== r) continue;          /* pokriva ga rowspan od zgoraj */
           h += '<td class="' + razred(koraki[j]) + '" data-k="' + j + '" rowspan="' +
                (Math.min(m.obsegi[j][1], s.length) - r + 1) + '">' +
-               vstavi(koraki[j].besedilo, n).replace(/\n/g, '<br>') + '</td>';
+               vstavi(koraki[j].besedilo, n).replace(/\n/g, '<br>') + gumbFotkeKoraka(j) + '</td>';
         } else {
           /* Luknja dobi prazno celico na istem mestu, kjer je bil prej prazen
              prostor. Na namizju je brez obrob (videz enak). V telefonski
@@ -219,7 +250,7 @@
         }
         kaj = ' <span style="color:var(--muted)">(' + imena.join(', ') + ')</span>';
       }
-      h += '<li data-k="' + j + '"><b>' + besedilo + '</b>' + kaj + '</li>';
+      h += '<li data-k="' + j + '"><b>' + besedilo + '</b>' + kaj + gumbFotkeKoraka(j) + '</li>';
     }
     return h + '</ol>';
   }
@@ -592,7 +623,8 @@
       cel = cel.parentNode;
     }
     if (!cel || cel.nodeType !== 1 || cel === document.body) return;
-    if (dogodek.target.closest && dogodek.target.closest('a')) return;  /* vir pusti pri miru */
+    /* vir in fotka koraka nista kljukica */
+    if (dogodek.target.closest && dogodek.target.closest('a, [data-f]')) return;
     var vrsta = cel.hasAttribute('data-s') ? 's' : 'k';
     var idx = cel.getAttribute('data-' + vrsta);
     opravljeno[vrsta][idx] = !opravljeno[vrsta][idx];
@@ -663,6 +695,91 @@
     orodja.insertBefore(g, orodja.firstChild);
   }
 
+  /* --- ogled fotografij cez cel zaslon ------------------------------
+     Puscici, poteg vstran in tipke (Esc, puscice). Nazaj (Android poteza)
+     zapre ogled, ne recepta - enako kot pri predogledu izvoza: ogled doda
+     svoj vnos v zgodovino, "nazaj" ga pobere. */
+  function pokaziFotke(zacetna, sprozilec) {
+    if (!FOTKE.length || document.querySelector('.fotke-okno')) return;
+    var i = 0, vec = FOTKE.length > 1;
+    var okno = document.createElement('div');
+    okno.className = 'fotke-okno';
+    okno.setAttribute('role', 'dialog');
+    okno.setAttribute('aria-modal', 'true');
+    okno.setAttribute('aria-label', t('Fotografije', 'Photos'));
+    okno.innerHTML = '<figure><img alt=""><figcaption></figcaption></figure>' +
+      (vec ? '<span class="stevec"></span>' +
+             '<button type="button" class="prejsnja" aria-label="' + t('Prejšnja', 'Previous') + '">&#8249;</button>' +
+             '<button type="button" class="naslednja" aria-label="' + t('Naslednja', 'Next') + '">&#8250;</button>' : '') +
+      '<button type="button" class="zapri" aria-label="' + t('Zapri', 'Close') + '">&#215;</button>';
+    var img = okno.querySelector('img');
+    var opis = okno.querySelector('figcaption');
+    var stevec = okno.querySelector('.stevec');
+    function pokazi(novi) {
+      i = (novi + FOTKE.length) % FOTKE.length;
+      var f = FOTKE[i];
+      img.src = f.velika;
+      img.alt = altFotke(i);
+      opis.innerHTML = opisFotke(f);
+      opis.hidden = !opisFotke(f);
+      if (stevec) stevec.textContent = (i + 1) + ' / ' + FOTKE.length;
+      if (vec) new Image().src = FOTKE[(i + 1) % FOTKE.length].velika;   /* naslednja je ze nalozena */
+    }
+
+    var vZgodovini = false;
+    try { history.pushState({ receptiFotke: 1 }, ''); vZgodovini = true; } catch (e) {}
+    var drsnik = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    var zaprto = false;
+    function zapri(izZgodovine) {
+      if (zaprto) return;
+      zaprto = true;
+      document.removeEventListener('keydown', tipka);
+      window.removeEventListener('popstate', naNazaj);
+      if (okno.parentNode) okno.parentNode.removeChild(okno);
+      document.documentElement.style.overflow = drsnik;
+      if (sprozilec && sprozilec.focus) sprozilec.focus();
+      if (vZgodovini && izZgodovine !== true) history.back();
+    }
+    function naNazaj() { zapri(true); }
+    window.addEventListener('popstate', naNazaj);
+    function tipka(e) {
+      if (e.key === 'Escape') zapri();
+      else if (vec && e.key === 'ArrowLeft') pokazi(i - 1);
+      else if (vec && e.key === 'ArrowRight') pokazi(i + 1);
+    }
+    document.addEventListener('keydown', tipka);
+
+    /* poteg vstran; klik, ki sledi potegu, ne sme zapreti okna */
+    var zacX = null, zacY = 0, potegnjeno = false;
+    okno.addEventListener('pointerdown', function (e) { zacX = e.clientX; zacY = e.clientY; });
+    okno.addEventListener('pointerup', function (e) {
+      if (zacX === null) return;
+      var dx = e.clientX - zacX, dy = e.clientY - zacY;
+      zacX = null;
+      if (vec && Math.abs(dx) > 50 && Math.abs(dx) > 1.5 * Math.abs(dy)) {
+        potegnjeno = true;
+        setTimeout(function () { potegnjeno = false; }, 400);
+        pokazi(i + (dx < 0 ? 1 : -1));
+      }
+    });
+    okno.addEventListener('click', function (e) {
+      if (potegnjeno) return;
+      var g = e.target.closest && e.target.closest('button');
+      if (g) {
+        if (g.classList.contains('zapri')) zapri();
+        else pokazi(i + (g.classList.contains('prejsnja') ? -1 : 1));
+        return;
+      }
+      /* klik mimo fotke (ozadje) zapre */
+      if (e.target === okno || e.target.tagName === 'FIGURE') zapri();
+    });
+
+    pokazi(zacetna || 0);
+    document.body.appendChild(okno);
+    okno.querySelector('.zapri').focus();
+  }
+
   /* --- izvoz kot slika (za deljenje s prijatelji) ---------------------
      Brez knjiznice: klon recepta gre v SVG <foreignObject>, ki ga brskalnik
      izrise sam - rowspan, color-mix() in pisava so tocno taksni kot na
@@ -722,7 +839,8 @@
 
   function klonZaIzvoz() {
     var k = document.querySelector('.stran').cloneNode(true);
-    var ven = k.querySelectorAll('.nazaj, .orodja, .akcije, .kosarica, .obvestilo, .zlozeno, .noga, .prikaz');
+    var ven = k.querySelectorAll('.nazaj, .orodja, .akcije, .kosarica, .obvestilo, .zlozeno, .noga, .prikaz, ' +
+                                 '.galerija, .fotka-koraka');
     for (var i = 0; i < ven.length; i++) ven[i].parentNode.removeChild(ven[i]);
     /* gumbi za kolicino na sliki nimajo pomena - ostane samo izbrana */
     var kol = k.querySelector('.kolicina');
@@ -735,7 +853,25 @@
     /* zaprt "Po sestavinah" je na sliki samo mrtev gumb; razpet gre zraven */
     var ps = k.querySelector('details.po-sestavinah');
     if (ps && !ps.open) ps.parentNode.removeChild(ps);
-    return new XMLSerializer().serializeToString(k);
+    /* Naslovna gre zraven, a kot data: URL (kot pisave) - zunanja slika bi v
+       SVG ostala prazna. Velika, ker je slika siroka 980 px v 2x. Ce je ni
+       mogoce prenesti, izpade cela, da na sliki ne ostane prazen okvir. */
+    var slike = k.querySelectorAll('img');
+    return Promise.all(Array.prototype.map.call(slike, function (s) {
+      s.removeAttribute('srcset');
+      s.removeAttribute('sizes');
+      s.removeAttribute('loading');
+      var f = FOTKE[Number((s.closest('[data-f]') || s).getAttribute('data-f'))];
+      var vir = f ? f.velika : s.getAttribute('src');
+      return prenesi(new URL(vir, location.href).href)
+        .then(function (r) { return r.blob(); })
+        .then(vDataUrl)
+        .then(function (u) { s.setAttribute('src', u); })
+        .catch(function () {
+          var okvir = s.closest('.naslovna') || s;
+          if (okvir.parentNode) okvir.parentNode.removeChild(okvir);
+        });
+    })).then(function () { return new XMLSerializer().serializeToString(k); });
   }
 
   /* Na telefonu (HA companion) je izvoz odrezal dno recepta: izris v SVG je
@@ -941,8 +1077,10 @@
     gumb.disabled = true;
     gumb.textContent = t('Pripravljam sliko…', 'Preparing image…');
     obvesti('', '');
-    var html = klonZaIzvoz();
-    slogZaIzvoz().then(function (css) {
+    /* klon nastane takoj (stanje ob kliku), prenos fotke pa traja */
+    var klon = klonZaIzvoz();
+    Promise.all([klon, slogZaIzvoz()]).then(function (v) {
+      var html = v[0], css = v[1];
       return izmeri(css, html).then(function (mere) {
         return rasteriziraj(svgZaIzvoz(css, html, mere), mere);
       });
@@ -989,7 +1127,19 @@
   var kategorija = window.RECEPTI_KATEGORIJA ? window.RECEPTI_KATEGORIJA(R.kategorija) : R.kategorija;
   if (R.kategorija) h += '<div class="kicker">' + t('Recept', 'Recipe') + ' &middot; ' + kategorija + '</div>';
   h += '<h1>' + R.naslov + '</h1>';
+  /* uvod: opis, naslovna in kolicina. Na namizju stoji fotka desno ob opisu
+     in kolicini, da tabela ostane blizu vrha (tablica v kuhinji); na
+     telefonu je cez celo sirino med opisom in kolicino. */
+  h += '<div class="uvod' + (F.naslovna ? ' s-fotko' : '') + '">';
   if (R.opis) h += '<p class="lead"></p>';
+  if (F.naslovna) {
+    /* obrezana na okvir; dotik odpre celo. Telefon vzame manjso. */
+    var nf = F.naslovna;
+    h += '<button type="button" class="naslovna" data-f="0" aria-label="' + t('Povečaj fotografijo', 'Enlarge photo') + '">' +
+         '<img src="' + nf.velika + '" srcset="' + nf.mala + ' ' + nf.mw + 'w, ' + nf.velika + ' ' + nf.w + 'w" ' +
+         'sizes="(max-width: 700px) 100vw, 940px" width="' + nf.w + '" height="' + nf.h + '" alt="' +
+         atribut(opisFotke(nf) || R.naslov) + '"' + izrezFotke(nf) + '></button>';
+  }
   if (izbire.length > 1) {
     h += '<div class="kolicina"><span class="oznaka">' + t('Količina', 'Makes') + '</span>';
     izbire.forEach(function (k) {
@@ -997,6 +1147,7 @@
     });
     h += '</div>';
   }
+  h += '</div>';
   /* preklop je viden samo pod 700 px (CSS) - tam je privzeto seznam */
   h += '<div class="prikaz" role="group" aria-label="' + t('Prikaz', 'View') + '">' +
        '<button type="button" class="chip" data-prikaz="seznam">' + t('Seznam', 'List') + '</button>' +
@@ -1019,6 +1170,17 @@
     h += '<div class="opombe">';
     R.opombe.forEach(function (o) { h += '<p>' + o + '</p>'; });
     h += '</div>';
+  }
+  if (F.galerija && F.galerija.length) {
+    var zamik = F.naslovna ? 1 : 0;
+    h += '<div class="galerija"><h2>' + t('Fotografije', 'Photos') + '</h2><div class="mreza-fotk">';
+    F.galerija.forEach(function (f, i) {
+      h += '<figure><button type="button" data-f="' + (i + zamik) + '" aria-label="' + t('Povečaj: ', 'Enlarge: ') +
+           atribut(altFotke(i + zamik)) + '"><img src="' + f.mala + '" width="' + f.mw + '" height="' + f.mh +
+           '" loading="lazy" alt="' + atribut(altFotke(i + zamik)) + '"' + izrezFotke(f) + '></button>' +
+           (opisFotke(f) ? '<figcaption>' + opisFotke(f) + '</figcaption>' : '') + '</figure>';
+    });
+    h += '</div></div>';
   }
   /* na koncu: med kuhanjem je ne rabis, je pa del recepta (tisk, slika) */
   h += '<div class="hranila-ovoj"></div>';
@@ -1057,6 +1219,11 @@
   });
   var izvozi = document.querySelector('.izvozi');
   if (izvozi) izvozi.addEventListener('click', function () { izvoziSliko(izvozi); });
+  /* vsak gumb z data-f odpre ogled (naslovna, galerija, fotka koraka) */
+  stran.addEventListener('click', function (e) {
+    var g = e.target.closest && e.target.closest('[data-f]');
+    if (g) pokaziFotke(Number(g.getAttribute('data-f')), g);
+  });
 
   /* "Odpri v brskalniku" iz HA aplikacije pride sem z #izvoz-<kolicina>.
      Kolicino vzamemo samo, ce je med ponujenimi. Znacko odstranimo, da

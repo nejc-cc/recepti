@@ -10,7 +10,9 @@ vsak recept, v slovenscini in anglescini, v 360 px sirokem okvirju
 - JS napake (iz dnevnika brskalnika),
 - da je stran izrisana (kazalo ima vnose, recept tabelo in hranila),
 - da se stran na telefonu ne siri cez rob (vodoravni drsnik),
-- v anglescini: da ni ostalo slovensko besedilo vmesnika.
+- v anglescini: da ni ostalo slovensko besedilo vmesnika,
+- fotke: da se vse nalozijo, da se ogled odpre in zapre in da klik na
+  fotko koraka ne odkljuka koraka.
 
 Izhodna koda 1 ob kateri koli tezavi. Edge je privzet v Windows; drugo pot
 nastavi v okolju EDGE.
@@ -41,6 +43,7 @@ SLOVENSKO = [
     "Ni vračunano", "Išči po", "Počisti", "Kaj imaš doma", "receptov",
     "Recept ·", "Energija", "Manjka ena", "Beri po vrsticah", "Lahko skuhaš",
     "Kaj imam doma", "S temi sestavinami", "Manjkata dve", "imaš vse", "po inženirsko",
+    "Fotografije",
 ]
 
 OVOJ = """<!DOCTYPE html><meta charset="utf-8"><pre id="izid">cakam</pre>
@@ -64,14 +67,36 @@ function naslednja(i) {
           var besedilo = d.body.innerText;
           SLO.forEach(function (b) { if (besedilo.indexOf(b) !== -1) r.tezave.push('slovensko: "' + b + '"'); });
         }
+        /* fotke pod robom okvirja se nalagajo lenobno - za preizkus vse takoj */
+        [].forEach.call(d.querySelectorAll('img[loading=lazy]'), function (im) { im.loading = 'eager'; });
       } catch (e) { r.tezave.push('preizkus ni uspel: ' + e.message); }
-      izid.push(r);
-      f.remove();
-      naslednja(i + 1);
+      setTimeout(function () {
+        try { fotke(f, s, r); } catch (e) { r.tezave.push('preizkus fotk ni uspel: ' + e.message); }
+        izid.push(r);
+        /* zapiranje ogleda gre z history.back() - naj se umiri pred naslednjo stranjo */
+        setTimeout(function () { f.remove(); naslednja(i + 1); }, 200);
+      }, d.querySelector('.stran img') ? 900 : 0);
     }, 700);
   };
   f.src = s.pot + (s.pot.indexOf('?') === -1 ? '?' : '&') + 'jezik=' + s.jezik;
   document.body.appendChild(f);
+}
+/* Fotke: vse se nalozijo; ogled se odpre in z Esc zapre; fotka koraka ne
+   odkljuka koraka. Na 360 px je viden seznam, zato najprej gumb v njem. */
+function fotke(f, s, r) {
+  var d = f.contentDocument, w = f.contentWindow;
+  [].forEach.call(d.querySelectorAll('.stran img'), function (im) {
+    if (!im.complete || !im.naturalWidth) r.tezave.push('fotka se ne nalozi: ' + (im.currentSrc || im.src).split('/').slice(-2).join('/'));
+  });
+  var g = d.querySelector('.zlozeno .fotka-koraka') || d.querySelector('.stran [data-f]');
+  if (!g) return;
+  var korak = g.closest('[data-k]');
+  g.click();
+  var okno = d.querySelector('.fotke-okno');
+  if (!okno || !okno.querySelector('img[src]')) { r.tezave.push('ogled fotk se ne odpre'); return; }
+  d.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape' }));
+  if (d.querySelector('.fotke-okno')) r.tezave.push('ogled fotk se z Esc ne zapre');
+  if (korak && korak.classList.contains('opravljeno')) r.tezave.push('klik na fotko koraka odkljuka korak');
 }
 naslednja(0);
 </script>"""

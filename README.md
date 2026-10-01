@@ -20,9 +20,13 @@ se raztezajo čez sestavine, na katere se nanašajo.
   recept odprt (kjer brskalnik to zna - drugje gumba ni).
 - **Hranilna vrednost** - kcal in beljakovine na porcijo, na 100 g in skupaj,
   z razčlenitvijo po sestavinah.
-- **Izvoz kot slika** - PNG za deljenje: svetla tema, tabela, brez gumbov.
+- **Izvoz kot slika** - PNG za deljenje: svetla tema, tabela, naslovna
+  fotka, brez gumbov.
+- **Fotografije** - naslovna na vrhu recepta in v kazalu, dodatne v galeriji
+  pod receptom, fotka koraka kot 📷 v koraku; dotik odpre ogled čez cel
+  zaslon (poteg vstran, nazaj ga zapre).
 - **Predogled povezave** - ob deljenju recepta (WhatsApp, Viber ...) kartica z
-  naslovom in opisom.
+  naslovom, opisom in naslovno fotko.
 - **Kazalo** - iskanje po imenu in kategoriji ter po sestavinah na dva načina:
   **S temi sestavinami** (recepti z vsemi izbranimi; ostanejo samo sestavine,
   ki se z njimi pojavljajo) in **Kaj imam doma** (odkljukaš shrambo - najprej
@@ -32,11 +36,13 @@ se raztezajo čez sestavine, na katere se nanašajo.
 ## Zgradba
 
     recepti/<ime>.json      VIR: en recept = ena datoteka, samo podatki
+    fotke/                  VIR fotografij - samo lokalno, ni v gitu
     orodja/                 generator, preizkus, predloga, opis polj
     docs/                   STRAN - to streže GitHub Pages
       index.html            kazalo z iskanjem
       recepti.js            kazalo - GENERIRANO
       recept/<ime>.html     strani receptov - GENERIRANE iz recepti/*.json
+      fotke/<ime>/          fotografije za splet - GENERIRANE iz fotke/
       _assets/              slog, skripte, pisave, hranila.js
 
 Strani receptov so generirane iz ene predloge (`orodja/stran-recepta.html`),
@@ -78,8 +84,9 @@ bi spremembo povozil.
 
 `orodja/preveri.py` postreže `docs/` in v headless Edgu naloži kazalo in vsak
 recept v slovenščini in angleščini, v 360 px širokem okvirju. Poroča o JS
-napakah, neizrisanih straneh, strani, ki je širša od telefona, in o
-slovenskem besedilu vmesnika v angleški različici. Ob težavi vrne kodo 1.
+napakah, neizrisanih straneh, strani, ki je širša od telefona, o slovenskem
+besedilu vmesnika v angleški različici, o fotkah, ki se ne naložijo, in o
+ogledu fotk, ki se ne odpre ali zapre. Ob težavi vrne kodo 1.
 Na Windows ga poženi iz PowerShella ali cmd (iz git-basha se Edge odklopi).
 
 ## Jezik (slovensko / English)
@@ -105,12 +112,35 @@ seznama (polje `nakup`), zato ista sestavina v vseh receptih bere isto vrstico.
   "Ni vračunano".
 - Natančnost je okoli ±10 %: izdelki se razlikujejo.
 
+## Fotografije
+
+Izvirnike daš v `fotke/` (jpg, png ali webp) in jih poimenuješ po receptu:
+
+    fotke/ciabatta.jpg      naslovna
+    fotke/ciabatta-1.jpg    dodatna 1 (galerija; vrstni red po številki,
+    fotke/ciabatta-2.jpg    luknje so dovoljene - 10, 20, 30)
+
+`orodja/naredi.py` iz njih izdela pomanjšane različice v `docs/fotke/<ime>/`
+(WebP 1600 in 640 px, kvadrat 240 px za kazalo, JPEG 1200 × 630 za
+predogled povezave), obrnjene po EXIF in v sRGB. **Vsi metapodatki ostanejo
+zunaj** - telefon v fotko zapiše GPS, torej domači naslov; generator to po
+izdelavi še preveri. Izvirniki niso v gitu, v gitu so samo pomanjšane
+različice. Kar je že narejeno, si zapomni `fotke/.naredi.json`.
+
+Opisi, korak, h kateremu fotka sodi, in izrez so v receptu, v polju `"fotke"`
+(`orodja/POLJA.md`). Generator opozori na fotko, ki ne ustreza nobenemu
+receptu, na opis brez fotke, neobstoječ korak in nepreveden opis.
+
+Kar je enkrat potisnjeno na GitHub, ostane v zgodovini javnega repa, tudi ko
+fotko zamenjaš - pred objavo poglej ozadje (obrazi, dokumenti na pultu).
+
 ## Izvoz kot slika
 
 Brez knjižnice: klon strani gre v SVG `<foreignObject>` s CSS in pisavami,
 vgrajenimi kot `data:` URL, brskalnik ga izriše sam, rezultat se nariše na
 canvas. Zato je slika enaka strani (rowspan, `color-mix()`, pisava). Vse, kar
-naj bo v sliki, mora biti vgrajeno - zunanja slika bi ostala prazna.
+naj bo v sliki, mora biti vgrajeno - zunanja slika bi ostala prazna; zato
+se naslovna fotka pred izrisom prenese in vgradi kot `data:` URL.
 
 ## Home Assistant (neobvezno)
 
@@ -128,13 +158,13 @@ jo še vedno najde.
 ## Zasebni recepti
 
 Recept z `"javno": false` ostane samo doma. Generator ga izpusti iz javnega
-kazala (`docs/recepti.js`), doda v domače (`docs/recepti-doma.js`) ter vir in
-stran vpiše v `.gitignore`, zato ga v tem repu ni.
+kazala (`docs/recepti.js`), doda v domače (`docs/recepti-doma.js`) ter vir,
+stran in fotke vpiše v `.gitignore`, zato ga v tem repu ni.
 
 ## Viri in licenca
 
 Recepti so predelani v tabelo in imajo vir naveden v opombah. Fotografij z
-virov stran ne objavlja. Avtor ali imetnik pravic lahko zahteva umik recepta
+virov stran ne objavlja - vse fotografije so lastne. Avtor ali imetnik pravic lahko zahteva umik recepta
 prek povezave v nogi strani - odpre obrazec na GitHubu
 (`.github/ISSUE_TEMPLATE/umik-recepta.yml`). Noga se pokaže samo na javni
 strani, na Home Assistantu (`/local/`) je ni.

@@ -8,12 +8,17 @@
 # - osnutki, dokler niso objavljeni
 /recepti/_osnutek-*.json
 /docs/recept/_osnutek-*.html
+/docs/fotke/_osnutek-*/
+# - izvirne fotografije (v git gredo samo pomanjsane, brez metapodatkov, iz docs/fotke)
+/fotke/
 # - Python predpomnilnik
 __pycache__/
 
 # --- zasebni recepti: vzdrzuje orodja/naredi.py, ne urejaj rocno ---
 /recepti/cokoladna-torta-s-kislim-zeljem.json
 /docs/recept/cokoladna-torta-s-kislim-zeljem.html
+/docs/fotke/cokoladna-torta-s-kislim-zeljem/
 /recepti/cokoladna-torta-z-majonezo.json
 /docs/recept/cokoladna-torta-z-majonezo.html
+/docs/fotke/cokoladna-torta-z-majonezo/
 # --- konec zasebnih receptov ---

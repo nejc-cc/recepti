@@ -62,6 +62,19 @@ Za enotno obliko: `python orodja/oblikuj.py recepti/<ime>.json`.
     koncna_masa stehtana masa KONCNE jedi v g pri osnovni kolicini (neobvezno).
                 Z njo je "na 100 g" natancen; brez nje se racuna iz mase
                 surovih sestavin, ki pri peki in kuhanju izgubijo vodo.
+    fotke       neobvezno; opisi fotografij. Fotke same so datoteke v fotke/
+                (ni v gitu): fotke/<ime>.jpg je naslovna, fotke/<ime>-<n>.jpg
+                dodatna n (jpg, png, webp; vrstni red po n). Kljuc je
+                "naslovna" ali stevilka n kot niz; vrednost je opis ali:
+                  opis    besedilo pod fotko in v ogledu (sme imeti <b>, <a>)
+                  korak   stevilka koraka od 1 (kot v seznamu na telefonu) -
+                          v tem koraku se pokaze 📷, ki odpre to fotko
+                  izrez   "50% 30%" - tocka, ki ostane vidna, ko se fotka
+                          obreze (naslovna, kvadrat v kazalu, galerija,
+                          predogled povezave); privzeto sredina
+                Primer: "fotke": { "naslovna": { "izrez": "50% 70%" },
+                  "1": { "opis": "Testo po 12 h", "korak": 3 }, "2": "Zlaganje" }
+                Anglesko: "en": { "fotke": { "1": "Dough after 12 h" } }
     kazalo      false = skrij povezavo "Vsi recepti" (neobvezno)
     kosarica    false = skrij gumb "V kosarico" (neobvezno)
     en          ANGLESKI PREVOD - generator opozori, ce ga ni. Polozi se cez
@@ -75,6 +88,7 @@ Za enotno obliko: `python orodja/oblikuj.py recepti/<ime>.json`.
                                   "merica_enota" (enota druge mere)
                   koraki          seznam besedil, npr. ["mix\ndry", "bake"]
                   plasti          { "od_zgoraj": ["cocoa", "cream"] }
+                  fotke           { "1": "Dough after 12 h" } - samo opisi
                 Kosarica ostane slovenska: na seznam gre vedno slovensko ime.
                 Nova kategorija -> dodaj jo v docs/_assets/jezik.js; nova sestavina
                 -> "en" v docs/_assets/hranila.js.
