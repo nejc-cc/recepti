@@ -56,7 +56,13 @@
     /* Staticno besedilo iz index.html. Nastavi se vedno (ne samo v
        anglescini), da se po preklopu nazaj ne pozabi nobeno. */
     var h1 = document.querySelector('.stran h1');
-    if (h1) h1.textContent = t('Recepti', 'Recipes');
+    if (h1) {
+      h1.textContent = t('Recepti', 'Recipes') + ' ';
+      var pripis = document.createElement('span');
+      pripis.className = 'pripis';
+      pripis.textContent = t('po inženirsko', 'the engineer’s way');
+      h1.appendChild(pripis);
+    }
     document.title = t('Recepti', 'Recipes');
     if (polje) polje.placeholder = t('Išči po imenu, kategoriji, opisu ali sestavini…',
                                      'Search by name, category, description or ingredient…');

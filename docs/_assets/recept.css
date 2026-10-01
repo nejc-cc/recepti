@@ -158,6 +158,13 @@ h1 {
   line-height: .98; font-weight: 600; letter-spacing: -.02em;
   margin: 0 0 var(--s4);
 }
+/* podnaslov pod naslovom kazala ("po inzenirsko"); doda ga tudi kazalo.js */
+h1 .pripis {
+  display: block; margin-top: var(--s2);
+  font-size: clamp(1.05rem, 2.6vw, 1.6rem); line-height: 1.2;
+  font-style: italic; font-weight: 400; letter-spacing: 0;
+  color: var(--accent);
+}
 .lead { font-size: 1.05rem; max-width: 34em; margin: 0 0 var(--s6); color: var(--muted); }
 .nazaj { display: inline-block; margin-bottom: var(--s4); color: var(--accent); text-decoration: none; font-size: .9rem; }
 .nazaj:hover { text-decoration: underline; }
