@@ -139,23 +139,57 @@
   }
 
   /* --- tabela --- */
+  /* Mreza tabele, kot jo postavi brskalnik: v vsaki vrstici gre korak, ki se
+     tam zacne, v prvo kolono, ki je ne zaseda korak iz vrstic nad njo. Koraki
+     si zato kolone delijo ("stepaj" zgoraj, "raztopi" nize v isti koloni).
+     zas[vrsta][kolona] = indeks koraka; luknja = undefined. */
+  function mreza(s, koraki) {
+    var N = s.length, zas = [], mesto = [], kolon = 0;
+    var obsegi = koraki.map(function (k) { return obseg(k, N); });
+    for (var r = 1; r <= N + 1; r++) zas[r] = [];
+    for (r = 1; r <= N; r++) {
+      var c = 1;
+      for (var j = 0; j < koraki.length; j++) {
+        if (obsegi[j][0] !== r) continue;
+        while (zas[r][c] !== undefined) c++;
+        mesto[j] = c;
+        for (var rr = r; rr <= Math.min(obsegi[j][1], N); rr++) zas[rr][c] = j;
+        if (c > kolon) kolon = c;
+        c++;
+      }
+    }
+    return { zas: zas, obsegi: obsegi, kolon: kolon };
+  }
+
   function tabela(n) {
     var s = R.sestavine || [], koraki = R.koraki || [];
     var stolpcev = 1 + koraki.length;
+    var m = mreza(s, koraki), zas = m.zas;
     var h = '<table class="recept"><tbody>';
     if (R.predgretje) {
       h += '<tr><td class="predgretje" colspan="' + stolpcev + '">' + vstavi(R.predgretje, n) + '</td></tr>';
     }
     for (var i = 0; i < s.length; i++) {
+      var r = i + 1;
       /* data-s in data-k sta zasidra za odkljukanje med kuhanjem; indeksi so
          stabilni, ker so vezani na vrstni red v receptu, ne na kolicino. */
       h += '<tr><td class="sestavina" data-s="' + i + '">' + sestavinaNiz(s[i], n) + '</td>';
-      for (var j = 0; j < koraki.length; j++) {
-        var o = obseg(koraki[j], s.length);
-        if (o[0] === i + 1) {
+      for (var c = 1; c <= m.kolon; c++) {
+        var j = zas[r][c];
+        if (j !== undefined) {
+          if (m.obsegi[j][0] !== r) continue;          /* pokriva ga rowspan od zgoraj */
           h += '<td class="' + razred(koraki[j]) + '" data-k="' + j + '" rowspan="' +
-               (o[1] - o[0] + 1) + '">' +
+               (Math.min(m.obsegi[j][1], s.length) - r + 1) + '">' +
                vstavi(koraki[j].besedilo, n).replace(/\n/g, '<br>') + '</td>';
+        } else {
+          /* Luknja dobi prazno celico na istem mestu, kjer je bil prej prazen
+             prostor. Na namizju je brez obrob (videz enak). V telefonski
+             tabeli z locenimi obrobami narise mejo proti koraku pod sabo in
+             desno od sebe - te meje sicer ne bi narisal nihce. */
+          var meja = '';
+          if (zas[r + 1][c] !== undefined) meja += ' meja-spodaj';
+          if (c < m.kolon && zas[r][c + 1] !== undefined) meja += ' meja-desno';
+          h += '<td class="prazno' + meja + '"></td>';
         }
       }
       h += '</tr>';

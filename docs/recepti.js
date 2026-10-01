@@ -2,7 +2,7 @@
 window.RECEPTI = [
   {
     "datoteka": "recept/govedina-po-mongolsko.html",
-    "v": "5db7bcec",
+    "v": "0c70f4ca",
     "naslov": "Govedina po mongolsko",
     "kategorija": "glavna jed",
     "povzetek": "Tanki trakovi marinirane govedine, hitro zapečeni s porom in prelivom iz ostrigine in sojine omake.",
@@ -33,7 +33,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/piscancji-zur.html",
-    "v": "9244eaf9",
+    "v": "cd91e307",
     "naslov": "Piščančji žur",
     "kategorija": "glavna jed",
     "povzetek": "Potolčen piščančji file, obložen s pršutom in sirom ter prelit s smetano; 45 min na 220 °C.",
@@ -58,7 +58,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/tajvanski-popcorn-piscanec.html",
-    "v": "2fceb97c",
+    "v": "32f11e4c",
     "naslov": "Tajvanski popcorn piščanec",
     "kategorija": "glavna jed",
     "povzetek": "Marinirana piščančja stegna, obvaljana v grobem krompirjevem škrobu, iz cvrtnika na vroč zrak; s tajsko baziliko in posipom petih začimb.",
@@ -95,7 +95,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/svinjska-enolocnica-z-grahom.html",
-    "v": "e54033bb",
+    "v": "fae5baaf",
     "naslov": "Svinjska enolončnica z grahom",
     "kategorija": "jed na žlico",
     "povzetek": "Svinjska ribica, krompir in grah v jušni osnovi s paradižnikovo mezgo in lovorjem; približno 1 h kuhanja.",
@@ -126,7 +126,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/korejska-sojina-juha.html",
-    "v": "dd97b7da",
+    "v": "086c1792",
     "naslov": "Korejska sojina juha",
     "kategorija": "juha",
     "povzetek": "Gosta enolončnica s korejsko sojino pasto (miso juha), mleto govedino, školjkami ali rakci in zelenjavo; približno 15 min kuhanja.",
@@ -157,7 +157,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/ciabatta.html",
-    "v": "659e534f",
+    "v": "5e94752c",
     "naslov": "Ciabatta",
     "kategorija": "kruh",
     "povzetek": "Mokro testo s 77 % hidracije, počiva čez noč, peče se 40 min na 200 °C.",
@@ -176,7 +176,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/prepovedan-kruh.html",
-    "v": "a6b61409",
+    "v": "3441324a",
     "naslov": "Prepovedan kruh",
     "kategorija": "kruh",
     "povzetek": "Ciabatta s čilijem, ocvirki in praženo čebulo — ker je enostavno predober. Počiva čez noč, 40 min na 200 °C.",
@@ -201,7 +201,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/vroca-cokolada.html",
-    "v": "51625398",
+    "v": "4d23935c",
     "naslov": "Vroča čokolada",
     "kategorija": "pijača",
     "povzetek": "Prava vroča čokolada iz stopljene čokolade — mleko se vmešava po žlicah, da ne ostane peščena.",
@@ -222,7 +222,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/brownie-v-2-minutah.html",
-    "v": "1a0b7d99",
+    "v": "a791f4ef",
     "naslov": "Brownie v 2 minutah",
     "kategorija": "sladica",
     "povzetek": "Tri sestavine — jabolko, jajce in nesladkan kakav — zblendane in v mikrovalovki v 2–3 minutah; brez moke.",
@@ -241,7 +241,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/creme-brulee.html",
-    "v": "e5cab889",
+    "v": "4f2802a8",
     "naslov": "Crème brûlée",
     "kategorija": "sladica",
     "povzetek": "Svilnata smetanova krema iz osmih rumenjakov; 1 h na 120 °C v vodni kopeli, 8 ur hlajenja, na koncu karamelizirana skorjica.",
@@ -264,7 +264,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/fizolovi-browniji.html",
-    "v": "1cea3455",
+    "v": "1e8547b1",
     "naslov": "Fižolovi browniji",
     "kategorija": "sladica",
     "povzetek": "Brez moke in dodanega sladkorja — konzerva fižola, datlji in proteini; 33 min na 180 °C.",
@@ -291,7 +291,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/tiramisu.html",
-    "v": "95af971c",
+    "v": "bb8a3076",
     "naslov": "Tiramisu",
     "kategorija": "sladica",
     "povzetek": "Izvirna različica s sladko marsalo — zabajone nad soparo, mascarpone in stepena smetana; 4 ure v hladilniku.",
@@ -320,7 +320,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/cokoladni-sufle.html",
-    "v": "6972a30d",
+    "v": "80f12b42",
     "naslov": "Čokoladni suflé",
     "kategorija": "sladica",
     "povzetek": "Suflé iz 70-odstotne čokolade v dveh ramekinih; 15 min na 190 °C, postreže se takoj.",
@@ -345,7 +345,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/hacapuri.html",
-    "v": "7f3d63ae",
+    "v": "69af2dff",
     "naslov": "Hačapuri",
     "kategorija": "slano pecivo",
     "povzetek": "Gruzijski sirovi čolniči iz kvašenega testa — tri vrste sira, rumenjak na sredino; 20–25 min na 200 °C.",
@@ -374,7 +374,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/slana-pletenica-s-sunko-in-hrenom.html",
-    "v": "cb87a6ce",
+    "v": "6be6a21f",
     "naslov": "Slana pletenica s šunko in hrenom",
     "kategorija": "slano pecivo",
     "povzetek": "Mehko kvašeno testo z maslom in kislo smetano, nadevano s hrenovim namazom in dimljeno šunko; 30–40 min na 180 °C.",
@@ -407,7 +407,7 @@ window.RECEPTI = [
   },
   {
     "datoteka": "recept/peceni-ovseni-kosmici.html",
-    "v": "6e724155",
+    "v": "21b949ff",
     "naslov": "Pečeni ovseni kosmiči",
     "kategorija": "zajtrk",
     "povzetek": "Zmečkani banani in jajci, ovseni kosmiči in čokoladni proteini, sadje ali čokolada po želji; 40 min na 180 °C.",
@@ -430,10 +430,10 @@ window.RECEPTI = [
   }
 ];
 window.RECEPTI_PODVIRI = {
-  "_assets/recept.css": "d5196310",
+  "_assets/recept.css": "27ab0c2f",
   "_assets/kazalo.js": "5a055142",
   "_assets/tema.js": "89542f8b",
-  "_assets/recept.js": "97c950cd",
+  "_assets/recept.js": "56d683f6",
   "_assets/jezik.js": "00903d2d"
 };
 window.RECEPTI_OSNOVE = {"sl": ["Beli poper", "Goveja jušna osnova v gelu (Knorr)", "Kitajskih pet začimb (five spice)", "Lovorjev list", "Pecilni prašek", "Rožmarin", "Sol", "Vinski kamen (cream of tartar)", "Čebula v prahu", "Česen v prahu"], "en": ["Baking powder", "Bay leaf", "Beef stock (gel)", "Chinese five spice", "Cream of tartar", "Garlic powder", "Onion powder", "Rosemary", "Salt", "White pepper"]};

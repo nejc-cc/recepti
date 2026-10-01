@@ -182,6 +182,9 @@ table.recept {
 table.recept td { border: 1px solid var(--line); padding: var(--s3) var(--s4); vertical-align: middle; }
 table.recept td.predgretje { text-align: center; font-weight: 600; }
 table.recept td.sestavina { width: 34%; }
+/* luknja v mrezi (glej mreza() v recept.js): na namizju brez obrob - pri
+   border-collapse zmaga obroba sosednjega koraka, videz je enak kot brez celice */
+table.recept td.prazno { border-style: none; }
 table.recept td.korak { text-align: center; font-weight: 600; color: var(--accent); }
 table.recept td.korak.tih { color: var(--text); font-weight: 400; }
 table.recept td.korak.zakljucek { color: var(--text); font-weight: 600; }
@@ -418,6 +421,8 @@ ul.kazalo .opis { flex: 1 1 100%; font-size: .95rem; color: var(--muted); }
   html[data-prikaz="tabela"] table.recept { font-size: .9rem; border-collapse: separate; border-spacing: 0; }
   html[data-prikaz="tabela"] table.recept td { padding: var(--s2); border-width: 0 1px 1px 0; }
   html[data-prikaz="tabela"] table.recept td.predgretje { text-align: left; }
+  html[data-prikaz="tabela"] table.recept td.prazno.meja-spodaj { border-bottom: 1px solid var(--line); }
+  html[data-prikaz="tabela"] table.recept td.prazno.meja-desno { border-right: 1px solid var(--line); }
   html[data-prikaz="tabela"] table.recept td.sestavina {
     position: sticky; left: 0; z-index: 1;
     width: 38vw; min-width: 7.5em;
