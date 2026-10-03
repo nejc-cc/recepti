@@ -189,6 +189,10 @@ h1 .pripis {
 .naslovna img, .mreza-fotk img {
   display: block; width: 100%; height: 100%; object-fit: cover;
 }
+/* izrezana fotka (prosojno ozadje, "prosojna" iz generatorja): cela, brez
+   okvirja - kruh lebdi na strani, nic ni odrezano */
+.naslovna.prosojna, .mreza-fotk button.prosojna { background: none; }
+.naslovna.prosojna img, .mreza-fotk .prosojna img { object-fit: contain; }
 .galerija { margin-top: var(--s6); }
 .galerija h2 {
   font-size: .8rem; letter-spacing: .14em; text-transform: uppercase;
@@ -283,7 +287,8 @@ table.recept td.sestavina { width: 34%; }
 table.recept td.prazno { border-style: none; }
 table.recept td.korak { text-align: center; font-weight: 600; color: var(--accent); }
 table.recept td.korak.tih { color: var(--text); font-weight: 400; }
-table.recept td.korak.zakljucek { color: var(--text); font-weight: 600; }
+/* "zakljucek" ostane v receptih kot oznaka zadnjega koraka, izgleda pa enako
+   kot ostali koraki (uporabnik: vse enake barve) */
 .kol { font-variant-numeric: tabular-nums; }
 
 /* ---------- odkljukano med kuhanjem ----------

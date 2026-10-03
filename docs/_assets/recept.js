@@ -1135,7 +1135,8 @@
   if (F.naslovna) {
     /* obrezana na okvir; dotik odpre celo. Telefon vzame manjso. */
     var nf = F.naslovna;
-    h += '<button type="button" class="naslovna" data-f="0" aria-label="' + t('Povečaj fotografijo', 'Enlarge photo') + '">' +
+    h += '<button type="button" class="naslovna' + (nf.prosojna ? ' prosojna' : '') + '" data-f="0" aria-label="' +
+         t('Povečaj fotografijo', 'Enlarge photo') + '">' +
          '<img src="' + nf.velika + '" srcset="' + nf.mala + ' ' + nf.mw + 'w, ' + nf.velika + ' ' + nf.w + 'w" ' +
          'sizes="(max-width: 700px) 100vw, 940px" width="' + nf.w + '" height="' + nf.h + '" alt="' +
          atribut(opisFotke(nf) || R.naslov) + '"' + izrezFotke(nf) + '></button>';
@@ -1175,7 +1176,8 @@
     var zamik = F.naslovna ? 1 : 0;
     h += '<div class="galerija"><h2>' + t('Fotografije', 'Photos') + '</h2><div class="mreza-fotk">';
     F.galerija.forEach(function (f, i) {
-      h += '<figure><button type="button" data-f="' + (i + zamik) + '" aria-label="' + t('Povečaj: ', 'Enlarge: ') +
+      h += '<figure><button type="button"' + (f.prosojna ? ' class="prosojna"' : '') + ' data-f="' + (i + zamik) +
+           '" aria-label="' + t('Povečaj: ', 'Enlarge: ') +
            atribut(altFotke(i + zamik)) + '"><img src="' + f.mala + '" width="' + f.mw + '" height="' + f.mh +
            '" loading="lazy" alt="' + atribut(altFotke(i + zamik)) + '"' + izrezFotke(f) + '></button>' +
            (opisFotke(f) ? '<figcaption>' + opisFotke(f) + '</figcaption>' : '') + '</figure>';

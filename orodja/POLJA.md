@@ -48,7 +48,8 @@ Za enotno obliko: `python orodja/oblikuj.py recepti/<ime>.json`.
     koraki      stolpci desno od sestavin, po vrsti
                 besedilo: "\n" pomeni prelom vrstice v celici
                 vrstice: [1,3] = korak pokriva 1.-3. sestavino (privzeto vse)
-                slog: "tih" (crno, navadno) ali "zakljucek" (crno, krepko); privzeto modro krepko
+                slog: "tih" (crno, navadno - cakanje, vmesni korak); privzeto modro krepko.
+                      "zakljucek" oznaci zadnji korak, izgleda pa kot privzeti
     opombe      kratki odstavki pod tabelo (neobvezno)
     plasti      neobvezno; izrise diagram plasti pod tabelo
                   naslov      neobvezen, privzeto "Plasti"
@@ -71,7 +72,8 @@ Za enotno obliko: `python orodja/oblikuj.py recepti/<ime>.json`.
                           v tem koraku se pokaze 📷, ki odpre to fotko
                   izrez   "50% 30%" - tocka, ki ostane vidna, ko se fotka
                           obreze (naslovna, kvadrat v kazalu, galerija,
-                          predogled povezave); privzeto sredina
+                          predogled povezave); privzeto sredina. Pri izrezani
+                          fotki (prosojno ozadje) ne velja - ta je vedno cela
                 Primer: "fotke": { "naslovna": { "izrez": "50% 70%" },
                   "1": { "opis": "Testo po 12 h", "korak": 3 }, "2": "Zlaganje" }
                 Anglesko: "en": { "fotke": { "1": "Dough after 12 h" } }

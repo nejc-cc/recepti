@@ -58,7 +58,7 @@ FOTKE = os.path.join(STRAN, "fotke")
 PREDPOMNILNIK = os.path.join(FOTKE_VIR, ".naredi.json")
 FOTKE_KONCNICE = (".jpg", ".jpeg", ".png", ".webp")
 # Mere v px. Ko se spremenijo, povecaj verzijo - fotke se izdelajo znova.
-FOTKE_VERZIJA = 1
+FOTKE_VERZIJA = 2
 VELIKA = 1600            # ogled cez cel zaslon, naslovna na namizju in v izvozu
 MALA = 640               # galerija, naslovna na telefonu
 KAZALO = 240             # kvadrat v kazalu
@@ -299,6 +299,14 @@ def odpri_fotko(pot):
     return Image.frombytes(im.mode, im.size, im.tobytes())
 
 
+def je_prosojna(im):
+    """Izrezana fotka (odstranjeno ozadje): vsaj 2 % pik je prosojnih."""
+    if im.mode != "RGBA":
+        return False
+    h = im.getchannel("A").histogram()
+    return sum(h[:250]) > 0.02 * im.size[0] * im.size[1]
+
+
 def brez_metapodatkov(pot):
     with open(pot, "rb") as f:
         b = f.read()
@@ -385,19 +393,27 @@ def izdelaj_fotke(ime, d, najdene, pomni, nov):
         with open(vir, "rb") as f:
             zapis = {"vir": hashlib.sha1(f.read()).hexdigest(), "verzija": FOTKE_VERZIJA,
                      "izrez": izrez, "datoteke": sorted(imena.values())}
-        if pomni.get(oznaka) != zapis or not all(os.path.exists(p) for p in poti.values()):
+        star = pomni.get(oznaka) or {}
+        prosojna = star.get("prosojna", False)
+        if {k: star.get(k) for k in zapis} != zapis or not all(os.path.exists(p) for p in poti.values()):
             im = odpri_fotko(vir)
+            prosojna = je_prosojna(im)
             sredina = (0.5, 0.5) if not izrez else (izrez[0] / 100, izrez[1] / 100)
             for k, p in poti.items():
+                mere = (KAZALO, KAZALO) if k == "kazalo" else OG
                 if k in ("velika", "mala"):
                     m = im.copy()
                     m.thumbnail((VELIKA, VELIKA) if k == "velika" else (MALA, MALA), Image.LANCZOS)
+                elif prosojna:
+                    # izrezana fotka (prosojno ozadje): cela, na sredini, nic odrezano
+                    m = Image.new("RGBA", mere, (0, 0, 0, 0))
+                    v = ImageOps.contain(im.convert("RGBA"), mere, Image.LANCZOS)
+                    m.paste(v, ((mere[0] - v.width) // 2, (mere[1] - v.height) // 2), v)
                 else:
-                    m = ImageOps.fit(im, (KAZALO, KAZALO) if k == "kazalo" else OG,
-                                     Image.LANCZOS, centering=sredina)
+                    m = ImageOps.fit(im, mere, Image.LANCZOS, centering=sredina)
                 shrani_fotko(m, p)
-            print("   fotka %s <- fotke/%s" % (oznaka, os.path.basename(vir)))
-        nov[oznaka] = zapis
+            print("   fotka %s <- fotke/%s%s" % (oznaka, os.path.basename(vir), " (prosojna)" if prosojna else ""))
+        nov[oznaka] = dict(zapis, prosojna=prosojna)
         datoteke.update(imena.values())
 
         def naslov(k):
@@ -412,7 +428,9 @@ def izdelaj_fotke(ime, d, najdene, pomni, nov):
                 f["opis_en"] = o_en["opis"]
             else:
                 print("   prevod %s: opis fotke %s ni preveden (en.fotke)" % (ime, kljuc))
-        if izrez:
+        if prosojna:
+            f["prosojna"] = True       # stran jo pokaze celo (contain), ne obrezane
+        elif izrez:
             f["izrez"] = "%g%% %g%%" % izrez
         if o.get("korak") is not None:
             if isinstance(o["korak"], int) and 1 <= o["korak"] <= korakov:

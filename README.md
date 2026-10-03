@@ -127,6 +127,9 @@ zunaj** - telefon v fotko zapiše GPS, torej domači naslov; generator to po
 izdelavi še preveri. Izvirniki niso v gitu, v gitu so samo pomanjšane
 različice. Kar je že narejeno, si zapomni `fotke/.naredi.json`.
 
+Izrezana fotka (PNG s prosojnim ozadjem) se nikjer ne obreže: na strani je
+cela in brez okvirja, v kazalu in predogledu povezave na sredini.
+
 Opisi, korak, h kateremu fotka sodi, in izrez so v receptu, v polju `"fotke"`
 (`orodja/POLJA.md`). Generator opozori na fotko, ki ne ustreza nobenemu
 receptu, na opis brez fotke, neobstoječ korak in nepreveden opis.
