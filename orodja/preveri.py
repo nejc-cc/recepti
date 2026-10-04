@@ -70,12 +70,18 @@ function naslednja(i) {
         /* fotke pod robom okvirja se nalagajo lenobno - za preizkus vse takoj */
         [].forEach.call(d.querySelectorAll('img[loading=lazy]'), function (im) { im.loading = 'eager'; });
       } catch (e) { r.tezave.push('preizkus ni uspel: ' + e.message); }
-      setTimeout(function () {
+      /* pocakaj, da se vse fotke nalozijo ali javijo napako (najvec 4 s) -
+         fiksen premor je pri 40 straneh v enem zagonu vcasih prekratek */
+      var cakano = 0;
+      (function cakaj() {
+        var slike = d.querySelectorAll('.stran img');
+        var vse = [].every.call(slike, function (im) { return im.complete; });
+        if (!vse && cakano < 4000) { cakano += 100; setTimeout(cakaj, 100); return; }
         try { fotke(f, s, r); } catch (e) { r.tezave.push('preizkus fotk ni uspel: ' + e.message); }
         izid.push(r);
         /* zapiranje ogleda gre z history.back() - naj se umiri pred naslednjo stranjo */
         setTimeout(function () { f.remove(); naslednja(i + 1); }, 200);
-      }, d.querySelector('.stran img') ? 900 : 0);
+      })();
     }, 700);
   };
   f.src = s.pot + (s.pot.indexOf('?') === -1 ? '?' : '&') + 'jezik=' + s.jezik;
@@ -86,7 +92,10 @@ function naslednja(i) {
 function fotke(f, s, r) {
   var d = f.contentDocument, w = f.contentWindow;
   [].forEach.call(d.querySelectorAll('.stran img'), function (im) {
-    if (!im.complete || !im.naturalWidth) r.tezave.push('fotka se ne nalozi: ' + (im.currentSrc || im.src).split('/').slice(-2).join('/'));
+    if (!im.complete || !im.naturalWidth) {
+      r.tezave.push('fotka se ne nalozi (' + (im.complete ? 'napaka' : 'prepocasi') + '): ' +
+                    (im.currentSrc || im.src).split('/').slice(-2).join('/'));
+    }
   });
   var g = d.querySelector('.zlozeno .fotka-koraka') || d.querySelector('.stran [data-f]');
   if (!g) return;

@@ -1133,12 +1133,16 @@
   h += '<div class="uvod' + (F.naslovna ? ' s-fotko' : '') + '">';
   if (R.opis) h += '<p class="lead"></p>';
   if (F.naslovna) {
-    /* obrezana na okvir; dotik odpre celo. Telefon vzame manjso. */
+    /* obrezana na okvir; dotik odpre celo. Telefon vzame manjso - a samo,
+       ce je res manjsa: majhen izvirnik da enako veliki, in dve izbiri z isto
+       sirino (577w, 577w) brskalnik vcasih pusti brez slike. */
     var nf = F.naslovna;
+    var izbiraVelikosti = nf.mw < nf.w
+      ? ' srcset="' + nf.mala + ' ' + nf.mw + 'w, ' + nf.velika + ' ' + nf.w + 'w" sizes="(max-width: 700px) 100vw, 940px"'
+      : '';
     h += '<button type="button" class="naslovna' + (nf.prosojna ? ' prosojna' : '') + '" data-f="0" aria-label="' +
          t('Povečaj fotografijo', 'Enlarge photo') + '">' +
-         '<img src="' + nf.velika + '" srcset="' + nf.mala + ' ' + nf.mw + 'w, ' + nf.velika + ' ' + nf.w + 'w" ' +
-         'sizes="(max-width: 700px) 100vw, 940px" width="' + nf.w + '" height="' + nf.h + '" alt="' +
+         '<img src="' + nf.velika + '"' + izbiraVelikosti + ' width="' + nf.w + '" height="' + nf.h + '" alt="' +
          atribut(opisFotke(nf) || R.naslov) + '"' + izrezFotke(nf) + '></button>';
   }
   if (izbire.length > 1) {

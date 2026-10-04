@@ -20,7 +20,7 @@
     {"kol": 50, "enota": "g", "ime": "proteinov v prahu", "kratko": "protein v prahu", "nakup": "Protein v prahu"},
     {"kol": 14, "enota": "g", "ime": "kakavovega prahu", "kratko": "kakav v prahu", "nakup": "Kakav v prahu"},
     {"kol": 8, "enota": "g", "ime": "pecilnega praška", "kratko": "pecilni prašek", "nakup": "Pecilni prašek"},
-    {"kol": null, "ime": "ščepec soli", "kratko": "sol", "nakup": false},
+    {"kol": 2, "ime": ["ščepec soli", "ščepca soli", "ščepci soli", "ščepcev soli"], "kratko": "sol", "nakup": false},
     {"kol": null, "ime": "sadje po želji — jagode, banana, borovnice", "kratko": "sadje", "nakup": false, "hranilo": false},
     {"kol": 70, "enota": "g", "ime": "sesekljane 70&nbsp;% čokolade", "kratko": "70 % čokolada", "nakup": "Temna čokolada (60–70 %)"}
   ],
@@ -55,7 +55,7 @@
       {"ime": "protein powder", "kratko": "protein powder"},
       {"ime": "cocoa powder", "kratko": "cocoa powder"},
       {"ime": "baking powder", "kratko": "baking powder"},
-      {"ime": "pinch of salt", "kratko": "salt"},
+      {"ime": ["pinch of salt", "pinches of salt"], "kratko": "salt"},
       {"ime": "fruit of your choice — strawberries, banana, blueberries", "kratko": "fruit"},
       {"ime": "chopped 70% chocolate", "kratko": "70% chocolate"}
     ],

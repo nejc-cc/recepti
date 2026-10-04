@@ -16,7 +16,7 @@
     {"kol": null, "ime": "ščepec soli", "kratko": "sol", "nakup": false},
     {"kol": 65, "enota": "ml", "ime": "mleka", "kratko": "mleko", "nakup": "Mleko"},
     {"kol": 100, "enota": "g", "ime": "zelo mehkega masla", "kratko": "maslo", "nakup": "Maslo", "nakup_kolicina": "100 g + za model"},
-    {"kol": 4, "ime": ["jabolko, narezano na tanke rezine", "jabolki, narezani na tanke rezine", "jabolka, narezana na tanke rezine", "jabolk, narezanih na tanke rezine"], "kratko": "jabolka", "nakup": "Jabolka", "gramov": 640},
+    {"kol": 4, "ime": ["jabolko, narezano na tanke rezine", "jabolki, narezani na tanke rezine", "jabolka, narezana na tanke rezine", "jabolk, narezanih na tanke rezine"], "kratko": "jabolka", "nakup": "Jabolka"},
     {"kol": null, "ime": "maslo za model", "kratko": "maslo za model", "nakup": false, "hranilo": "maslo", "gramov": 5},
     {"kol": null, "ime": "1 žlica sladkorja v prahu za posip", "kratko": "sladkor v prahu", "nakup": "Sladkor v prahu", "gramov": 10}
   ],

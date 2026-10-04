@@ -55,10 +55,13 @@ window.RECEPTI_HRANILA = {
     "krompirjev škrob (grobi)": { "en": "Potato starch (coarse)", "enako": "krompirjev škrob" },
     "suhi kvas": { "en": "Dried yeast", "kcal": 325, "b": 40, "kos": 7, "opomba": "kos = zavojček" },
     "sveži kvas": { "en": "Fresh yeast", "kcal": 105, "b": 8.4 },
+    "riž": { "en": "Rice", "kcal": 358, "b": 6.5, "opomba": "okrogli (za mlečni riž), surov" },
+    "drobtine": { "en": "Breadcrumbs", "kcal": 395, "b": 13.4, "opomba": "suhe, mlete" },
 
     "kristalni sladkor": { "en": "Granulated sugar", "kcal": 400, "b": 0 },
     "sladkor v prahu": { "en": "Icing sugar", "kcal": 400, "b": 0 },
     "sladkor turbinado": { "en": "Turbinado sugar", "enako": "kristalni sladkor" },
+    "vanilijev sladkor": { "en": "Vanilla sugar", "enako": "kristalni sladkor" },
     "rjavi sladkor": { "en": "Brown sugar", "kcal": 380, "b": 0.1 },
     "vanilijev ekstrakt": { "en": "Vanilla extract", "kcal": 288, "b": 0.1, "ml": 0.88 },
     "kakav v prahu": { "en": "Cocoa powder", "kcal": 350, "b": 20, "ml": 0.36, "opomba": "nesladkan; 1 žlica = 5,4 g" },
@@ -123,6 +126,7 @@ window.RECEPTI_HRANILA = {
     "bučka": { "en": "Courgette", "kcal": 17, "b": 1.2, "kos": 200 },
     "tajska bazilika": { "en": "Thai basil", "kcal": 23, "b": 3.2 },
     "jabolka": { "en": "Apples", "kcal": 52, "b": 0.3, "kos": 170 },
+    "bio limona": { "en": "Unwaxed lemon", "kcal": 47, "b": 1.5, "opomba": "vrednost je za naribano lupinico" },
     "banane": { "en": "Bananas", "kcal": 89, "b": 1.1, "kos": 118, "opomba": "kos = olupljena srednja" }
   }
 };

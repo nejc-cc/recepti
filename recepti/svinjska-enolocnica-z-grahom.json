@@ -22,8 +22,8 @@
     {"kol": null, "ime": "jušna osnova, da pokrije vse 1–2 cm na visoko", "kratko": "jušna osnova", "nakup": "Goveja jušna osnova v gelu (Knorr)"},
     {"kol": 1, "ime": ["lovorjev list", "lovorjeva lista", "lovorjevi listi", "lovorjevih listov"], "kratko": "lovorjev list", "nakup": "Lovorjev list", "nakup_kolicina": ""},
     {"kol": 1, "ime": ["poravnana velika žlica paradižnikove mezge", "poravnani veliki žlici paradižnikove mezge", "poravnane velike žlice paradižnikove mezge", "poravnanih velikih žlic paradižnikove mezge"], "kratko": "paradižnikova mezga", "nakup": "Paradižnikova mezga", "nakup_kolicina": "", "gramov": 20},
-    {"kol": null, "ime": "pribl. 1 žlica moke tip 500 — po potrebi", "kratko": "moka", "nakup": false, "hranilo": "gladka moka", "gramov": 8},
-    {"kol": null, "ime": "pribl. 2 žlici vode", "kratko": "voda", "nakup": false}
+    {"kol": 1, "ime": ["žlica moke tip 500 (pribl., po potrebi)", "žlici moke tip 500 (pribl., po potrebi)", "žlice moke tip 500 (pribl., po potrebi)", "žlic moke tip 500 (pribl., po potrebi)"], "kratko": "moka", "nakup": false, "hranilo": "gladka moka", "gramov": 8},
+    {"kol": 2, "ime": ["žlica vode (pribl.)", "žlici vode (pribl.)", "žlice vode (pribl.)", "žlic vode (pribl.)"], "kratko": "voda", "nakup": false}
   ],
   "koraki": [
     {"besedilo": "nareži\nna koščke", "vrstice": [1, 1]},
@@ -38,7 +38,7 @@
     "Ko je meso prepraženo, dodaj <strong>vse ostale sestavine hkrati</strong>: krompir, grah, lovorjev list, paradižnikovo mezgo in jušno osnovo.",
     "Jušna osnova je lahko juha ali Knorr goveja jušna osnova v gelu, pripravljena po navodilih na embalaži. Prilij je toliko, da pokrije vse sestavine in sega <strong>1–2 cm nad njimi</strong>.",
     "Začimbe dodaj po okusu. Če je jušna osnova slana, meso soli zmerno.",
-    "Med kuhanjem preveri gostoto. Če je enolončnica preredka, zmešaj pribl. 1 žlico moke tip 500 in pribl. 2 žlici vode, da je zmes <strong>komaj tekoča</strong>, in jo vmešaj.",
+    "Med kuhanjem preveri gostoto. Če je enolončnica preredka, zmešaj moko in vodo (količini sta med sestavinami), da je zmes <strong>komaj tekoča</strong>, in jo vmešaj.",
     "Kuhaj približno 1 uro in vmes premešaj. Lovorjev list pred serviranjem odstrani.",
     "Vir: družinski recept."
   ],
@@ -59,8 +59,8 @@
       {"ime": "stock, to cover everything by 1–2 cm", "kratko": "stock"},
       {"ime": ["bay leaf", "bay leaves"], "kratko": "bay leaf"},
       {"ime": ["level tablespoon of tomato paste", "level tablespoons of tomato paste"], "kratko": "tomato paste"},
-      {"ime": "approx. 1 tbsp plain flour — if needed", "kratko": "flour"},
-      {"ime": "approx. 2 tbsp water", "kratko": "water"}
+      {"ime": "tbsp plain flour (approx., if needed)", "kratko": "flour"},
+      {"ime": "tbsp water (approx.)", "kratko": "water"}
     ],
     "koraki": [
       "cut\ninto pieces",
@@ -75,7 +75,7 @@
       "Once the meat is browned, add <strong>all the other ingredients at once</strong>: potatoes, peas, bay leaf, tomato paste and stock.",
       "The stock can be broth or Knorr beef stock gel, made up according to the packet. Pour in enough to cover all the ingredients and come <strong>1–2 cm above them</strong>.",
       "Season to taste. If the stock is salty, salt the meat sparingly.",
-      "Check the consistency while it cooks. If the stew is too thin, mix about 1 tbsp of plain flour with about 2 tbsp of water until it is <strong>barely runny</strong>, and stir it in.",
+      "Check the consistency while it cooks. If the stew is too thin, mix the flour and water (amounts are in the ingredients) until it is <strong>barely runny</strong>, and stir it in.",
       "Simmer for about 1 hour, stirring now and then. Remove the bay leaf before serving.",
       "Source: family recipe."
     ]
