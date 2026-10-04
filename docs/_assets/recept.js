@@ -555,11 +555,30 @@
 
   /* Casovnik: en klik, brez potrditve - klikas ga z vrocim pekacem v rokah,
      nastavi pa samo kuhinjski alarm pecice. */
+  /* Peka po stopnjah: "stopnje": [{"po": 10, "temperatura": 180}] - HA med
+     peko sam spremeni temperaturo (packages/recepti_pecica.yaml). Alarm
+     velja za cel cas ("skupaj"); "minute" je cas do prve spremembe, da bi
+     star paket brez stopenj vsaj zazvonil takrat, ko je treba preklopiti. */
+  var STOPNJE = (P.stopnje || []).filter(function (s) {
+    return s && s.po > 0 && s.po < P.minute && s.temperatura >= 50 && s.temperatura <= 250;
+  }).sort(function (a, b) { return a.po - b.po; });
+
   function gumbCasovnik(g) {
-    g.textContent = t('⏱ Časovnik — ', '⏱ Timer — ') + P.minute + ' min';
+    var stopnjeNiz = STOPNJE.map(function (s) {
+      return t('po ', 'after ') + s.po + ' min → ' + s.temperatura + ' °C';
+    }).join(', ');
+    g.textContent = t('⏱ Časovnik — ', '⏱ Timer — ') + P.minute + ' min' + (stopnjeNiz ? ' (' + stopnjeNiz + ')' : '');
     g.addEventListener('click', function () {
-      posljiPecici({ akcija: 'casovnik', minute: P.minute },
-                   t('Časovnik pečice teče: ', 'Oven timer running: ') + P.minute + ' min.', g);
+      var podatki = { akcija: 'casovnik', minute: P.minute };
+      if (STOPNJE.length) {
+        podatki = {
+          akcija: 'casovnik', minute: STOPNJE[0].po, skupaj: P.minute,
+          stopnje: STOPNJE.map(function (s) { return { po: s.po, temperatura: s.temperatura }; })
+        };
+      }
+      posljiPecici(podatki,
+                   t('Časovnik pečice teče: ', 'Oven timer running: ') + P.minute + ' min.' +
+                   (stopnjeNiz ? t(' Pečica se sama preklopi: ', ' The oven switches by itself: ') + stopnjeNiz + '.' : ''), g);
     });
   }
 

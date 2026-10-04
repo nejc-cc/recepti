@@ -469,6 +469,19 @@ def pocisti_fotke(narejene):
         os.rmdir(FOTKE)
 
 
+def tezave_pecice(d):
+    """Peka po stopnjah: stran neveljavne stopnje tiho izpusti - zato tu glasno."""
+    p = d.get("pecica") or {}
+    ven = []
+    for s in p.get("stopnje") or []:
+        po, t = s.get("po"), s.get("temperatura")
+        if not isinstance(po, (int, float)) or not 0 < po < (p.get("minute") or 0):
+            ven.append('stopnja "po": %s mora biti vec kot 0 in manj kot "minute" (%s)' % (po, p.get("minute")))
+        if not isinstance(t, (int, float)) or not 50 <= t <= 250:
+            ven.append('stopnja "temperatura": %s mora biti 50-250' % t)
+    return ven
+
+
 # --- strani ----------------------------------------------------------------
 def navaden(t):
     return html.escape(CIST.sub("", html.unescape(t or "")).strip(), quote=True)
@@ -601,6 +614,8 @@ def main():
                 print("   hranila %s: %s" % (ime, t))
         for t in tezave_prevoda(d):
             print("   prevod %s: %s" % (ime, t))
+        for t in tezave_pecice(d):
+            print("   pecica %s: %s" % (ime, t))
         if KAT is not None and d.get("kategorija") and d["kategorija"].lower() not in KAT:
             print('   prevod %s: kategorija "%s" ni v jezik.js' % (ime, d["kategorija"]))
 

@@ -40,9 +40,15 @@
   "predgretje": "Pečico ogrej na 200&nbsp;°C — zgornji + spodnji grelec",
   "pecica": {
     "temperatura": 200,
-    "minute": 10,
+    "minute": 50,
     "program": "top_bottom",
-    "hitro_predgretje": true
+    "hitro_predgretje": true,
+    "stopnje": [
+      {
+        "po": 10,
+        "temperatura": 180
+      }
+    ]
   },
   "sestavine": [
     {
@@ -203,7 +209,7 @@
     "Jajca, sladkor in vanilijo stepaj tako dolgo, da se <strong>volumen podvoji<\/strong>. Ta zrak je poleg pecilnega praška edino vzhajalno sredstvo, saj je moke le 70 g.",
     "Jabolka vmešaj <strong>previdno<\/strong>, samo toliko, da se obložijo z zmesjo. Z močnim mešanjem izgubiš zrak iz stepene zmesi.",
     "Izvirnik ne pove, ali jabolka olupiš. Pri tej torti se običajno olupijo; z lupino bo bolj rustikalna.",
-    "<strong>Peka je dvostopenjska:<\/strong> 10 minut na 200&nbsp;°C, nato temperaturo znižaj na 180&nbsp;°C in peci še 40 minut. Časovnik na strani je nastavljen na prvih 10 minut, ker je to trenutek, ki ga ne smeš zamuditi; za drugo stopnjo ga nastavi znova na 40 minut.",
+    "<strong>Peka je dvostopenjska:<\/strong> 10 minut na 200&nbsp;°C, nato temperaturo znižaj na 180&nbsp;°C in peci še 40 minut. V Home Assistantu gumb Časovnik nastavi alarm na vseh 50 minut, pečica pa se po 10 minutah sama preklopi na 180&nbsp;°C.",
     "Velikosti modela izvirnik ne navaja. Glede na količine je primeren okrogel model s premerom 22–24 cm; v večjem bo torta prenizka in se bo spekla prej.",
     "Posip s sladkorjem v prahu je med sestavinami, v postopku pa ni zapisan. Potresi ga tik pred serviranjem, ko je torta ohlajena — na vroči se raztopi.",
     "Vir: komentar pod <a href=\"https://9gag.com/gag/aQzY5gw\">objavo na 9gag<\/a>."
@@ -287,7 +293,7 @@
       "Whisk the eggs, sugar and vanilla until the <strong>volume doubles<\/strong>. That air is the only leavening besides the baking powder, as there is just 70 g of flour.",
       "Fold the apples in <strong>gently<\/strong>, only until they are coated. Vigorous mixing knocks the air out of the whisked mixture.",
       "The original does not say whether to peel the apples. For this cake they usually are; with the skin on it turns out more rustic.",
-      "<strong>Baking is in two stages:<\/strong> 10 minutes at 200&nbsp;°C, then turn the oven down to 180&nbsp;°C and bake for another 40 minutes. The timer on this page is set to the first 10 minutes, because that is the moment you must not miss; set it again to 40 minutes for the second stage.",
+      "<strong>Baking is in two stages:<\/strong> 10 minutes at 200&nbsp;°C, then turn the oven down to 180&nbsp;°C and bake for another 40 minutes. In Home Assistant the Timer button sets the alarm for the full 50 minutes, and the oven switches itself to 180&nbsp;°C after 10 minutes.",
       "The original gives no tin size. For these quantities a round 22–24 cm tin suits; in a larger one the cake comes out thin and bakes faster.",
       "The icing sugar is in the ingredient list but never mentioned in the method. Dust it on just before serving, once the cake has cooled — on a hot cake it melts.",
       "Source: a comment under <a href=\"https://9gag.com/gag/aQzY5gw\">a post on 9gag<\/a>."
@@ -297,6 +303,6 @@
 </script>
 <script src="../_assets/hranila.js?v=93b16779"></script>
 <script src="../_assets/nastavitve.js?v=5cadc01b"></script>
-<script src="../_assets/recept.js?v=a51c90d2"></script>
+<script src="../_assets/recept.js?v=45427cff"></script>
 </body>
 </html>

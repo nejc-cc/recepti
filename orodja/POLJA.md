@@ -102,6 +102,11 @@ Za enotno obliko: `python orodja/oblikuj.py recepti/<ime>.json`.
                   minute           cas peke     -> gumb "Casovnik"
                   program          top_bottom | vroci_zrak | pizza | spodnji
                   hitro_predgretje true/false (privzeto true)
+                  stopnje          neobvezno; peka po stopnjah, npr.
+                                   [{"po": 10, "temperatura": 180}] - po 10 min
+                                   HA sam nastavi 180 °C. "minute" je takrat
+                                   CEL cas peke (alarm zazvoni na koncu);
+                                   "po" mora biti manj kot "minute".
                 Locena sta zato, ker cas peke tece od trenutka, ko pekac gre
                 noter, ne od vziga. Gretje zahteva dva klika (drugi je
                 potrditev), casovnik enega.
