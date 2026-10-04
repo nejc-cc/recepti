@@ -12,8 +12,9 @@ se raztezajo čez sestavine, na katere se nanašajo.
   enot in sestavin (1 jajce, 3 jajca, 6 jajc); neobvezna druga mera (cups).
 - **Dva jezika** - gumb EN/SL preklopi vmesnik in recepte; `?jezik=en` v
   povezavi odpre stran naravnost v angleščini.
-- **Telefon** - pod 700 px isti recept kot seznam sestavin in oštevilčen
-  postopek. **Tisk** - samo recept, brez gumbov. **Temni način** po sistemu,
+- **Telefon** - pod 700 px privzeto tabela, ki se premika vstran (stolpec s
+  sestavinami ostane levo); preklop **Seznam** pokaže seznam sestavin in
+  oštevilčen postopek, izbira se zapomni. **Tisk** - samo recept, brez gumbov. **Temni način** po sistemu,
   gumb zgoraj desno ga povozi.
 - **Med kuhanjem** - klik na sestavino ali korak ga prečrta (shrani se v
   brskalnik, po napravi); gumb s skodelico drži zaslon prižgan, dokler je

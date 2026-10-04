@@ -95,6 +95,8 @@ body {
   line-height: 1.5;
 }
 .stran { max-width: 940px; margin: 0 auto; }
+/* kazalo.js da fokus v .stran (HA aplikacija, glej tam) - brez obrobe */
+.stran:focus { outline: none; }
 
 /* ---------- vrstica z naslovom in gumbi ----------
    Posodo .orodja zgradi _assets/tema.js (RECEPTI_ORODJA), vanjo pa gresta

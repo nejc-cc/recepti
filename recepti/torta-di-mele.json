@@ -27,7 +27,8 @@
     {"besedilo": "previdno\nvmešaj", "vrstice": [1, 9]},
     {"besedilo": "namaži\nmodel", "vrstice": [10, 10]},
     {"besedilo": "vlij\nin poravnaj", "vrstice": [1, 10]},
-    {"besedilo": "peci\n200&nbsp;°C 10 min,\nnato 180&nbsp;°C\n40 min", "vrstice": [1, 10]},
+    {"besedilo": "peci\n200&nbsp;°C\n10 min", "vrstice": [1, 10]},
+    {"besedilo": "znižaj na\n180&nbsp;°C,\npeci 40 min", "vrstice": [1, 10]},
     {"besedilo": "potresi", "vrstice": [1, 11], "slog": "zakljucek"}
   ],
   "opombe": [
@@ -66,7 +67,8 @@
       "fold in\ngently",
       "butter\nthe tin",
       "pour in\nand level",
-      "bake\n200&nbsp;°C 10 min,\nthen 180&nbsp;°C\n40 min",
+      "bake\n200&nbsp;°C\n10 min",
+      "turn down to\n180&nbsp;°C,\nbake 40 min",
       "dust"
     ],
     "opombe": [

@@ -1153,7 +1153,7 @@
     h += '</div>';
   }
   h += '</div>';
-  /* preklop je viden samo pod 700 px (CSS) - tam je privzeto seznam */
+  /* preklop je viden samo pod 700 px (CSS) - tam je privzeto tabela */
   h += '<div class="prikaz" role="group" aria-label="' + t('Prikaz', 'View') + '">' +
        '<button type="button" class="chip" data-prikaz="seznam">' + t('Seznam', 'List') + '</button>' +
        '<button type="button" class="chip" data-prikaz="tabela">' + t('Tabela', 'Table') + '</button></div>';
@@ -1241,10 +1241,11 @@
     try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
   }
 
-  /* --- prikaz na telefonu: seznam (privzeto) ali tabela ------------
+  /* --- prikaz na telefonu: tabela (privzeto) ali seznam ------------
      Tabela je na ozkem zaslonu siroka, zato se premika vstran, stolpec s
      sestavinami pa ostane prilepljen levo (CSS). Izbira je po napravi in
-     velja samo pod 700 px - sirse je tabela vedno. */
+     velja samo pod 700 px - sirse je tabela vedno. Privzeto tabela od
+     2026-10-04 (uporabnik); shrani se samo izbira "seznam". */
   var PRIKAZ_KLJUC = 'recepti-prikaz';
   function nastaviPrikaz(p) {
     if (p === 'tabela') document.documentElement.setAttribute('data-prikaz', 'tabela');
@@ -1252,8 +1253,8 @@
     var g = document.querySelectorAll('.prikaz button');
     for (var i = 0; i < g.length; i++) g[i].setAttribute('aria-pressed', String(g[i].getAttribute('data-prikaz') === p));
   }
-  var zacetni = 'seznam';
-  try { if (localStorage.getItem(PRIKAZ_KLJUC) === 'tabela') zacetni = 'tabela'; } catch (e) {}
+  var zacetni = 'tabela';
+  try { if (localStorage.getItem(PRIKAZ_KLJUC) === 'seznam') zacetni = 'seznam'; } catch (e) {}
   nastaviPrikaz(zacetni);
   var gumbiPrikaza = document.querySelector('.prikaz');
   if (gumbiPrikaza) {
@@ -1262,7 +1263,7 @@
       if (!p) return;
       nastaviPrikaz(p);
       try {
-        if (p === 'tabela') localStorage.setItem(PRIKAZ_KLJUC, 'tabela');
+        if (p === 'seznam') localStorage.setItem(PRIKAZ_KLJUC, 'seznam');
         else localStorage.removeItem(PRIKAZ_KLJUC);
       } catch (err) {}
     });

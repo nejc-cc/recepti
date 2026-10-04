@@ -53,6 +53,28 @@
     var gumbOdpri = document.getElementById('odpri-sestavine');
     var teloSestavin = document.querySelector('.sestavine-filter .telo');
 
+    /* HA aplikacija (Android), dashboard "Webpage": iframe se ni dal drsati,
+       dokler uporabnik ni tapnil iskalnika (fokus v iframe). Fokus damo v
+       stran sami - na posodo, ki ne odpre tipkovnice, brez pomika. Samo na
+       HA (/local/) in samo v iframeu; ob vrnitvi v aplikacijo znova. */
+    if (location.pathname.indexOf('/local/') === 0 && window.parent !== window) {
+      var fokusVStran = function () {
+        try {
+          window.focus();
+          var s = document.querySelector('.stran');
+          if (s && (!document.activeElement || document.activeElement === document.body)) {
+            s.setAttribute('tabindex', '-1');
+            s.focus({ preventScroll: true });
+          }
+        } catch (e) {}
+      };
+      fokusVStran();
+      window.addEventListener('pageshow', fokusVStran);
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') fokusVStran();
+      });
+    }
+
     /* Staticno besedilo iz index.html. Nastavi se vedno (ne samo v
        anglescini), da se po preklopu nazaj ne pozabi nobeno. */
     var h1 = document.querySelector('.stran h1');

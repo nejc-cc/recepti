@@ -88,7 +88,7 @@ function naslednja(i) {
   document.body.appendChild(f);
 }
 /* Fotke: vse se nalozijo; ogled se odpre in z Esc zapre; fotka koraka ne
-   odkljuka koraka. Na 360 px je viden seznam, zato najprej gumb v njem. */
+   odkljuka koraka. Najprej vidna fotka koraka (na 360 px je privzeto tabela). */
 function fotke(f, s, r) {
   var d = f.contentDocument, w = f.contentWindow;
   [].forEach.call(d.querySelectorAll('.stran img'), function (im) {
@@ -97,7 +97,8 @@ function fotke(f, s, r) {
                     (im.currentSrc || im.src).split('/').slice(-2).join('/'));
     }
   });
-  var g = d.querySelector('.zlozeno .fotka-koraka') || d.querySelector('.stran [data-f]');
+  var vidni = [].filter.call(d.querySelectorAll('.stran [data-f]'), function (el) { return el.offsetParent !== null; });
+  var g = vidni.filter(function (el) { return el.classList.contains('fotka-koraka'); })[0] || vidni[0];
   if (!g) return;
   var korak = g.closest('[data-k]');
   g.click();
